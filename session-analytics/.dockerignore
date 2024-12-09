@@ -1,0 +1,50 @@
+# Ignore files and directories that are not needed in the Docker image
+
+# Compiled Python files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment directories
+.venv
+venv/
+ENV/
+env/
+virtualenv/
+
+# Git-related files
+.git
+.gitignore
+
+# IDE configurations
+.idea/
+.vscode/
+
+# Local development settings
+.env
+
+# Testing and coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+
+# Logs and temporary files
+*.log
+tmp/
+
+# Documentation
+docs/
+
+# Build artifacts
+build/
+dist/
+*.egg-info/
