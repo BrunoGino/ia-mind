@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="0" failures="6" skipped="0" tests="6" time="0.557" timestamp="2024-12-14T13:31:01.468173-03:00" hostname="DESKTOP-NK8V44U"><testcase classname="tests.unit.controllers.test_game_controller" name="test_create_game" time="0.004"><failure message="TypeError: GameController.create_game() got an unexpected keyword argument 'request'">game_controller = &lt;app.controllers.game_controller.GameController object at 0x0000026DA5122600&gt;
+mocker = &lt;pytest_mock.plugin.MockerFixture object at 0x0000026DA5120EC0&gt;
+
+    def test_create_game(game_controller, mocker):
+        mock_request = mocker.Mock(get_json=lambda: {'name': 'New Game', 'genre': 'Action', 'platform': 'PC'})
+        mock_jsonify = mocker.patch('app.controllers.game_controller.jsonify')
+    
+&gt;       response = game_controller.create_game(request=mock_request)
+E       TypeError: GameController.create_game() got an unexpected keyword argument 'request'
+
+tests\unit\controllers\test_game_controller.py:14: TypeError</failure></testcase><testcase classname="tests.unit.controllers.test_game_controller" name="test_update_game" time="0.001"><failure message="TypeError: GameController.update_game() got multiple values for argument 'game_id'">game_controller = &lt;app.controllers.game_controller.GameController object at 0x0000026DA5169190&gt;
+mocker = &lt;pytest_mock.plugin.MockerFixture object at 0x0000026DA51697F0&gt;
+
+    def test_update_game(game_controller, mocker):
+        mock_request = mocker.Mock(get_json=lambda: {'name': 'Updated Game', 'genre': 'Adventure'})
+        mock_jsonify = mocker.patch('app.controllers.game_controller.jsonify')
+    
+&gt;       response = game_controller.update_game(game_id=1, request=mock_request)
+E       TypeError: GameController.update_game() got multiple values for argument 'game_id'
+
+tests\unit\controllers\test_game_controller.py:23: TypeError</failure></testcase><testcase classname="tests.unit.controllers.test_game_controller" name="test_delete_game" time="0.001"><failure message="TypeError: GameController.delete_game() got multiple values for argument 'game_id'">game_controller = &lt;app.controllers.game_controller.GameController object at 0x0000026DA516B2F0&gt;
+mocker = &lt;pytest_mock.plugin.MockerFixture object at 0x0000026DA516B0B0&gt;
+
+    def test_delete_game(game_controller, mocker):
+        mock_jsonify = mocker.patch('app.controllers.game_controller.jsonify')
+    
+&gt;       response = game_controller.delete_game(game_id=1)
+E       TypeError: GameController.delete_game() got multiple values for argument 'game_id'
+
+tests\unit\controllers\test_game_controller.py:31: TypeError</failure></testcase><testcase classname="tests.unit.controllers.test_game_controller" name="test_partially_update_game" time="0.001"><failure message="TypeError: GameController.partially_update_game() got multiple values for argument 'game_id'">game_controller = &lt;app.controllers.game_controller.GameController object at 0x0000026DA519EF00&gt;
+mocker = &lt;pytest_mock.plugin.MockerFixture object at 0x0000026DA519F170&gt;
+
+    def test_partially_update_game(game_controller, mocker):
+        mock_request = mocker.Mock(get_json=lambda: {'genre': 'RPG'})
+        mock_jsonify = mocker.patch('app.controllers.game_controller.jsonify')
+    
+&gt;       response = game_controller.partially_update_game(game_id=1, request=mock_request)
+E       TypeError: GameController.partially_update_game() got multiple values for argument 'game_id'
+
+tests\unit\controllers\test_game_controller.py:40: TypeError</failure></testcase><testcase classname="tests.unit.controllers.test_game_controller" name="test_get_games" time="0.001"><failure message="TypeError: GameController.get_games() takes 0 positional arguments but 1 was given">game_controller = &lt;app.controllers.game_controller.GameController object at 0x0000026DA51A99A0&gt;
+
+    def test_get_games(game_controller):
+&gt;       response = game_controller.get_games()
+E       TypeError: GameController.get_games() takes 0 positional arguments but 1 was given
+
+tests\unit\controllers\test_game_controller.py:46: TypeError</failure></testcase><testcase classname="tests.unit.controllers.test_game_controller" name="test_get_game" time="0.001"><failure message="TypeError: GameController.get_game() got multiple values for argument 'game_id'">game_controller = &lt;app.controllers.game_controller.GameController object at 0x0000026DA51AA300&gt;
+
+    def test_get_game(game_controller):
+&gt;       response = game_controller.get_game(game_id=1)
+E       TypeError: GameController.get_game() got multiple values for argument 'game_id'
+
+tests\unit\controllers\test_game_controller.py:51: TypeError</failure></testcase></testsuite></testsuites>
