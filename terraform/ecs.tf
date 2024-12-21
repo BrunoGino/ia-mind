@@ -26,19 +26,19 @@ module "ecs" {
   }
 
   services = {
-    session_analytics = {
+    session_management = {
       cpu    = 1024
       memory = 4096
 
       container_definitions = {
-        session_analytics_container = {
+        session_management_container = {
           cpu       = 512
           memory    = 1024
           essential = true
           image     = "xxx-image-here"
           port_mappings = [
             {
-              name          = "session_analytics_container_port"
+              name          = "session_management_container_port"
               containerPort = 5000
               protocol      = "tcp"
             }
