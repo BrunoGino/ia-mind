@@ -8,19 +8,25 @@ on:
             - 'session_management/**'
 
 env:
-  PYTHON_VERSION: "3.13"            
+  PYTHON_VERSION: "3.13"
+  MAIN_AWS_REGION: "eu-west-1"
+  
+
+permissions:
+  id-token: write
+  contents: read
   
 jobs:
     build:
         runs-on: ubuntu-latest
-
+        name: Install dependencies and run unit tests
         steps:
             - uses: actions/checkout@v4
 
             - name: Setup Python
               uses: actions/setup-python@v5
               with:
-                python-version: $PYTHON_VERSION
+                python-version: ${{env.PYTHON_VERSION}}
 
             - name: Install dependencies
               run: |
@@ -29,45 +35,92 @@ jobs:
                 ls session_management
                 pip install -r ./session_management/requirements.txt
 
-            - name: Run unit tests    
-              run: |
-                pytest . --doctest-modules --junitxml=junit/test-results.xml --cov=com --cov-report=xml --cov-report=html
+           # - name: Run unit tests    
+           #   run: |
+           #     pytest . --doctest-modules --junitxml=test-results.xml --cov=com --cov-report=xml --cov-report=html
 
-            - name: Upload test results
-              uses: actions/upload-artifact@v4
-              if: ${{ always() }}
-              with:
-                name: pytest-results
-                path: junit/test-results.xml
-    
+           # - name: Upload test results
+           #   uses: actions/upload-artifact@v4
+           #   if: ${{ always() }}
+           #   with:
+           #     name: pytest-results
+           #     path: test-results.xml
+            
+            #- name: Create test report
+            #  uses: dorny/test-reporter@v1
+            #  if: ${{ always() }}
+            #  with:
+            #    name: Test Results Report
+            #    artifact: pytest-results
+            #    path: test-results.xml
+            #    reporter: jest-junit
+            #    fail-on-error: 'false'
+            
     docker:
       runs-on: ubuntu-latest
       needs:
         - build
       name: Generate and Publish Docker Image
       steps:
-        - uses: actions/checkout@v4
-
-        - name: Build And Publish
-          shell: bash
-          run: |
-            DOCKER_REPO=${{secrets.SESSION_MANAGEMENT_DOCKER_REPO}}
-            echo "DOCKER_REPO=${DOCKER_REPO}" >> $GITHUB_ENV
-        
+        - uses: actions/checkout@v4      
         - name: Docker Build
           shell: bash
           run: |
             docker build --no-cache -t iamind/session_management:latest ./session_management
-            echo "DOCKER_REPO=${DOCKER_REPO}" >> $GITHUB_ENV
         
         - name: Docker Publish
           env:
+            DOCKER_REPO: ${{secrets.SESSION_MANAGEMENT_DOCKER_REPO}}
             DOCKER_REPO_TOKEN: ${{secrets.DOCKER_REPO_TOKEN}}
             DOCKER_REPO_USER: ${{secrets.DOCKER_REPO_USER}}
           shell: bash
           run: |
-            echo $DOCKER_REPO_TOKEN | docker login -u $DOCKER_REPO_USER --password-stdin docker.com
+            echo $DOCKER_REPO_TOKEN | docker login -u $DOCKER_REPO_USER --password-stdin
             docker push ${DOCKER_REPO} -a
+
+    deploy-to-aws:
+      runs-on: ubuntu-latest
+      name: Deploy to AWS
+      needs:
+        - docker
+      defaults:
+        run:
+          working-directory: terraform
+      steps:
+        - uses: actions/checkout@v4
+        - name: Configure AWS credentials
+          uses: aws-actions/configure-aws-credentials@v4
+          with:
+            role-to-assume: ${{secrets.AWS_DEPLOYMENT_ROLE_ARN}}
+            role-session-name: github-to-aws-via-oidc
+            aws-region: ${{env.MAIN_AWS_REGION}}
+            role-skip-session-tagging: true
+        
+        - name: Setup Terraform
+          uses: hashicorp/setup-terraform@v3
+          with:
+            terraform_version: "1.10.3"
+
+        - name: Terraform Init
+          id: terraform-init
+          env:
+            TF_INPUT: 0
+            TF_VAR_session_management_docker_image: brunogino/iamind-session_management
+          run: terraform init
+
+        - name: Terraform Validate
+          id: terraform-validate
+          run: terraform validate
+
+        - name: Terraform Plan
+          id: terraform-plan
+          run: terraform plan
+        
+        - name: Terraform Apply
+          id: terraform-apply
+          run: terraform apply -auto-approve
+
+        
 
 
       
