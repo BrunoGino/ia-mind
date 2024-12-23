@@ -10,7 +10,7 @@ terraform {
     region         = "eu-west-1"
     bucket         = "iamind-terraform-state-backend"
     key            = "terraform.tfstate"
-    dynamodb_table = "terraform_state"
+    dynamodb_table = "iamind-terraform-state-lock"
   }
 }
 
