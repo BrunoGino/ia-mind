@@ -68,7 +68,7 @@ jobs:
         - name: Docker Build
           shell: bash
           run: |
-            docker build --no-cache -t iamind/session_management:latest ./session_management
+            docker build --no-cache -t brunogino/iamind-session_management:latest ./session_management
         
         - name: Docker Publish
           env:
