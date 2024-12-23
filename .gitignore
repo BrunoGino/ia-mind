@@ -100,3 +100,6 @@ virtualenv/
 # IDE
 .idea/
 .vscode/
+
+.github/.secrets
+.secrets
