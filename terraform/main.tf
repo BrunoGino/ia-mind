@@ -7,11 +7,14 @@ terraform {
   }
 
   backend "s3" {
-    region = "us-east-2"
+    region         = "eu-west-1"
+    bucket         = "iamind-terraform-state-backend"
+    key            = "terraform.tfstate"
+    dynamodb_table = "terraform_state"
   }
 }
 
 provider "aws" {
-  region = "us-east-2"
+  region = local.main_aws_region
 }
 
