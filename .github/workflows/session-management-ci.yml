@@ -88,6 +88,9 @@ jobs:
       defaults:
         run:
           working-directory: terraform
+      env:
+        TF_INPUT: 0
+        TF_VAR_session_management_docker_image: brunogino/iamind-session_management
       steps:
         - uses: actions/checkout@v4
         - name: Configure AWS credentials
@@ -105,9 +108,6 @@ jobs:
 
         - name: Terraform Init
           id: terraform-init
-          env:
-            TF_INPUT: 0
-            TF_VAR_session_management_docker_image: brunogino/iamind-session_management
           run: terraform init
 
         - name: Terraform Validate
@@ -121,10 +121,3 @@ jobs:
         - name: Terraform Apply
           id: terraform-apply
           run: terraform apply -auto-approve
-
-        
-
-
-      
-
-
