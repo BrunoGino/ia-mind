@@ -1,8 +1,3 @@
-import {
-  to = aws_iam_policy.deployment_policy
-  id = "arn:aws:iam::108782061116:policy/aws-gino-sol-deployment"
-}
-
 data "aws_iam_policy_document" "deployment_policy_document" {
 
   version = "2012-10-17"
@@ -16,7 +11,7 @@ data "aws_iam_policy_document" "deployment_policy_document" {
     resources = [
       "arn:aws:s3:::iamind-terraform-state-backend",
       "arn:aws:dynamodb:eu-west-1:108782061116:table/iamind-terraform-state-lock",
-      "arn:aws:dynamodb:eu-west-1:108782061116:table/iamind-terraform-state-lock/*"
+      "arn:aws:s3:::iamind-terraform-state-backend/terraform.tfstate"
     ]
   }
 
@@ -43,7 +38,7 @@ data "aws_iam_policy_document" "deployment_policy_document" {
 
 
 resource "aws_iam_policy" "deployment_policy" {
-  name        = "aws-gino-sol-deployment"
+  name        = "aws_gino_sol_deployment"
   description = "The policy that grants permissions to the deployment role"
   policy      = data.aws_iam_policy_document.deployment_policy_document.json
 }

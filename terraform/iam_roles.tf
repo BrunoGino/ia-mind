@@ -1,8 +1,3 @@
-import {
-  to = aws_iam_role.deployment_role
-  id = "aws-gino-sol-deployment"
-}
-
 data "aws_iam_policy_document" "deployment_assume_role_policy_document" {
 
   version = "2012-10-17"
@@ -28,14 +23,14 @@ data "aws_iam_policy_document" "deployment_assume_role_policy_document" {
   }
 }
 
-resource "aws_iam_role" "deployment_role" {
-  name                 = "aws-gino-sol-deployment"
-  max_session_duration = 3600
+# resource "aws_iam_role" "deployment_role" {
+#   name                 = "aws_gino_sol_deployment"
+#   max_session_duration = 3600
 
-  assume_role_policy = data.aws_iam_policy_document.deployment_assume_role_policy_document.json
+#   assume_role_policy = data.aws_iam_policy_document.deployment_assume_role_policy_document.json
 
-  tags = local.default_tags
-}
+#   tags = local.default_tags
+# }
 
 # resource "aws_iam_role_policy_attachment" "deployment_role_policy_attch" {
 #   role       = aws_iam_role.deployment_role.name
