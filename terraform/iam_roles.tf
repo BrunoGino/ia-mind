@@ -37,7 +37,7 @@ resource "aws_iam_role" "deployment_role" {
   tags = local.default_tags
 }
 
-resource "aws_iam_role_policy_attachment" "deployment_role_policy_attch" {
-  role       = aws_iam_role.deployment_role.name
-  policy_arn = aws_iam_policy.deployment_policy.arn
-}
+# resource "aws_iam_role_policy_attachment" "deployment_role_policy_attch" {
+#   role       = aws_iam_role.deployment_role.name
+#   policy_arn = aws_iam_policy.deployment_policy.arn
+# }

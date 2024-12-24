@@ -15,7 +15,8 @@ data "aws_iam_policy_document" "deployment_policy_document" {
     ]
     resources = [
       "arn:aws:s3:::iamind-terraform-state-backend",
-      "arn:aws:dynamodb:eu-west-1:108782061116:table/iamind-terraform-state-lock"
+      "arn:aws:dynamodb:eu-west-1:108782061116:table/iamind-terraform-state-lock",
+      "arn:aws:dynamodb:eu-west-1:108782061116:table/iamind-terraform-state-lock/*"
     ]
   }
 
@@ -24,7 +25,14 @@ data "aws_iam_policy_document" "deployment_policy_document" {
     effect = "Allow"
     actions = [
       "iam:Get*",
-      "iam:List*"
+      "iam:List*",
+      "iam:DeletePolicyVersion",
+      "iam:TagRole",
+      "iam:UntagRole",
+      "iam:DeletePolicy",
+      "iam:UpdateAssumeRolePolicy",
+      "iam:UpdateRoleDescription",
+      "iam:PassRole"
     ]
     resources = [
       "arn:aws:iam::108782061116:policy/aws-gino-sol-deployment",
