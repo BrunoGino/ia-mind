@@ -12,7 +12,7 @@ resource "aws_s3_bucket" "terraform_state_bucket" {
 }
 
 resource "aws_s3_bucket_server_side_encryption_configuration" "terraform_state_bucket_encryption" {
-  bucket = aws_s3_bucket.terraform_state_bucket
+  bucket = aws_s3_bucket.terraform_state_bucket.bucket
 
   rule {
     apply_server_side_encryption_by_default {
