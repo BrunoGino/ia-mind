@@ -116,7 +116,7 @@ jobs:
 
         - name: Terraform Plan
           id: terraform-plan
-          run: terraform plan
+          run: terraform plan -lock=false
         
         - name: Terraform Apply
           id: terraform-apply
