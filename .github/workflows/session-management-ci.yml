@@ -120,4 +120,4 @@ jobs:
         
         - name: Terraform Apply
           id: terraform-apply
-          run: terraform apply -auto-approve
+          run: terraform apply -auto-approve -lock=false
