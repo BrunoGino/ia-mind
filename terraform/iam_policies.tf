@@ -17,7 +17,19 @@ data "aws_iam_policy_document" "deployment_policy_document" {
       "arn:aws:s3:::iamind-terraform-state-backend",
       "arn:aws:dynamodb:eu-west-1:108782061116:table/iamind-terraform-state-lock"
     ]
+  }
 
+  statement {
+    sid    = "AuthorizeDeployment"
+    effect = "Allow"
+    actions = [
+      "iam:Get*",
+      "iam:List*"
+    ]
+    resources = [
+      "arn:aws:iam::108782061116:policy/aws-gino-sol-deployment",
+      "arn:aws:iam::108782061116:role/aws-gino-sol-deployment"
+    ]
   }
 }
 
