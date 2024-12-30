@@ -42,6 +42,9 @@ data "aws_iam_policy_document" "deployment_policy_document" {
       "wafv2:AssociateWebACL",
       "wafv2:CreateWebACL"
     ]
+    resources = [
+      "arn:aws:wafv2:eu-west-1:108782061116:regional/managedruleset/*/*"
+    ]
   }
 
   statement {
@@ -58,7 +61,9 @@ data "aws_iam_policy_document" "deployment_policy_document" {
       "iam:UpdateRoleDescription",
       "iam:PassRole",
       "iam:CreatePolicy",
-      "iam:CreatePolicyVersion"
+      "iam:CreatePolicyVersion",
+      "iam:CreateRole",
+      "iam:AttachRolePolicy"
     ]
     resources = [
       "arn:aws:iam::108782061116:role/aws_gino_sol_deployment",
