@@ -8,12 +8,14 @@ data "aws_iam_policy_document" "deployment_policy_document" {
       "s3:CreateBucket",
       "s3:DeleteBucket",
       "s3:PutBucketVersioning",
-      "s3:PutBucketEncryption",
-      "s3:PutBucketTagging"
+      "s3:PutEncryptionConfiguration",
+      "s3:PutBucketTagging",
+      "s3:PutObject*",
+      "s3:Get*",
+      "s3:List*"
     ]
     resources = [
       "arn:aws:s3:::iamind-terraform-state-backend",
-
       "arn:aws:s3:::iamind-terraform-state-backend/terraform.tfstate"
     ]
   }
