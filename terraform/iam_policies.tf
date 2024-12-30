@@ -47,7 +47,10 @@ data "aws_iam_policy_document" "deployment_policy_document" {
       "wafv2:UntagResource",
       "wafv2:AssociateWebACL",
       "wafv2:CreateWebACL",
-      "wafv2:UpdateWebACL"
+      "wafv2:UpdateRuleGroup",
+      "wafv2:UpdateRegexPatternSet",
+      "wafv2:UpdateManagedRuleSetVersionExpiryDate",
+      "wafv2:UpdateIPSet"
     ]
     resources = [
       "arn:aws:wafv2:eu-west-1:108782061116:regional/managedruleset/*/*",
