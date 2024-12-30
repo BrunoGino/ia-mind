@@ -26,16 +26,16 @@ data "aws_iam_policy_document" "deployment_assume_role_policy_document" {
   }
 }
 
-# resource "aws_iam_role" "deployment_role" {
-#   name                 = "aws_gino_sol_deployment"
-#   max_session_duration = 3600
+resource "aws_iam_role" "deployment_role" {
+  name                 = "aws_gino_sol_deployment"
+  max_session_duration = 3600
 
-#   assume_role_policy = data.aws_iam_policy_document.deployment_assume_role_policy_document.json
+  assume_role_policy = data.aws_iam_policy_document.deployment_assume_role_policy_document.json
 
-#   tags = local.default_tags
-# }
+  tags = local.default_tags
+}
 
-# resource "aws_iam_role_policy_attachment" "deployment_role_policy_attch" {
-#   role       = aws_iam_role.deployment_role.name
-#   policy_arn = aws_iam_policy.deployment_policy.arn
-# }
+resource "aws_iam_role_policy_attachment" "deployment_role_policy_attch" {
+  role       = aws_iam_role.deployment_role.name
+  policy_arn = aws_iam_policy.deployment_policy.arn
+}

@@ -2,21 +2,50 @@ data "aws_iam_policy_document" "deployment_policy_document" {
 
   version = "2012-10-17"
   statement {
-    sid    = "TerraformStateFullAccess"
+    sid    = "S3Control"
     effect = "Allow"
     actions = [
-      "s3:*",
-      "dynamodb:*"
+      "s3:CreateBucket",
+      "s3:DeleteBucket",
+      "s3:PutBucketVersioning",
+      "s3:PutBucketEncryption",
+      "s3:PutBucketTagging"
     ]
     resources = [
       "arn:aws:s3:::iamind-terraform-state-backend",
-      "arn:aws:dynamodb:eu-west-1:108782061116:table/iamind-terraform-state-lock",
+
       "arn:aws:s3:::iamind-terraform-state-backend/terraform.tfstate"
     ]
   }
 
   statement {
-    sid    = "AuthorizeDeployment"
+    sid    = "DynamoDBControl"
+    effect = "Allow"
+    actions = [
+      "dynamodb:CreateTable",
+      "dynamodb:TagResource"
+    ]
+    resources = [
+      "arn:aws:dynamodb:eu-west-1:108782061116:table/iamind-terraform-state-lock"
+    ]
+  }
+
+
+  statement {
+    sid    = "WAFControl"
+    effect = "Allow"
+    actions = [
+      "wafv2:Get*",
+      "wafv2:List*",
+      "wafv2:TagResource",
+      "wafv2:UntagResource",
+      "wafv2:AssociateWebACL",
+      "wafv2:CreateWebACL"
+    ]
+  }
+
+  statement {
+    sid    = "IAMControl"
     effect = "Allow"
     actions = [
       "iam:Get*",
@@ -27,11 +56,15 @@ data "aws_iam_policy_document" "deployment_policy_document" {
       "iam:DeletePolicy",
       "iam:UpdateAssumeRolePolicy",
       "iam:UpdateRoleDescription",
-      "iam:PassRole"
+      "iam:PassRole",
+      "iam:CreatePolicy",
+      "iam:CreatePolicyVersion"
     ]
     resources = [
-      "arn:aws:iam::108782061116:policy/aws-gino-sol-deployment",
-      "arn:aws:iam::108782061116:role/aws-gino-sol-deployment"
+      "arn:aws:iam::108782061116:role/aws_gino_sol_deployment",
+      "arn:aws:iam::108782061116:policy/aws_gino_sol_deployment",
+      "arn:aws:iam::108782061116:role/aws_gino_sol_iamind*",
+      "arn:aws:iam::108782061116:policy/aws_gino_sol_iamind*",
     ]
   }
 }
