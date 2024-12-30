@@ -54,6 +54,17 @@ data "aws_iam_policy_document" "deployment_policy_document" {
     ]
   }
 
+    statement {
+    sid    = "Route53Control"
+    effect = "Allow"
+    actions = [
+      "route53:ListHostedZones"
+    ]
+    resources = [
+      "*"
+    ]
+  }
+
   statement {
     sid    = "IAMControl"
     effect = "Allow"
