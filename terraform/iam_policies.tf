@@ -25,7 +25,11 @@ data "aws_iam_policy_document" "deployment_policy_document" {
     effect = "Allow"
     actions = [
       "dynamodb:CreateTable",
-      "dynamodb:TagResource"
+      "dynamodb:TagResource",
+      "dynamodb:UntagResource",
+      "dynamodb:List*",
+      "dynamodb:Describe*",
+      "dynamodb:Get*"
     ]
     resources = [
       "arn:aws:dynamodb:eu-west-1:108782061116:table/iamind-terraform-state-lock"
