@@ -46,7 +46,8 @@ data "aws_iam_policy_document" "deployment_policy_document" {
       "wafv2:TagResource",
       "wafv2:UntagResource",
       "wafv2:AssociateWebACL",
-      "wafv2:CreateWebACL"
+      "wafv2:CreateWebACL",
+      "wafv2:UpdateWebACL"
     ]
     resources = [
       "arn:aws:wafv2:eu-west-1:108782061116:regional/managedruleset/*/*",
@@ -54,7 +55,7 @@ data "aws_iam_policy_document" "deployment_policy_document" {
     ]
   }
 
-    statement {
+  statement {
     sid    = "Route53Control"
     effect = "Allow"
     actions = [
