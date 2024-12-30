@@ -15,9 +15,12 @@ data "aws_iam_policy_document" "deployment_assume_role_policy_document" {
     }
 
     condition {
-      test     = "StringEquals"
+      test     = "StringLike"
       variable = "token.actions.githubusercontent.com:sub"
-      values   = ["sts.amazonaws.com"]
+      values = [
+        "sts.amazonaws.com",
+        "repo:BrunoGino/ia-mind:ref:refs/heads/main"
+      ]
     }
 
   }
