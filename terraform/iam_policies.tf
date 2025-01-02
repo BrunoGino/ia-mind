@@ -136,6 +136,8 @@ data "aws_iam_policy_document" "deployment_policy_document" {
       "arn:aws:apigateway:eu-west-1::/apis/*/stages/*",
       "arn:aws:apigateway:eu-west-1::/apis/*/stages/*/accesslogsettings",
       "arn:aws:apigateway:eu-west-1::/domainnames/*",
+      "arn:aws:apigateway:eu-west-1::/vpclinks",
+      "arn:aws:apigateway:eu-west-1::/vpclinks/*",
     ]
   }
 
