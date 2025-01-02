@@ -191,6 +191,25 @@ data "aws_iam_policy_document" "deployment_policy_document" {
     ]
   }
 
+  statement {
+    sid    = "CloudwatchControl"
+    effect = "Allow"
+    actions = [
+      "cloudwatch:Describe*",
+      "cloudwatch:List*",
+      "cloudwatch:EnableAlarmActions",
+      "cloudwatch:PutMetric*",
+      "cloudwatch:TagResource",
+      "cloudwatch:UntagResource",
+      "cloudwatch:DeleteAlarms"
+    ]
+    resources = [
+      "arn:aws:cloudwatch:eu-west-1:108782061116:alarm:iamind-*",
+      "arn:aws:cloudwatch:eu-west-1:108782061116:metric-stream/iamind-*",
+      "arn:aws:cloudwatch:eu-west-1:108782061116:service/iamind-*"
+    ]
+  }
+
 }
 
 
@@ -240,6 +259,13 @@ data "aws_iam_policy_document" "ecs_tasks_policy_document" {
     effect    = "Allow"
     actions   = ["sqs:DeleteMessage", "sqs:GetQueueUrl", "sqs:GetQueueAttributes", "sqs:ReceiveMessage", "sqs:SendMessage"]
     resources = ["arn:aws:sqs:eu-west-1:108782061116:iamind-*"]
+  }
+
+  statement {
+    sid       = "CloudwatchIntegration"
+    effect    = "Allow"
+    actions   = ["cloudwatch:PutMetricAlarm", "cloudwatch:DeleteAlarms"]
+    resources = ["arn:aws:cloudwatch:eu-west-1:108782061116:alarm:iamind-*"]
   }
 
 }
