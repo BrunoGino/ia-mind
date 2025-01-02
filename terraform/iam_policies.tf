@@ -1,3 +1,6 @@
+#####################################
+#    DEPLOYMENT POLICY
+#####################################
 data "aws_iam_policy_document" "deployment_policy_document" {
 
   version = "2012-10-17"
@@ -154,14 +157,14 @@ data "aws_iam_policy_document" "deployment_policy_document" {
       "ecs:Register*"
     ]
     resources = [
-      "arn:aws:ecs:eu-west-1:108782061116:cluster/ia-mind",
-      "arn:aws:ecs:eu-west-1:108782061116:service-deployment/ia-mind/*/*",
-      "arn:aws:ecs:eu-west-1:108782061116:task/ia-mind/*",
-      "arn:aws:ecs:eu-west-1:108782061116:container-instance/ia-mind/*",
+      "arn:aws:ecs:eu-west-1:108782061116:cluster/iamind",
+      "arn:aws:ecs:eu-west-1:108782061116:service-deployment/iamind/*/*",
+      "arn:aws:ecs:eu-west-1:108782061116:task/iamind/*",
+      "arn:aws:ecs:eu-west-1:108782061116:container-instance/iamind/*",
       "arn:aws:ecs:eu-west-1:108782061116:task-definition/*:*",
-      "arn:aws:ecs:eu-west-1:108782061116:service/ia-mind/*",
-      "arn:aws:ecs:eu-west-1:108782061116:task-set/ia-mind/*/*",
-      "arn:aws:ecs:eu-west-1:108782061116:service-revision/ia-mind/*/*",
+      "arn:aws:ecs:eu-west-1:108782061116:service/iamind/*",
+      "arn:aws:ecs:eu-west-1:108782061116:task-set/iamind/*/*",
+      "arn:aws:ecs:eu-west-1:108782061116:service-revision/iamind/*/*",
       "arn:aws:ecs:eu-west-1:108782061116:capacity-provider/*"
     ]
   }
@@ -173,4 +176,54 @@ resource "aws_iam_policy" "deployment_policy" {
   name        = "aws_gino_sol_deployment"
   description = "The policy that grants permissions to the deployment role"
   policy      = data.aws_iam_policy_document.deployment_policy_document.json
+}
+
+
+#####################################
+#    ECS TASKS POLICY
+#####################################
+data "aws_iam_policy_document" "ecs_tasks_policy_document" {
+
+  version = "2012-10-17"
+
+  statement {
+    sid    = "DynamoDBIntegrationAccess"
+    effect = "Allow"
+    actions = [
+      "dynamodb:*Item",
+      "dynamodb:Scan",
+      "dynamodb:Query",
+      "dynamodb:Describe*"
+    ]
+    resources = [
+      "arn:aws:dynamodb:eu-west-1:108782061116:table/iamind-*"
+    ]
+  }
+
+  statement {
+    sid    = "SNSIntegration"
+    effect = "Allow"
+    actions = [
+      "sns:Publish",
+      "sns:ListSubscriptionsByTopic",
+      "sns:GetTopicAttributes"
+    ]
+    resources = [
+      "arn:aws:sns:eu-west-1:108782061116:iamind-*"
+    ]
+  }
+
+  statement {
+    sid       = "SQSIntegration"
+    effect    = "Allow"
+    actions   = ["sqs:DeleteMessage", "sqs:GetQueueUrl", "sqs:GetQueueAttributes", "sqs:ReceiveMessage", "sqs:SendMessage"]
+    resources = ["arn:aws:sqs:eu-west-1:108782061116:iamind-*"]
+  }
+
+}
+
+resource "aws_iam_policy" "ecs_tasks_policy" {
+  name        = "aws_gino_sol_iamind_ecs_tasks"
+  description = "The policy that grants permissions to the ECS tasks role"
+  policy      = data.aws_iam_policy_document.ecs_tasks_policy_document.json
 }
