@@ -169,6 +169,28 @@ data "aws_iam_policy_document" "deployment_policy_document" {
     ]
   }
 
+  statement {
+    sid    = "ELBControl"
+    effect = "Allow"
+    actions = [
+      "elasticloadbalancing:Delete*",
+      "elasticloadbalancing:Create*",
+      "elasticloadbalancing:AddTags",
+      "elasticloadbalancing:DeleteTargetGroup",
+      "elasticloadbalancing:Modify*",
+      "elasticloadbalancing:SetSecurityGroup",
+      "elasticloadbalancing:DeleteRule",
+      "elasticloadbalancing:set*"
+    ]
+    resources = [
+      "arn:aws:elasticloadbalancing:eu-west-1:108782061116:loadbalancer/net/iamind-*",
+      "arn:aws:elasticloadbalancing:eu-west-1:108782061116:loadbalancer/app/iamind-*",
+      "arn:aws:elasticloadbalancing:eu-west-1:108782061116:listener/app/iamind-*",
+      "arn:aws:elasticloadbalancing:eu-west-1:108782061116:listener-rule/app/iamind-*",
+      "arn:aws:elasticloadbalancing:eu-west-1:108782061116:targetgroup/iamind-*"
+    ]
+  }
+
 }
 
 
