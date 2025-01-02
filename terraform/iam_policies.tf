@@ -50,7 +50,8 @@ data "aws_iam_policy_document" "deployment_policy_document" {
       "wafv2:UpdateRuleGroup",
       "wafv2:UpdateRegexPatternSet",
       "wafv2:UpdateManagedRuleSetVersionExpiryDate",
-      "wafv2:UpdateIPSet"
+      "wafv2:UpdateIPSet",
+      "wafv2:UpdateWebACL"
     ]
     resources = [
       "arn:aws:wafv2:eu-west-1:108782061116:regional/managedruleset/*/*",
@@ -94,6 +95,18 @@ data "aws_iam_policy_document" "deployment_policy_document" {
       "arn:aws:iam::108782061116:policy/aws_gino_sol_iamind*",
     ]
   }
+
+  statement {
+    sid    = "APIGatewayControl"
+    effect = "Allow"
+    actions = [
+      "apigateway:POST"
+    ]
+    resources = [
+      "arn:aws:apigateway:eu-west-1::/tags/*"
+    ]
+  }
+
 }
 
 
