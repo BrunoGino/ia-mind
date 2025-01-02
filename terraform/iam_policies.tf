@@ -141,6 +141,31 @@ data "aws_iam_policy_document" "deployment_policy_document" {
     ]
   }
 
+  statement {
+    sid    = "ECSControl"
+    effect = "Allow"
+    actions = [
+      "ecs:List*",
+      "ecs:Describe*",
+      "ecs:Get*",
+      "ecs:Put*",
+      "ecs:Delete*",
+      "ecs:Create*",
+      "ecs:Register*"
+    ]
+    resources = [
+      "arn:aws:ecs:eu-west-1:108782061116:cluster/ia-mind",
+      "arn:aws:ecs:eu-west-1:108782061116:service-deployment/ia-mind/*/*",
+      "arn:aws:ecs:eu-west-1:108782061116:task/ia-mind/*",
+      "arn:aws:ecs:eu-west-1:108782061116:container-instance/ia-mind/*",
+      "arn:aws:ecs:eu-west-1:108782061116:task-definition/*:*",
+      "arn:aws:ecs:eu-west-1:108782061116:service/ia-mind/*",
+      "arn:aws:ecs:eu-west-1:108782061116:task-set/ia-mind/*/*",
+      "arn:aws:ecs:eu-west-1:108782061116:service-revision/ia-mind/*/*",
+      "arn:aws:ecs:eu-west-1:108782061116:capacity-provider/*"
+    ]
+  }
+
 }
 
 
