@@ -100,7 +100,11 @@ data "aws_iam_policy_document" "deployment_policy_document" {
     sid    = "APIGatewayControl"
     effect = "Allow"
     actions = [
-      "apigateway:POST"
+      "apigateway:POST",
+      "apigateway:GET",
+      "apigateway:PATCH",
+      "apigateway:DELETE",
+      "apigateway:PUT",
     ]
     resources = [
       "arn:aws:apigateway:eu-west-1::/tags/*",    
