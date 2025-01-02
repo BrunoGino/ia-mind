@@ -192,6 +192,28 @@ data "aws_iam_policy_document" "deployment_policy_document" {
   }
 
   statement {
+    sid    = "VPCEC2Control"
+    effect = "Allow"
+    actions = [
+      "ec2:DeleteSecurityGroup",
+      "ec2:RevokeSecurityGroup*",
+      "ec2:AuthorizeSecurityGroup*",
+      "ec2:UpdateSecurityGroup*",
+      "ec2:Create*",
+      "ec2:Describe*",
+      "ec2:Terminate*"
+    ]
+    resources = [
+      "*"
+    ]
+    condition {
+      test     = "StringEquals"
+      variable = "ec2:ResourceTag/component"
+      values   = ["iamind"]
+    }
+  }
+
+  statement {
     sid    = "CloudwatchControl"
     effect = "Allow"
     actions = [
