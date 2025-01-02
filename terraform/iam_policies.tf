@@ -107,7 +107,7 @@ data "aws_iam_policy_document" "deployment_policy_document" {
       "apigateway:PUT",
     ]
     resources = [
-      "arn:aws:apigateway:eu-west-1::/tags/*",    
+      "arn:aws:apigateway:eu-west-1::/tags/*",
       "arn:aws:apigateway:eu-west-1::/apis",
       "arn:aws:apigateway:eu-west-1::/apis/*",
       "arn:aws:apigateway:eu-west-1::/apis/*/apimappings",
