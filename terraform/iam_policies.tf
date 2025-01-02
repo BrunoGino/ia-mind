@@ -103,7 +103,34 @@ data "aws_iam_policy_document" "deployment_policy_document" {
       "apigateway:POST"
     ]
     resources = [
-      "arn:aws:apigateway:eu-west-1::/tags/*"
+      "arn:aws:apigateway:eu-west-1::/tags/*",    
+      "arn:aws:apigateway:eu-west-1::/apis/*",
+      "arn:aws:apigateway:eu-west-1::/apis/*/apimappings",
+      "arn:aws:apigateway:eu-west-1::/apis/*/apimappings/*",
+      "arn:aws:apigateway:eu-west-1::/apis/*/authorizers",
+      "arn:aws:apigateway:eu-west-1::/apis/*/authorizers/*",
+      "arn:aws:apigateway:eu-west-1::/apis/*/cors",
+      "arn:aws:apigateway:eu-west-1::/apis/*/deployments",
+      "arn:aws:apigateway:eu-west-1::/apis/*/deployments/*",
+      "arn:aws:apigateway:eu-west-1::/apis/*/domainnames",
+      "arn:aws:apigateway:eu-west-1::/apis/*/domainnames/*",
+      "arn:aws:apigateway:eu-west-1::/apis/*/exports/*",
+      "arn:aws:apigateway:eu-west-1::/apis/*/integrations",
+      "arn:aws:apigateway:eu-west-1::/apis/*/integrations/*",
+      "arn:aws:apigateway:eu-west-1::/apis/*/integrationresponses",
+      "arn:aws:apigateway:eu-west-1::/apis/*/integrationresponses/*",
+      "arn:aws:apigateway:eu-west-1::/apis/*/models",
+      "arn:aws:apigateway:eu-west-1::/apis/*/models/*",
+      "arn:aws:apigateway:eu-west-1::/apis/*/routes",
+      "arn:aws:apigateway:eu-west-1::/apis/*/routes/*",
+      "arn:aws:apigateway:eu-west-1::/apis/*/requestparameters/*",
+      "arn:aws:apigateway:eu-west-1::/apis/*/routeresponses",
+      "arn:aws:apigateway:eu-west-1::/apis/*/routeresponses/*",
+      "arn:aws:apigateway:eu-west-1::/apis/*/routesettings/*",
+      "arn:aws:apigateway:eu-west-1::/apis/*/stages",
+      "arn:aws:apigateway:eu-west-1::/apis/*/stages/*",
+      "arn:aws:apigateway:eu-west-1::/apis/*/stages/*/accesslogsettings",
+      "arn:aws:apigateway:eu-west-1::/domainnames/*",
     ]
   }
 
