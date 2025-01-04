@@ -178,7 +178,6 @@ data "aws_iam_policy_document" "deployment_policy_document" {
       "elasticloadbalancing:AddTags",
       "elasticloadbalancing:DeleteTargetGroup",
       "elasticloadbalancing:Modify*",
-      "elasticloadbalancing:SetSecurityGroup",
       "elasticloadbalancing:DeleteRule",
       "elasticloadbalancing:set*"
     ]
@@ -204,10 +203,11 @@ data "aws_iam_policy_document" "deployment_policy_document" {
       "ec2:Terminate*"
     ]
     resources = [
-      "*"
+      "*",
+      "arn:aws:ec2::108782061116:ipam/*"
     ]
     condition {
-      test     = "StringEquals"
+      test     = "StringLike"
       variable = "aws:ResourceTag/component"
       values   = ["iamind"]
     }
