@@ -206,11 +206,6 @@ data "aws_iam_policy_document" "deployment_policy_document" {
       "*",
       "arn:aws:ec2::108782061116:ipam/*"
     ]
-    condition {
-      test     = "StringLike"
-      variable = "aws:ResourceTag/component"
-      values   = ["iamind"]
-    }
   }
 
   statement {
