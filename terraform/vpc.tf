@@ -4,12 +4,14 @@ resource "aws_vpc_ipam" "iamind_vpc_ipam" {
   operating_regions {
     region_name = local.main_aws_region
   }
+  tags = local.default_tags
 }
 
 resource "aws_vpc_ipam_pool" "iamind_vpc_ipam_pool" {
   address_family = "ipv4"
-  ipam_scope_id  = aws_vpc_ipam.iamind-vpc-ipam.private_default_scope_id
+  ipam_scope_id  = aws_vpc_ipam.iamind_vpc_ipam.private_default_scope_id
   locale         = data.aws_region.current.name
+  tags           = local.default_tags
 }
 
 resource "aws_vpc_ipam_pool_cidr" "iamind_vpc_ipam_pool_cidr" {
@@ -64,7 +66,7 @@ resource "aws_subnet" "iamind_subnet_private2" {
 }
 
 
-resource "aws_security_group" "iamind_sg_http" {
+resource "aws_security_group" "iamind_sg_tls_http" {
   name        = "iamind_sg_tls_http"
   description = "Allow HTTP/HTTPS inbound and outbound traffic"
   vpc_id      = aws_vpc.iamind_vpc.id
@@ -78,6 +80,7 @@ resource "aws_vpc_security_group_ingress_rule" "allow_tls_ipv4" {
   from_port         = 443
   ip_protocol       = "tcp"
   to_port           = 443
+  tags              = local.default_tags
 }
 
 resource "aws_vpc_security_group_ingress_rule" "allow_http_ipv4" {
@@ -86,22 +89,25 @@ resource "aws_vpc_security_group_ingress_rule" "allow_http_ipv4" {
   from_port         = 80
   ip_protocol       = "tcp"
   to_port           = 80
+  tags              = local.default_tags
 }
 
 resource "aws_vpc_security_group_egress_rule" "allow_http_traffic_ipv4" {
-  security_group_id = aws_security_group.iamind_sg_http.id
+  security_group_id = aws_security_group.iamind_sg_tls_http.id
   cidr_ipv4         = "0.0.0.0/0"
   from_port         = 80
   ip_protocol       = "tcp"
   to_port           = 80
+  tags              = local.default_tags
 }
 
 resource "aws_vpc_security_group_egress_rule" "allow_tls_traffic_ipv4" {
-  security_group_id = aws_security_group.iamind_sg_http.id
+  security_group_id = aws_security_group.iamind_sg_tls_http.id
   cidr_ipv4         = "0.0.0.0/0"
   from_port         = 443
   ip_protocol       = "tcp"
   to_port           = 443
+  tags              = local.default_tags
 }
 
 resource "aws_network_acl" "iamind_main_nacl" {

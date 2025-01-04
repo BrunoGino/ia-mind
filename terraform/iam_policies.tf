@@ -208,7 +208,7 @@ data "aws_iam_policy_document" "deployment_policy_document" {
     ]
     condition {
       test     = "StringEquals"
-      variable = "ec2:ResourceTag/component"
+      variable = "aws:ResourceTag/component"
       values   = ["iamind"]
     }
   }
