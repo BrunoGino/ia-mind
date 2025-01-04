@@ -89,12 +89,14 @@ data "aws_iam_policy_document" "deployment_policy_document" {
       "iam:CreatePolicy",
       "iam:CreatePolicyVersion",
       "iam:CreateRole",
-      "iam:AttachRolePolicy"
+      "iam:AttachRolePolicy",
+      "iam:CreateServiceLinkedRole"
     ]
     resources = [
       "arn:aws:iam::108782061116:role/aws_gino_sol_deployment",
       "arn:aws:iam::108782061116:policy/aws_gino_sol_deployment",
       "arn:aws:iam::108782061116:role/aws_gino_sol_iamind*",
+      "arn:aws:iam::108782061116:role/AWSServiceRole*",
       "arn:aws:iam::108782061116:policy/aws_gino_sol_iamind*",
     ]
   }
@@ -200,11 +202,18 @@ data "aws_iam_policy_document" "deployment_policy_document" {
       "ec2:UpdateSecurityGroup*",
       "ec2:Create*",
       "ec2:Describe*",
-      "ec2:Terminate*"
+      "ec2:Terminate*",
+      "ec2:ProvisionIpamPoolCidr",
+      "ec2:DeleteIpamPool",
+      "ec2:DeleteIpam",
+      "ec2:Get*"
     ]
     resources = [
       "*",
-      "arn:aws:ec2::108782061116:ipam/*"
+      "arn:aws:ec2::108782061116:ipam/*",
+      "arn:aws:ec2::108782061116:ipam-pool/ipam-pool-*",
+      "arn:aws:ec2:eu-west-1:108782061116:ipam-pool/*",
+      "arn:aws:ec2::108782061116:ipam/ipam-*"
     ]
   }
 
