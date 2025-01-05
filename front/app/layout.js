@@ -19,15 +19,15 @@ const worksans = Work_Sans({
 
 export const metadata = {
   title: {
-    template:'Techwave NextJs | %s',
+    template:'IAMind Heath Tech | %s',
     // content:'text/html',
-    default:'Techwave | React NextJs Personal Portfolio Templage', // a default is required when creating a template
+    default:'IAMind | Platafforn For Heath Mental Deases', // a default is required when creating a template
   },
   name: "description",
-  content:"React NextJs Admin Deshboard",
+  content:"IAMind Platafforn For Heath Mental Deases",
   openGraph: {
     title: 'Techwave - React NextJs',
-    description: 'React NextJs Admin Deshboard'
+    description: 'IAMind Platafforn For Heath Mental Deases'
   },
   author: [{ name: 'TrendyCoder' }, { name: 'Alam', url: 'https://trendycoder.com' }],
   viewport:'width=device-width, initial-scale=1, maximum-scale=1',

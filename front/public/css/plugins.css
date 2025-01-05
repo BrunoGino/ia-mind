@@ -8,6 +8,11 @@
 /*------------------------------------------------------------------*/ 
 /*	1. Base CSS
 /*------------------------------------------------------------------*/
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 a,abbr,acronym,address,applet,b,big,blockquote,body,caption,center,cite,code,dd,del,dfn,div,dl,dt,em,fieldset,font,form,h1,h2,h3,h4,h5,h6,html,i,iframe,ins,kbd,label,legend,li,object,ol,p,pre,q,s,samp,small,span,strike,strong,sub,sup,table,tbody,td,tfoot,th,thead,tr,tt,u,ul,var{
     background:0 0;
     border:0;
@@ -58,22 +63,22 @@ h1,h2,h3,h4,h5,h6{
     margin-bottom:20px
 }
 h1{
-    font-size:45px
+    font-size:38px
 }
 h2{
-    font-size:36px
+    font-size:32px
 }
 h3{
-    font-size:30px
-}
-h4{
-    font-size:24px
-}
-h5{
     font-size:20px
 }
-h6{
+h4{
+    font-size:17px
+}
+h5{
     font-size:16px
+}
+h6{
+    font-size:12px
 }
 table{
     width:100%;
