@@ -234,23 +234,8 @@ resource "aws_vpc_endpoint" "private_dynamodb_endpoint" {
   tags = merge(local.default_tags, { Name : "iamind-dynamoDB-private-endpoint" })
 }
 
-
-data "aws_prefix_list" "private_dynamodb_prefix_list" {
-  prefix_list_id = aws_vpc_endpoint.private_dynamodb_endpoint.prefix_list_id
-}
-
 resource "aws_route_table" "iamind_rtb_private1" {
   vpc_id = aws_vpc.iamind_vpc.id
-
-  route {
-    cidr_block      = data.aws_prefix_list.private_dynamodb_prefix_list.prefix_list_id
-    vpc_endpoint_id = aws_vpc_endpoint.private_dynamodb_endpoint.id
-  }
-
-  route {
-    cidr_block      = data.aws_prefix_list.private_s3_prefix_list.prefix_list_id
-    vpc_endpoint_id = aws_vpc_endpoint.private_s3_endpoint.id
-  }
 
   route {
     cidr_block = "13.3.0.0/16"
@@ -259,27 +244,36 @@ resource "aws_route_table" "iamind_rtb_private1" {
 
   tags = local.default_tags
 }
-
 
 resource "aws_route_table" "iamind_rtb_private2" {
   vpc_id = aws_vpc.iamind_vpc.id
 
   route {
-    cidr_block      = data.aws_prefix_list.private_dynamodb_prefix_list.prefix_list_id
-    vpc_endpoint_id = aws_vpc_endpoint.private_dynamodb_endpoint.id
-  }
-
-  route {
-    cidr_block      = data.aws_prefix_list.private_s3_prefix_list.prefix_list_id
-    vpc_endpoint_id = aws_vpc_endpoint.private_s3_endpoint.id
-  }
-
-  route {
     cidr_block = "13.3.0.0/16"
     gateway_id = "local"
   }
 
   tags = local.default_tags
+}
+
+resource "aws_vpc_endpoint_route_table_association" "iamind_rtb_association_private1_dynamodb" {
+  route_table_id  = aws_route_table.iamind_rtb_private1.id
+  vpc_endpoint_id = aws_vpc_endpoint.private_dynamodb_endpoint.id
+}
+
+resource "aws_vpc_endpoint_route_table_association" "iamind_rtb_association_private1_s3" {
+  route_table_id  = aws_route_table.iamind_rtb_private1.id
+  vpc_endpoint_id = aws_vpc_endpoint.private_s3_endpoint.id
+}
+
+resource "aws_vpc_endpoint_route_table_association" "iamind_rtb_association_private2_dynamodb" {
+  route_table_id  = aws_route_table.iamind_rtb_private2.id
+  vpc_endpoint_id = aws_vpc_endpoint.private_dynamodb_endpoint.id
+}
+
+resource "aws_vpc_endpoint_route_table_association" "iamind_rtb_association_private2_s3" {
+  route_table_id  = aws_route_table.iamind_rtb_private2.id
+  vpc_endpoint_id = aws_vpc_endpoint.private_s3_endpoint.id
 }
 
 resource "aws_route_table_association" "iamind_rtb_association_private1" {
