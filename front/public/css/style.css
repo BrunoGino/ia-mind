@@ -83,6 +83,11 @@
 /*------------------------------------------------------------------*/
 /*	01) ROOT
 /*------------------------------------------------------------------*/
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 :root{
 	color-scheme: dark;
 	--techwave-site-bg-color: #0f0e11;
@@ -6237,172 +6242,127 @@ a.fn__like.no_border .fn__svg{
 	display: block;
 }
 /*------------------------------------------------------------------*/
-/*	60) Model Items (used in model page)
+/*	60) Model Items (used in model page) - Ajuste para lista linear
 /*------------------------------------------------------------------*/
-.fn__model_items{
-	margin: 0;
-	padding: 0;
-	list-style-type: none;
-	display: -webkit-flex;
-	display: -moz-flex;
-	display: -ms-flex;
-	display: -o-flex;
-	display: flex;
-	flex-wrap: wrap;
-	margin-left: -20px;
-}
-.fn__model_item{
-	margin: 0;
-	padding: 0;
-	width: 20%;
-	padding-left: 20px;
-	margin-bottom: 20px;
-}
-.fn__model_item .item{
-	border: 1px solid var(--techwave-border-color);
-	border-radius: 5px;
-	position: relative;
-	background-color: var(--techwave-some-r-bg-color);
-	min-height: 100%;
-}
-.fn__model_item.new .item a{
-	z-index: 3;
-}
-.fn__model_item.new .item{
-	padding: 30px 15px 27px;
-    text-align: center;
-    display: -webkit-flex;
-    display: -moz-flex;
-    display: -ms-flex;
-    display: -o-flex;
+.fn__model_items {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
     display: flex;
-    -webkit-flex-direction: column;
-    -moz-flex-direction: column;
-    -ms-flex-direction: column;
-    -o-flex-direction: column;
-    flex-direction: column;
-    -ms-align-items: center;
-    align-items: center;
-    justify-content: center;
+    flex-direction: column; /* Exibe os itens verticalmente */
+    gap: 20px; /* Espaçamento entre os itens */
 }
-.fn__model_item.new .item .add{
-	height: 80px;
-    width: 80px;
-    position: relative;
-    margin-bottom: 29px;
+
+.fn__model_item {
+    margin: 0;
+    padding: 0;
+    width: 100%; /* Cada item ocupa toda a largura */
+    display: flex; /* Exibe o conteúdo em linha */
+    align-items: center; /* Alinha verticalmente o conteúdo */
+    border: 1px solid var(--techwave-border-color);
+    border-radius: 5px;
+    background-color: var(--techwave-some-r-bg-color);
+    overflow: hidden;
+    padding: 15px;
 }
-.fn__model_item.new .item .add:after{
-	width: 2px;
-	height: 80px;
-	position: absolute;
-	content: '';
-	left: 50%;
-	margin-left: -1px;
-	background-color: var(--techwave-border-color);
-	top: 50%;
-	margin-top: -40px;
-}
-.fn__model_item.new .item:hover{
-	border-color: var(--techwave-main-color);
-}
-.fn__model_item.new .item .add:before{
-	width: 80px;
-	height: 2px;
-	position: absolute;
-	content: '';
-	top: 50%;
-	left: 50%;
-	margin-left: -40px;
-	margin-top: -1px;
-	background-color: var(--techwave-border-color);
-}
-.fn__model_item.new .item .text{
-	font-weight: 500;
-	font-size: 14px;
-	line-height: 1;
-	text-transform: uppercase;
-	letter-spacing: .5px;
-	color: var(--techwave-heading-color);
-    font-family: var(--techwave-heading-font-family);
-}
-.fn__model_item .item:hover .fn__bookmark{
-	opacity: 1;
-	visibility: visible;
-	pointer-events: all;
-}
-.fn__model_item .img:before{
-	height: 0;
-	content: '';
-	padding-bottom: 100%;
-	display: block;
-}
-.fn__model_item .img{
-	position: relative;
-	margin: -1px;
-	margin-bottom: 0;
-}
-.fn__model_item .img img{
-	position: absolute;
-	width: 100%;
-	height: 100%;
-	object-fit: cover;
-	top: 0;
-	left: 0;
-	border-radius: 5px 5px 0 0;
-}
-.fn__model_item .item__info{
-	padding: 18px 15px 14px;
-}
-.fn__model_item .item__info .title{
-	margin: 0;
-	padding: 0;
-	font-size: 16px;
-	font-weight: 400;
-	color: var(--techwave-heading-color);
-    font-family: var(--techwave-heading-font-family);
-	margin-bottom: 5px;
-}
-.fn__model_item .item__info .desc{
-	margin: 0;
-	padding: 0;
-	font-size: 14px;
-	font-weight: 400;
-	color: var(--techwave-body-color);
-    font-family: var(--techwave-body-font-family);
-	overflow: hidden;
-	display: -webkit-box;
-	-webkit-line-clamp: 3; /* number of lines to show */
-	line-clamp: 3; 
-	-webkit-box-orient: vertical;
-}
-.fn__model_item .item__author{
-	height: 41px;
-	border-top: 1px solid var(--techwave-border-color);
-	padding: 10px 15px;
-	display: -webkit-flex;
-	display: -moz-flex;
-	display: -ms-flex;
-	display: -o-flex;
+
+.fn__model_content_item{
 	display: flex;
-	-ms-align-items: center;
 	align-items: center;
 }
-.fn__model_item .item__author img{
-	margin-right: 7px;
-	width: 20px;
-	height: 20px;
-	display: block;
-	border-radius: 100%;
-	object-fit: cover;
+
+.fn__model_image{
+	padding-right: 15px;
+    width: 100%;
+    text-align: center;
+    max-width: 155px;
 }
-.fn__model_item .author_name{
-	margin: 0;
-	padding: 0;
-	font-size: 14px;
-	font-weight: 400;
-	color: var(--techwave-heading-color);
+
+.fn__model_item .img {
+    width: 120px; /* Largura fixa para a imagem */
+    height: 120px; /* Altura fixa para manter proporção */
+    margin-right: 15px; /* Espaço entre a imagem e o texto */
+    flex-shrink: 0; /* Impede que a imagem encolha */
+}
+
+.fn__model_item .img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Mantém a proporção da imagem */
+    border-radius: 5px;
+}
+
+.fn__model_item .item__info {
+    flex: 1; /* Faz o texto ocupar o restante do espaço */
+    padding: 0; /* Remove padding adicional */
+}
+
+.fn__model_item .item__info .title {
+    margin: 0 0 8px;
+    padding: 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--techwave-heading-color);
     font-family: var(--techwave-heading-font-family);
 }
+
+.fn__model_item .item__info .desc {
+    margin: 0 0 8px;
+    padding: 0;
+    font-size: 14px;
+    color: var(--techwave-body-color);
+    font-family: var(--techwave-body-font-family);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap; /* Texto em uma linha */
+}
+
+.fn__model_item .item__author {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    color: var(--techwave-body-color);
+    margin-top: 8px;
+}
+
+.fn__model_item .item__author img {
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+    border-radius: 50%; /* Deixa a imagem do autor circular */
+    object-fit: cover;
+}
+
+.fn__model_item .author_name {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--techwave-heading-color);
+}
+
+.fn__model__actions{
+
+}
+
+
+
+.fn__model__actions .fn__model_bt_tools{
+	display: flex;
+}
+
+.fn__model__actions .fn__model_bt_tools a{
+	display: block;
+	padding: 0 15px 0 15px;
+	text-decoration: none;
+	font-size: 12px!important;
+	color: var(--techwave-heading-color);
+}
+
+.fn__model__actions .fn__model_bt_tools a:first-child{
+	display: block;
+	padding: 0 15px 0 0;
+	text-decoration: none;
+}
+
 /*------------------------------------------------------------------*/
 /*	61) Bookmark button
 /*------------------------------------------------------------------*/
