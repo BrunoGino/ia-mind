@@ -10,16 +10,15 @@ data "aws_iam_policy_document" "deployment_policy_document_1" {
     actions = [
       "s3:CreateBucket",
       "s3:DeleteBucket",
-      "s3:PutBucketVersioning",
-      "s3:PutEncryptionConfiguration",
-      "s3:PutBucketTagging",
-      "s3:PutObject*",
+      "s3:Put*",
       "s3:Get*",
       "s3:List*"
     ]
     resources = [
       "arn:aws:s3:::iamind-terraform-state-backend",
-      "arn:aws:s3:::iamind-terraform-state-backend/terraform.tfstate"
+      "arn:aws:s3:::iamind-terraform-state-backend/terraform.tfstate",
+      "arn:aws:s3:::iamind-access-logs-bucket",
+      "arn:aws:s3:::iamind-access-logs-bucket/*"
     ]
   }
 
