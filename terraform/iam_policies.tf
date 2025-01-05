@@ -1,7 +1,7 @@
 #####################################
-#    DEPLOYMENT POLICY
+#    DEPLOYMENT POLICY - PART ONE
 #####################################
-data "aws_iam_policy_document" "deployment_policy_document" {
+data "aws_iam_policy_document" "deployment_policy_document_1" {
 
   version = "2012-10-17"
   statement {
@@ -88,18 +88,16 @@ data "aws_iam_policy_document" "deployment_policy_document" {
       "iam:UpdateAssumeRolePolicy",
       "iam:UpdateRoleDescription",
       "iam:PassRole",
-      "iam:CreatePolicy",
-      "iam:CreatePolicyVersion",
-      "iam:CreateRole",
+      "iam:Create*",
       "iam:AttachRolePolicy",
-      "iam:CreateServiceLinkedRole"
+      "iam:DetachRolePolicy"
     ]
     resources = [
-      "arn:aws:iam::108782061116:role/aws_gino_sol_deployment",
-      "arn:aws:iam::108782061116:policy/aws_gino_sol_deployment",
+      "arn:aws:iam::108782061116:role/aws_gino_sol_deployment*",
+      "arn:aws:iam::108782061116:policy/aws_gino_sol_deployment*",
       "arn:aws:iam::108782061116:role/aws_gino_sol_iamind*",
       "arn:aws:iam::108782061116:role/AWSServiceRole*",
-      "arn:aws:iam::108782061116:policy/aws_gino_sol_iamind*",
+      "arn:aws:iam::108782061116:policy/aws_gino_sol_iamind*"
     ]
   }
 
@@ -243,16 +241,46 @@ data "aws_iam_policy_document" "deployment_policy_document" {
       "arn:aws:cloudwatch:eu-west-1:108782061116:service/iamind-*"
     ]
   }
+}
 
+#####################################
+#    DEPLOYMENT POLICY - PART TWO
+#####################################
+data "aws_iam_policy_document" "deployment_policy_document_2" {
+
+  version = "2012-10-17"
+  statement {
+    sid    = "ACMControl"
+    effect = "Allow"
+    actions = [
+      "acm:Get*",
+      "acm:List*",
+      "acm:AddTagsToCertificate",
+      "acm:DeleteCertificate",
+      "acm:DescribeCertificate",
+      "acm:PutAccountConfiguration",
+      "acm:RemoveTagsFromCertificate",
+      "acm:RequestCertificate",
+      "acm:UpdateCertificateOptions"
+    ]
+    resources = [
+      "arn:aws:acm:eu-west-1:108782061116:certificate/*"
+    ]
+  }
 }
 
 
-resource "aws_iam_policy" "deployment_policy" {
-  name        = "aws_gino_sol_deployment"
+resource "aws_iam_policy" "deployment_policy_1" {
+  name        = "aws_gino_sol_deployment_policy_1"
   description = "The policy that grants permissions to the deployment role"
-  policy      = data.aws_iam_policy_document.deployment_policy_document.json
+  policy      = data.aws_iam_policy_document.deployment_policy_document_1.json
 }
 
+resource "aws_iam_policy" "deployment_policy_2" {
+  name        = "aws_gino_sol_deployment_policy_2"
+  description = "The policy that grants permissions to the deployment role"
+  policy      = data.aws_iam_policy_document.deployment_policy_document_2.json
+}
 
 #####################################
 #    ECS TASKS POLICY
