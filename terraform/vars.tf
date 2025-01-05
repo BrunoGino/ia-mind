@@ -1,5 +1,6 @@
 locals {
   main_aws_region = "eu-west-1"
+  region          = "eu-west-1"
 
 
   default_tags = {

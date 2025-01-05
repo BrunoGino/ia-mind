@@ -14,3 +14,14 @@ resource "aws_dynamodb_table" "terraform-lock" {
   }
   tags = merge(local.default_tags, { Name : "DynamoDB Terraform State Lock Table" })
 }
+
+resource "aws_dynamodb_table" "iamind_session_table" {
+  name         = "iamind_session_table"
+  billing_mode = "PAY_PER_REQUEST"
+  hash_key     = "id"
+  attribute {
+    name = "id"
+    type = "S"
+  }
+  tags = merge(local.default_tags, { Name : "IAMind session management table" })
+}
