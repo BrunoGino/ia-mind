@@ -197,22 +197,23 @@ data "aws_iam_policy_document" "deployment_policy_document" {
   statement {
     sid    = "VPCEC2Control"
     effect = "Allow"
-    actions = [    
-      "ec2:RevokeSecurityGroup*",
-      "ec2:AuthorizeSecurityGroup*",
-      "ec2:UpdateSecurityGroup*",
+    actions = [
+      "ec2:Revoke*",
+      "ec2:Authorize*",
+      "ec2:Update*",
       "ec2:Create*",
       "ec2:Describe*",
       "ec2:Terminate*",
-      "ec2:ProvisionIpamPoolCidr",
-      "ec2:DeprovisionIpamPoolCidr",    
+      "ec2:Provision*",
+      "ec2:Deprovision*",
       "ec2:Allocate*",
       "ec2:Modify*",
       "ec2:Get*",
       "ec2:Attach*",
       "ec2:Detach*",
       "ec2:Delete*",
-      "ec2:AssociateRouteTable"
+      "ec2:Associate*",
+      "ec2:Replace*"
     ]
     resources = [
       "*",

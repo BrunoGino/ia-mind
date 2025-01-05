@@ -131,7 +131,7 @@ resource "aws_network_acl" "iamind_main_nacl" {
 
   egress {
     protocol   = "tcp"
-    rule_no    = 200
+    rule_no    = 100
     action     = "allow"
     cidr_block = "0.0.0.0/0"
     from_port  = 80
