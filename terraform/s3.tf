@@ -23,7 +23,7 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "terraform_state_b
 }
 
 resource "aws_s3_bucket" "iamind_access_logs_bucket" {
-  bucket = "iamind_access_logs_bucket"
+  bucket = "iamind-access-logs-bucket"
 
   tags = local.default_tags
 }
