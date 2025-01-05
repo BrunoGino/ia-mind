@@ -162,7 +162,7 @@ resource "aws_network_acl" "iamind_main_nacl" {
 resource "aws_internet_gateway" "iamind_vpc_ig" {
   vpc_id = aws_vpc.iamind_vpc.id
 
-  tags = local.default_tags
+  tags = merge(local.default_tags, { Name : "iamind-internet-gateway" })
 }
 
 resource "aws_route_table" "iamind_rtb_public" {
@@ -178,7 +178,7 @@ resource "aws_route_table" "iamind_rtb_public" {
     gateway_id = "local"
   }
 
-  tags = local.default_tags
+  tags = merge(local.default_tags, { Name : "iamind-public-route-table" })
 }
 
 resource "aws_route_table_association" "iamind_rtb_association_public1" {
@@ -242,7 +242,7 @@ resource "aws_route_table" "iamind_rtb_private1" {
     gateway_id = "local"
   }
 
-  tags = local.default_tags
+  tags = merge(local.default_tags, { Name : "iamind-private1-route-table" })
 }
 
 resource "aws_route_table" "iamind_rtb_private2" {
@@ -253,7 +253,7 @@ resource "aws_route_table" "iamind_rtb_private2" {
     gateway_id = "local"
   }
 
-  tags = local.default_tags
+  tags = merge(local.default_tags, { Name : "iamind-private2-route-table" })
 }
 
 resource "aws_vpc_endpoint_route_table_association" "iamind_rtb_association_private1_dynamodb" {
