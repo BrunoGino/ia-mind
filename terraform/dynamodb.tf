@@ -16,9 +16,9 @@ resource "aws_dynamodb_table" "terraform-lock" {
 }
 
 resource "aws_dynamodb_table" "iamind_session_table" {
-  name                        = "iamind_session_table"
-  billing_mode                = "PAY_PER_REQUEST"
-  hash_key                    = "id"
+  name         = "iamind_session_table"
+  billing_mode = "PAY_PER_REQUEST"
+  hash_key     = "id"
   attribute {
     name = "id"
     type = "S"
