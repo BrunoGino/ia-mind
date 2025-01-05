@@ -17,7 +17,7 @@ resource "aws_lb" "iamind_alb" {
 }
 
 resource "aws_lb_target_group" "iamind_alb_tg_https" {
-  name     = "alb-tg-https"
+  name     = "iamind-alb-tg-https"
   port     = 443
   protocol = "TCP"
   vpc_id   = aws_vpc.iamind_vpc.id
