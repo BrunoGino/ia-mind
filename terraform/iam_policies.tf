@@ -35,7 +35,8 @@ data "aws_iam_policy_document" "deployment_policy_document" {
       "dynamodb:Get*"
     ]
     resources = [
-      "arn:aws:dynamodb:eu-west-1:108782061116:table/iamind-terraform-state-lock"
+      "arn:aws:dynamodb:eu-west-1:108782061116:table/iamind-terraform-state-lock",
+      "arn:aws:dynamodb:eu-west-1:108782061116:table/iamind-*",
     ]
   }
 
@@ -206,6 +207,9 @@ data "aws_iam_policy_document" "deployment_policy_document" {
       "ec2:ProvisionIpamPoolCidr",
       "ec2:DeleteIpamPool",
       "ec2:DeleteIpam",
+      "ec2:Allocate*",
+      "ec2:Modify*",
+      "ec2:DeleteVpc",
       "ec2:Get*"
     ]
     resources = [
