@@ -191,3 +191,103 @@ resource "aws_route_table_association" "iamind_rtb_association_public2" {
   route_table_id = aws_route_table.iamind_rtb_public.id
 }
 
+resource "aws_vpc_endpoint" "private_s3_endpoint" {
+  vpc_id       = aws_vpc.iamind_vpc.id
+  service_name = "com.amazonaws.eu-west-1.s3"
+
+  policy = jsonencode({
+    Version = "2008-10-17",
+    Statement = [
+      {
+        Effect    = "Allow",
+        Principal = "*",
+        Action    = "*",
+        Resource  = "*"
+      }
+    ]
+  })
+
+  tags = merge(local.default_tags, { Name : "iamind-S3-private-endpoint" })
+}
+
+data "aws_prefix_list" "private_s3_prefix_list" {
+  prefix_list_id = aws_vpc_endpoint.private_s3_endpoint.prefix_list_id
+}
+
+
+resource "aws_vpc_endpoint" "private_dynamodb_endpoint" {
+  vpc_id       = aws_vpc.iamind_vpc.id
+  service_name = "com.amazonaws.eu-west-1.dynamodb"
+
+  policy = jsonencode({
+    Version = "2008-10-17",
+    Statement = [
+      {
+        Effect    = "Allow",
+        Principal = "*",
+        Action    = "*",
+        Resource  = "*"
+      }
+    ]
+  })
+
+  tags = merge(local.default_tags, { Name : "iamind-dynamoDB-private-endpoint" })
+}
+
+
+data "aws_prefix_list" "private_dynamodb_prefix_list" {
+  prefix_list_id = aws_vpc_endpoint.private_dynamodb_endpoint.prefix_list_id
+}
+
+resource "aws_route_table" "iamind_rtb_private1" {
+  vpc_id = aws_vpc.iamind_vpc.id
+
+  route {
+    cidr_block      = data.aws_prefix_list.private_dynamodb_prefix_list.prefix_list_id
+    vpc_endpoint_id = aws_vpc_endpoint.private_dynamodb_endpoint.id
+  }
+
+  route {
+    cidr_block      = data.aws_prefix_list.private_s3_prefix_list.prefix_list_id
+    vpc_endpoint_id = aws_vpc_endpoint.private_s3_endpoint.id
+  }
+
+  route {
+    cidr_block = "13.3.0.0/16"
+    gateway_id = "local"
+  }
+
+  tags = local.default_tags
+}
+
+
+resource "aws_route_table" "iamind_rtb_private2" {
+  vpc_id = aws_vpc.iamind_vpc.id
+
+  route {
+    cidr_block      = data.aws_prefix_list.private_dynamodb_prefix_list.prefix_list_id
+    vpc_endpoint_id = aws_vpc_endpoint.private_dynamodb_endpoint.id
+  }
+
+  route {
+    cidr_block      = data.aws_prefix_list.private_s3_prefix_list.prefix_list_id
+    vpc_endpoint_id = aws_vpc_endpoint.private_s3_endpoint.id
+  }
+
+  route {
+    cidr_block = "13.3.0.0/16"
+    gateway_id = "local"
+  }
+
+  tags = local.default_tags
+}
+
+resource "aws_route_table_association" "iamind_rtb_association_private1" {
+  subnet_id      = aws_subnet.iamind_subnet_private1.id
+  route_table_id = aws_route_table.iamind_rtb_private1.id
+}
+
+resource "aws_route_table_association" "iamind_rtb_association_private2" {
+  subnet_id      = aws_subnet.iamind_subnet_private2.id
+  route_table_id = aws_route_table.iamind_rtb_private2.id
+}
