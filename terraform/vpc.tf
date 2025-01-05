@@ -1,5 +1,8 @@
 data "aws_region" "current" {}
 
+#####################################
+#    VPC IP Address Manager
+#####################################
 resource "aws_vpc_ipam" "iamind_vpc_ipam" {
   operating_regions {
     region_name = local.main_aws_region
@@ -19,6 +22,9 @@ resource "aws_vpc_ipam_pool_cidr" "iamind_vpc_ipam_pool_cidr" {
   cidr         = "13.3.0.0/16"
 }
 
+#####################################
+#    VPC
+#####################################
 resource "aws_vpc" "iamind_vpc" {
   instance_tenancy    = "default"
   ipv4_ipam_pool_id   = aws_vpc_ipam_pool.iamind_vpc_ipam_pool.id
@@ -30,9 +36,12 @@ resource "aws_vpc" "iamind_vpc" {
   enable_dns_hostnames                 = true
   enable_network_address_usage_metrics = true
 
-  tags = local.default_tags
+  tags = merge(local.default_tags, { Name = "iamind-vpc" })
 }
 
+#####################################
+#    Subnets
+#####################################
 resource "aws_subnet" "iamind_subnet_public1" {
   vpc_id            = aws_vpc.iamind_vpc.id
   cidr_block        = "13.3.0.0/20"
@@ -65,7 +74,9 @@ resource "aws_subnet" "iamind_subnet_private2" {
   tags = merge(local.default_tags, { Name = "iamind-private-subnet-2" })
 }
 
-
+#####################################
+#    Security Groups
+#####################################
 resource "aws_security_group" "iamind_sg_tls_http" {
   name        = "iamind_sg_tls_http"
   description = "Allow HTTP/HTTPS inbound and outbound traffic"
@@ -110,6 +121,9 @@ resource "aws_vpc_security_group_egress_rule" "allow_tls_traffic_ipv4" {
   tags              = local.default_tags
 }
 
+#####################################
+#    Network Access Control Lists
+#####################################
 resource "aws_network_acl" "iamind_main_nacl" {
   vpc_id = aws_vpc.iamind_vpc.id
 
@@ -159,12 +173,18 @@ resource "aws_network_acl" "iamind_main_nacl" {
   tags = local.default_tags
 }
 
+#####################################
+#    Internet Gateway
+#####################################
 resource "aws_internet_gateway" "iamind_vpc_ig" {
   vpc_id = aws_vpc.iamind_vpc.id
 
   tags = merge(local.default_tags, { Name : "iamind-internet-gateway" })
 }
 
+#####################################
+#   Public Route Tables
+#####################################
 resource "aws_route_table" "iamind_rtb_public" {
   vpc_id = aws_vpc.iamind_vpc.id
 
@@ -191,6 +211,9 @@ resource "aws_route_table_association" "iamind_rtb_association_public2" {
   route_table_id = aws_route_table.iamind_rtb_public.id
 }
 
+#####################################
+#    VPC Endpoints
+#####################################
 resource "aws_vpc_endpoint" "private_s3_endpoint" {
   vpc_id       = aws_vpc.iamind_vpc.id
   service_name = "com.amazonaws.eu-west-1.s3"
@@ -209,11 +232,6 @@ resource "aws_vpc_endpoint" "private_s3_endpoint" {
 
   tags = merge(local.default_tags, { Name : "iamind-S3-private-endpoint" })
 }
-
-data "aws_prefix_list" "private_s3_prefix_list" {
-  prefix_list_id = aws_vpc_endpoint.private_s3_endpoint.prefix_list_id
-}
-
 
 resource "aws_vpc_endpoint" "private_dynamodb_endpoint" {
   vpc_id       = aws_vpc.iamind_vpc.id
@@ -234,6 +252,9 @@ resource "aws_vpc_endpoint" "private_dynamodb_endpoint" {
   tags = merge(local.default_tags, { Name : "iamind-dynamoDB-private-endpoint" })
 }
 
+#####################################
+#   Private Route Tables
+#####################################
 resource "aws_route_table" "iamind_rtb_private1" {
   vpc_id = aws_vpc.iamind_vpc.id
 
