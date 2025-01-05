@@ -205,6 +205,7 @@ data "aws_iam_policy_document" "deployment_policy_document" {
       "ec2:Describe*",
       "ec2:Terminate*",
       "ec2:ProvisionIpamPoolCidr",
+      "ec2:DeprovisionIpamPoolCidr",
       "ec2:DeleteIpamPool",
       "ec2:DeleteIpam",
       "ec2:Allocate*",
