@@ -181,14 +181,15 @@ data "aws_iam_policy_document" "deployment_policy_document_1" {
       "elasticloadbalancing:DeleteTargetGroup",
       "elasticloadbalancing:Modify*",
       "elasticloadbalancing:DeleteRule",
-      "elasticloadbalancing:set*"
+      "elasticloadbalancing:set*",
+      "elasticloadbalancing:Describe*"
     ]
     resources = [
-      "arn:aws:elasticloadbalancing:eu-west-1:108782061116:loadbalancer/net/iamind-*",
-      "arn:aws:elasticloadbalancing:eu-west-1:108782061116:loadbalancer/app/iamind-*",
-      "arn:aws:elasticloadbalancing:eu-west-1:108782061116:listener/app/iamind-*",
-      "arn:aws:elasticloadbalancing:eu-west-1:108782061116:listener-rule/app/iamind-*",
-      "arn:aws:elasticloadbalancing:eu-west-1:108782061116:targetgroup/iamind-*"
+      "arn:aws:elasticloadbalancing:eu-west-1:108782061116:loadbalancer/net/iamind*",
+      "arn:aws:elasticloadbalancing:eu-west-1:108782061116:loadbalancer/app/iamind*",
+      "arn:aws:elasticloadbalancing:eu-west-1:108782061116:listener/app/iamind*",
+      "arn:aws:elasticloadbalancing:eu-west-1:108782061116:listener-rule/app/iamind*",
+      "arn:aws:elasticloadbalancing:eu-west-1:108782061116:targetgroup/iamind*"
     ]
   }
 
