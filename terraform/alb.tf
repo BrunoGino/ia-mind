@@ -25,7 +25,7 @@ resource "aws_lb_target_group" "iamind_alb_tg_https" {
 
 resource "aws_lb_listener" "iamind_alb_listener_https" {
   load_balancer_arn = aws_lb.iamind_alb.arn
-  port              = "443"
+  port              = "80"
   protocol          = "HTTP"
   # ssl_policy        = "ELBSecurityPolicy-2016-08"
   # certificate_arn   = aws_acm_certificate.iamind_certificate.arn
