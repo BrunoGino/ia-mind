@@ -1,4 +1,6 @@
-# Byte-compiled / optimized / DLL files
+# ==============================
+# 📦 BYTE-COMPILED / OPTIMIZED FILES
+# ==============================
 __pycache__/
 *.py[cod]
 *$py.class
@@ -6,7 +8,9 @@ __pycache__/
 # C extensions
 *.so
 
-# Distribution / packaging
+# ==============================
+# 📦 DISTRIBUTION / PACKAGING
+# ==============================
 .Python
 build/
 develop-eggs/
@@ -26,18 +30,25 @@ share/python-wheels/
 .installed.cfg
 *.egg
 MANIFEST
+target/
+!**/src/main/**/target/
+!**/src/test/**/target/
 
-# PyInstaller
-#  Usually these files are written by a python script from a template
-#  before PyInstaller builds the exe, so as to inject date/other infos into it.
+# ==============================
+# 🛠️ PYINSTALLER
+# ==============================
 *.manifest
 *.spec
 
-# Installer logs
+# ==============================
+# 🛠️ INSTALLER LOGS
+# ==============================
 pip-log.txt
 pip-delete-this-directory.txt
 
-# Unit test / coverage reports
+# ==============================
+# 🧪 UNIT TEST / COVERAGE REPORTS
+# ==============================
 htmlcov/
 .tox/
 .nox/
@@ -51,63 +62,121 @@ coverage.xml
 .hypothesis/
 .pytest_cache/
 
-# Translations
+# ==============================
+# 🌍 TRANSLATIONS
+# ==============================
 *.mo
 *.pot
 
-# Django stuff:
+# ==============================
+# 🎓 DJANGO STUFF
+# ==============================
 *.log
 local_settings.py
 db.sqlite3
 db.sqlite3-journal
 
-# Flask stuff:
+# ==============================
+# ⚙️ FLASK STUFF
+# ==============================
 instance/
 .webassets-cache
 
-# Scrapy stuff:
+# ==============================
+# 🕷️ SCRAPY STUFF
+# ==============================
 .scrapy
 
-# Sphinx documentation
+# ==============================
+# 📚 SPHINX DOCUMENTATION
+# ==============================
 docs/_build/
 
-# PyBuilder
+# ==============================
+# 🛠️ PYBUILDER
+# ==============================
 target/
+!**/src/main/**/build/
+!**/src/test/**/build/
 
-# Jupyter Notebook
+# ==============================
+# 📓 JUPYTER NOTEBOOK
+# ==============================
 .ipynb_checkpoints
 
-# IPython
+# ==============================
+# 💻 IPYTHON
+# ==============================
 profile_default/
 ipython_config.py
 
-# pyenv
+# ==============================
+# 🐍 PYENV
+# ==============================
 .python-version
 
-# celery beat schedule file
+# ==============================
+# ⏰ CELERY BEAT SCHEDULE
+# ==============================
 celerybeat-schedule
 
-# dotenv
+# ==============================
+# 🔐 DOTENV
+# ==============================
 .env
 
-# virtualenv
+# ==============================
+# 📦 VIRTUALENV
+# ==============================
 .venv
 venv/
 ENV/
 env/
 virtualenv/
 
-# IDE
-.idea/
+# ==============================
+# 🛠️ IDE CONFIGURATIONS
+# ==============================
+# IntelliJ IDEA
+.idea
+*.iws
+*.iml
+*.ipr
+
+# Spring Tools Suite (STS)
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+# NetBeans
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+# VS Code
 .vscode/
 
+# ==============================
+# 🔒 SECRETS
+# ==============================
 .github/.secrets
 .secrets
 
-
-#FRONT
-
+# ==============================
+# 🌐 FRONTEND
+# ==============================
 front/node_modules
 front\node_modules
 .codegpt
 .next
+
+# ==============================
+# 📄 OTHER HELP FILES
+# ==============================
+HELP.md
