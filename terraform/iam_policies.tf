@@ -184,6 +184,7 @@ data "aws_iam_policy_document" "deployment_policy_document_1" {
       "elasticloadbalancing:RemoveTags"
     ]
     resources = [
+      "*",
       "arn:aws:elasticloadbalancing:eu-west-1:108782061116:targetgroup/*/*",
       "arn:aws:elasticloadbalancing:eu-west-1:108782061116:loadbalancer/net/*/*",
       "arn:aws:elasticloadbalancing:eu-west-1:108782061116:loadbalancer/app/*/*",
