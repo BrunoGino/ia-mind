@@ -154,7 +154,9 @@ data "aws_iam_policy_document" "deployment_policy_document_1" {
       "ecs:Delete*",
       "ecs:Create*",
       "ecs:TagResource",
-      "ecs:UntagResource"
+      "ecs:UntagResource",
+      "ecs:Register*",
+      "ecs:Deregister*"
     ]
     resources = [
       "arn:aws:ecs:eu-west-1:108782061116:cluster/iamind*",
