@@ -1,6 +1,6 @@
 services:
   students-ms:
-    image: students-ms:latest
+    image: user-ms:latest
     build:
       context: .
       dockerfile: Dockerfile

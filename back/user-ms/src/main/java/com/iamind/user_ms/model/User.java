@@ -2,19 +2,23 @@ package com.iamind.user_ms.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "students")
-@Data
+@Table(name = "users")
+@Inheritance(strategy = InheritanceType.JOINED)
+@DiscriminatorColumn(name = "user_type", discriminatorType = DiscriminatorType.STRING)
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-public class User {
+@SuperBuilder
+public abstract class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,11 +34,17 @@ public class User {
     private LocalDate dateOfBirth;
 
     @Column(nullable = false)
-    private String school;
+    private String gender;
 
-    @Column(nullable = false, unique = true)
-    private String registrationNumber; // RA
+    @Column(nullable = false)
+    private String fullAddress;
 
     @Column(nullable = false, unique = true)
     private String email;
+
+    @Column(nullable = false)
+    private String phone;
+
+    @Column(nullable = true, length = 1000)
+    private String notes; // Optional notes
 }

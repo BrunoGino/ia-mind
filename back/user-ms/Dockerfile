@@ -1,6 +1,6 @@
 FROM maven:3.9.9-amazoncorretto-21 AS build
 
-WORKDIR /students-ms
+WORKDIR /user-ms
 
 COPY . .
 
@@ -10,8 +10,8 @@ FROM amazoncorretto:21
 
 WORKDIR /app
 
-COPY --from=build /students-ms/target/students-ms-0.0.1-SNAPSHOT.jar ./students-ms-0.0.1-SNAPSHOT.jar
+COPY --from=build /user-ms/target/user-ms-0.0.1-SNAPSHOT.jar ./user-ms-0.0.1-SNAPSHOT.jar
 
 EXPOSE 8080
 
-CMD ["java", "-jar", "./students-ms-0.0.1-SNAPSHOT.jar"]
+CMD ["java", "-jar", "./user-ms-0.0.1-SNAPSHOT.jar"]
