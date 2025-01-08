@@ -20,6 +20,7 @@ resource "aws_lb_target_group" "iamind_alb_tg_https" {
   name     = "iamind-alb-tg-https"
   port     = 80
   protocol = "HTTP"
+  target_type = "ip"
   vpc_id   = aws_vpc.iamind_vpc.id
 }
 
