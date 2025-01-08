@@ -80,12 +80,10 @@ data "aws_iam_policy_document" "deployment_policy_document_1" {
     actions = [
       "iam:Get*",
       "iam:List*",
-      "iam:DeletePolicyVersion",
       "iam:TagRole",
       "iam:UntagRole",
-      "iam:DeletePolicy",
-      "iam:UpdateAssumeRolePolicy",
-      "iam:UpdateRoleDescription",
+      "iam:Delete*",
+      "iam:Update*",
       "iam:PassRole",
       "iam:Create*",
       "iam:AttachRolePolicy",
@@ -266,6 +264,19 @@ data "aws_iam_policy_document" "deployment_policy_document_2" {
     ]
     resources = [
       "arn:aws:acm:eu-west-1:108782061116:certificate/*"
+    ]
+  }
+
+  statement {
+    sid    = "LogsControl"
+    effect = "Allow"
+    actions = [
+      "logs:CreateLogGroup"
+    ]
+    resources = [
+      "arn:aws:logs:eu-west-1:108782061116:log-group:/aws/ecs/iamind-cluster:log-stream",
+      "arn:aws:logs:eu-west-1:108782061116:log-group:/aws/ecs/session-management/session-management:log-stream",
+
     ]
   }
 }
