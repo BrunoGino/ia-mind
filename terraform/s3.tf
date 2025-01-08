@@ -38,3 +38,22 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "iamind_access_log
   }
 
 }
+
+resource "aws_s3_bucket_policy" "iamind_access_logs_bucket_policy" {
+  bucket = aws_s3_bucket.iamind_access_logs_bucket.id
+  policy = <<POLICY
+    {
+      "Version": "2012-10-17",
+      "Statement": [
+        {
+          "Effect": "Allow",
+          "Principal": {
+            "AWS": "arn:aws:iam::156460612806:root"
+          },
+          "Action": "s3:PutObject",
+          "Resource": ["arn:aws:s3:::iamind-access-logs-bucket/*"]
+        }
+      ]
+    }
+  POLICY
+}

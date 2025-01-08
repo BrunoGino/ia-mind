@@ -80,12 +80,10 @@ data "aws_iam_policy_document" "deployment_policy_document_1" {
     actions = [
       "iam:Get*",
       "iam:List*",
-      "iam:DeletePolicyVersion",
       "iam:TagRole",
       "iam:UntagRole",
-      "iam:DeletePolicy",
-      "iam:UpdateAssumeRolePolicy",
-      "iam:UpdateRoleDescription",
+      "iam:Delete*",
+      "iam:Update*",
       "iam:PassRole",
       "iam:Create*",
       "iam:AttachRolePolicy",
@@ -155,10 +153,13 @@ data "aws_iam_policy_document" "deployment_policy_document_1" {
       "ecs:Put*",
       "ecs:Delete*",
       "ecs:Create*",
-      "ecs:Register*"
+      "ecs:TagResource",
+      "ecs:UntagResource",
+      "ecs:Register*",
+      "ecs:Deregister*"
     ]
     resources = [
-      "arn:aws:ecs:eu-west-1:108782061116:cluster/iamind",
+      "arn:aws:ecs:eu-west-1:108782061116:cluster/iamind*",
       "arn:aws:ecs:eu-west-1:108782061116:service-deployment/iamind/*/*",
       "arn:aws:ecs:eu-west-1:108782061116:task/iamind/*",
       "arn:aws:ecs:eu-west-1:108782061116:container-instance/iamind/*",
@@ -174,21 +175,22 @@ data "aws_iam_policy_document" "deployment_policy_document_1" {
     sid    = "ELBControl"
     effect = "Allow"
     actions = [
+      "elasticloadbalancing:set*",
+      "elasticloadbalancing:Modify*",
+      "elasticloadbalancing:Describe*",
+      "elasticloadbalancing:Delete*",
       "elasticloadbalancing:Delete*",
       "elasticloadbalancing:Create*",
       "elasticloadbalancing:AddTags",
-      "elasticloadbalancing:DeleteTargetGroup",
-      "elasticloadbalancing:Modify*",
-      "elasticloadbalancing:DeleteRule",
-      "elasticloadbalancing:set*",
-      "elasticloadbalancing:Describe*"
+      "elasticloadbalancing:RemoveTags"
     ]
     resources = [
-      "arn:aws:elasticloadbalancing:eu-west-1:108782061116:loadbalancer/net/iamind*",
-      "arn:aws:elasticloadbalancing:eu-west-1:108782061116:loadbalancer/app/iamind*",
+      "*",
+      "arn:aws:elasticloadbalancing:eu-west-1:108782061116:targetgroup/*/*",
+      "arn:aws:elasticloadbalancing:eu-west-1:108782061116:loadbalancer/net/*/*",
+      "arn:aws:elasticloadbalancing:eu-west-1:108782061116:loadbalancer/app/*/*",
       "arn:aws:elasticloadbalancing:eu-west-1:108782061116:listener/app/iamind*",
-      "arn:aws:elasticloadbalancing:eu-west-1:108782061116:listener-rule/app/iamind*",
-      "arn:aws:elasticloadbalancing:eu-west-1:108782061116:targetgroup/iamind*"
+      "arn:aws:elasticloadbalancing:eu-west-1:108782061116:listener-rule/app/iamind*"
     ]
   }
 
@@ -265,6 +267,19 @@ data "aws_iam_policy_document" "deployment_policy_document_2" {
     ]
     resources = [
       "arn:aws:acm:eu-west-1:108782061116:certificate/*"
+    ]
+  }
+
+  statement {
+    sid    = "LogsControl"
+    effect = "Allow"
+    actions = [
+      "logs:CreateLogGroup"
+    ]
+    resources = [
+      "arn:aws:logs:eu-west-1:108782061116:log-group:/aws/ecs/iamind-cluster:log-stream",
+      "arn:aws:logs:eu-west-1:108782061116:log-group:/aws/ecs/session-management/session-management:log-stream",
+
     ]
   }
 }
