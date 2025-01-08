@@ -159,6 +159,7 @@ data "aws_iam_policy_document" "deployment_policy_document_1" {
       "ecs:Deregister*"
     ]
     resources = [
+      "*",
       "arn:aws:ecs:eu-west-1:108782061116:cluster/iamind*",
       "arn:aws:ecs:eu-west-1:108782061116:service-deployment/iamind/*/*",
       "arn:aws:ecs:eu-west-1:108782061116:task/iamind/*",
