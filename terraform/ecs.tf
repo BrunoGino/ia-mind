@@ -31,7 +31,7 @@ data "template_file" "session_management_container_definitions" {
   template = file("task-definitions/task-template.json")
 
   vars = {
-    name  = "session_management"
+    name  = "session_management_task"
     image = "brunogino/iamind-session_management:latest"
   }
 }

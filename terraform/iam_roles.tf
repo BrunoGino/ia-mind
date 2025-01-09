@@ -11,6 +11,7 @@ data "aws_iam_policy_document" "deployment_assume_role_policy_document" {
       type        = "Federated"
       identifiers = ["arn:aws:iam::108782061116:oidc-provider/token.actions.githubusercontent.com"]
     }
+
     condition {
       test     = "StringEquals"
       variable = "token.actions.githubusercontent.com:aud"
@@ -25,8 +26,17 @@ data "aws_iam_policy_document" "deployment_assume_role_policy_document" {
         "repo:BrunoGino/ia-mind:ref:refs/heads/main"
       ]
     }
-
   }
+
+  statement {
+    effect  = "Allow"
+    actions = ["sts:AssumeRole"]
+    principals {
+      type        = "Service"
+      identifiers = ["ecs-tasks.amazonaws.com", "lambda.amazonaws.com"]
+    }
+  }
+
 }
 
 resource "aws_iam_role" "deployment_role" {

@@ -90,6 +90,7 @@ jobs:
           working-directory: terraform
       env:
         TF_INPUT: 0
+        TF_LOG: DEBUG
         TF_VAR_session_management_docker_image: brunogino/iamind-session_management
       steps:
         - uses: actions/checkout@v4
