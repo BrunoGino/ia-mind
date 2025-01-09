@@ -31,7 +31,8 @@ data "aws_iam_policy_document" "deployment_policy_document_1" {
       "dynamodb:UntagResource",
       "dynamodb:List*",
       "dynamodb:Describe*",
-      "dynamodb:Get*"
+      "dynamodb:Get*",
+      "dynamodb:Put*"
     ]
     resources = [
       "arn:aws:dynamodb:eu-west-1:108782061116:table/iamind-terraform-state-lock",
@@ -159,6 +160,7 @@ data "aws_iam_policy_document" "deployment_policy_document_1" {
       "ecs:Deregister*"
     ]
     resources = [
+      "*",
       "arn:aws:ecs:eu-west-1:108782061116:cluster/iamind*",
       "arn:aws:ecs:eu-west-1:108782061116:service-deployment/iamind/*/*",
       "arn:aws:ecs:eu-west-1:108782061116:task/iamind/*",
