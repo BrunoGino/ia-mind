@@ -68,7 +68,7 @@ jobs:
           uses: actions/checkout@v4
 
         - name: Docker Build & Publish
-          uses: ./github/actions/docker-publish
+          uses: ./.github/actions/docker-publish
           with:
             image_name: brunogino/iamind-session_management:latest
             project_path: ./session_management
