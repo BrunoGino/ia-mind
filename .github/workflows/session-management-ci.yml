@@ -64,6 +64,7 @@ jobs:
         - build
       name: Generate and Publish Docker Image
       steps:
+        - uses: actions/checkout@v4
         - name: Docker Build & Publish
           uses: ./github/actions/docker-publish
           with:
