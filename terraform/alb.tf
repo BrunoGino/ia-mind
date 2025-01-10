@@ -32,7 +32,27 @@ resource "aws_lb_listener" "iamind_alb_listener_https" {
   # certificate_arn   = aws_acm_certificate.iamind_certificate.arn
 
   default_action {
+    type = "fixed-response"
+
+    fixed_response {
+      content_type = "text/plain"
+      message_body = "Page not found"
+      status_code  = "404"
+    }
+  }
+}
+
+resource "aws_lb_listener_rule" "iamind_backend_rule" {
+  listener_arn = aws_lb_listener.iamind_alb_listener_https.arn
+  priority     = 1
+  action {
     type             = "forward"
     target_group_arn = aws_lb_target_group.iamind_alb_tg_https.arn
+  }
+
+  condition {
+    path_pattern {
+      values = ["/api/*"]
+    }
   }
 }
