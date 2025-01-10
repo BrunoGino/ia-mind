@@ -64,21 +64,14 @@ jobs:
         - build
       name: Generate and Publish Docker Image
       steps:
-        - uses: actions/checkout@v4      
-        - name: Docker Build
-          shell: bash
-          run: |
-            docker build --no-cache -t brunogino/iamind-session_management:latest ./session_management
-        
-        - name: Docker Publish
-          env:
-            DOCKER_REPO: ${{secrets.SESSION_MANAGEMENT_DOCKER_REPO}}
-            DOCKER_REPO_TOKEN: ${{secrets.DOCKER_REPO_TOKEN}}
-            DOCKER_REPO_USER: ${{secrets.DOCKER_REPO_USER}}
-          shell: bash
-          run: |
-            echo $DOCKER_REPO_TOKEN | docker login -u $DOCKER_REPO_USER --password-stdin
-            docker push ${DOCKER_REPO} -a
+        - name: Docker Build & Publish
+          uses: ./github/actions/docker-publish
+          with:
+            image_name: brunogino/iamind-session_management:latest
+            project_path: ./session_management
+            docker_repo: ${{secrets.SESSION_MANAGEMENT_DOCKER_REPO}}
+            docker_repo_token: ${{secrets.DOCKER_REPO_TOKEN}}
+            docker_repo_user: ${{secrets.DOCKER_REPO_USER}}
 
     deploy-to-aws:
       runs-on: ubuntu-latest
