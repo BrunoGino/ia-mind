@@ -157,7 +157,8 @@ data "aws_iam_policy_document" "deployment_policy_document_1" {
       "ecs:TagResource",
       "ecs:UntagResource",
       "ecs:Register*",
-      "ecs:Deregister*"
+      "ecs:Deregister*",
+      "ecs:Update*"
     ]
     resources = [
       "*",
