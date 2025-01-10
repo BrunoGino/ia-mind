@@ -1,0 +1,22 @@
+[
+    {
+        "name": "${name}",
+        "image": "${image}",
+        "essential": true,
+        "logConfigurations": {
+            "logDriver": "awslogs",
+            "secretOptions": [],
+            "options": {
+                "awslogs-group": "/ecs/${name}-task",
+                "awslogs-region": "eu-west-1",
+                "awslogs-stream-prefix": "ecs"
+            }
+        },
+        "portMappings": [
+            {
+                "containerPort": 8080,
+                "hostPort": 8080
+            }
+        ]
+    }
+]
