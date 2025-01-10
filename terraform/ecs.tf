@@ -50,6 +50,7 @@ resource "aws_ecs_task_definition" "session_management_task_definition" {
 }
 
 resource "aws_ecs_service" "session_management_service" {
+  depends_on      = [aws_ecs_task_definition.session_management_task_definition]
   name            = "session_management_service"
   cluster         = aws_ecs_cluster.iamind_ecs_cluster.id
   task_definition = aws_ecs_task_definition.session_management_task_definition.arn
