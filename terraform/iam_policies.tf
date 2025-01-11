@@ -92,6 +92,7 @@ data "aws_iam_policy_document" "deployment_policy_document_1" {
       "iam:DetachRolePolicy"
     ]
     resources = [
+      "arn:aws:iam::108782061116:role/iamind*",
       "arn:aws:iam::108782061116:role/aws_gino_sol_deployment*",
       "arn:aws:iam::108782061116:policy/aws_gino_sol_deployment*",
       "arn:aws:iam::108782061116:role/aws_gino_sol_iamind*",
