@@ -291,6 +291,7 @@ data "aws_iam_policy_document" "deployment_policy_document_2" {
     ]
     resources = [
       "arn:aws:logs:eu-west-1:108782061116:log-group:/aws/ecs/iamind-cluster:log-stream",
+      "arn:aws:logs:eu-west-1:108782061116:log-group:/aws/vpc/iamind*",
       "arn:aws:logs:eu-west-1:108782061116:log-group:/ecs/*",
       "arn:aws:logs:eu-west-1:108782061116:log-group::log-stream*"
 
@@ -458,4 +459,27 @@ resource "aws_iam_policy" "ecs_tasks_policy" {
   name        = "aws_gino_sol_iamind_ecs_tasks"
   description = "The policy that grants permissions to the ECS tasks role"
   policy      = data.aws_iam_policy_document.ecs_tasks_policy_document.json
+}
+
+resource "aws_iam_role_policy" "iamind_flow_logs_policy" {
+  name = "iamind_flow_logs_policy"
+  role = aws_iam_role.iamind_flow_logs_role.id
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Effect   = "Allow",
+        Action   = "logs:CreateLogGroup",
+        Resource = "arn:aws:logs:*:*:*"
+      },
+      {
+        Effect = "Allow",
+        Action = [
+          "logs:CreateLogStream",
+          "logs:PutLogEvents"
+        ],
+        Resource = "arn:aws:logs:*:*:log-group:/aws/vpc/flow-logs:*"
+      }
+    ]
+  })
 }

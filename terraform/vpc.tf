@@ -329,3 +329,11 @@ resource "aws_route_table_association" "iamind_rtb_association_private2" {
   subnet_id      = aws_subnet.iamind_subnet_private2.id
   route_table_id = aws_route_table.iamind_rtb_private2.id
 }
+
+
+resource "aws_flow_log" "iamind_vpc_flow_logs" {
+  log_group_name = "/aws/vpc/iamind-flow-logs"
+  iam_role_arn   = aws_iam_role.iamind_flow_logs_role.arn
+  vpc_id         = aws_vpc.iamind_vpc.id
+  traffic_type   = "ALL" # Capture ALL traffic (accepted, rejected, all)
+}

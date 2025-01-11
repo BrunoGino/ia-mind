@@ -101,3 +101,19 @@ resource "aws_iam_role_policy_attachment" "ecs_tasks_role_policy_attch" {
   role       = aws_iam_role.ecs_tasks_role.name
   policy_arn = aws_iam_policy.ecs_tasks_policy.arn
 }
+
+
+resource "aws_iam_role" "iamind_flow_logs_role" {
+  name = "iamind_flow_logs_role"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Action    = "sts:AssumeRole",
+        Effect    = "Allow",
+        Principal = { Service = "vpc-flow-logs.amazonaws.com" }
+      }
+    ]
+  })
+}
