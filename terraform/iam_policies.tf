@@ -310,6 +310,36 @@ data "aws_iam_policy_document" "deployment_policy_document_2" {
       "arn:aws:secretsmanager:eu-west-1:108782061116:secret:iamind*"
     ]
   }
+
+  statement {
+    sid    = "KMSManagement"
+    effect = "Allow"
+    actions = [
+      "kms:List*",
+      "kms:Describe*",
+      "kms:Get*",
+      "kms:Cancel*",
+      "kms:Connect*",
+      "kms:Create*",
+      "kms:Decrypt",
+      "kms:DeleteAlias",
+      "kms:Disable*",
+      "kms:Enable*",
+      "kms:Encrypt",
+      "kms:Update*",
+      "kms:RevokeGrant",
+      "kms:RetireGrant",
+      "kms:PutKeyPolicy",
+      "kms:CreateGrant",
+      "kms:TagResource",
+      "kms:UntagResource"
+    ]
+    resources = [
+      "*",
+      "arn:aws:kms:eu-west-1:108782061116:key/iamind*",
+      "arn:aws:kms:eu-west-1:108782061116:alias/iamind"
+    ]
+  }
 }
 
 
