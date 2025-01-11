@@ -373,6 +373,13 @@ data "aws_iam_policy_document" "ecs_tasks_policy_document" {
     resources = ["arn:aws:cloudwatch:eu-west-1:108782061116:alarm:iamind-*"]
   }
 
+  statement {
+    sid       = "SecretsIntegration"
+    effect    = "Allow"
+    actions   = ["kms:Decrypt", "secretsmanager:GetSecretValue"]
+    resources = ["arn:aws:secretsmanager:eu-west-1:108782061116:secret:iamind*", "arn:aws:eu-west-1:108782061116:key:/*"]
+  }
+
 }
 
 resource "aws_iam_policy" "ecs_tasks_policy" {

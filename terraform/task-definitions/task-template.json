@@ -17,6 +17,9 @@
                 "containerPort": 8080,
                 "hostPort": 8080
             }
-        ]
+        ],
+        "repositoryCredentials": {
+            "credentialsParameter": "arn:aws:secretsmanager:eu-west-1:108782061116:secret:iamind_docker_hub_secret"
+        }
     }
 ]
