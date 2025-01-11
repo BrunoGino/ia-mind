@@ -52,6 +52,7 @@ data "aws_iam_policy_document" "deployment_policy_document_1" {
       "wafv2:UntagResource",
       "wafv2:AssociateWebACL",
       "wafv2:CreateWebACL",
+      "wafv2:DeleteWebACL",
       "wafv2:UpdateRuleGroup",
       "wafv2:UpdateRegexPatternSet",
       "wafv2:UpdateManagedRuleSetVersionExpiryDate",
