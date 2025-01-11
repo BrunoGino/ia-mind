@@ -118,7 +118,7 @@ resource "aws_vpc_security_group_egress_rule" "allow_http_traffic_ipv4" {
 #    Network Access Control Lists
 #####################################
 resource "aws_network_acl" "iamind_main_nacl" {
-    vpc_id = aws_vpc.iamind_vpc.id
+  vpc_id = aws_vpc.iamind_vpc.id
 
   subnet_ids = [
     aws_subnet.iamind_subnet_public1.id,

@@ -285,6 +285,31 @@ data "aws_iam_policy_document" "deployment_policy_document_2" {
 
     ]
   }
+
+  statement {
+    sid    = "SecretsManagement"
+    effect = "Allow"
+    actions = [
+      "secretsmanager:Get*",
+      "secretsmanager:Describe*",
+      "secretsmanager:List*",
+      "secretsmanager:DeleteResourcePolicy",
+      "secretsmanager:PutResourcePolicy",
+      "secretsmanager:ValidateResourcePolicy",
+      "secretsmanager:TagResource",
+      "secretsmanager:UntagResource",
+      "secretsmanager:UpdateSecret",
+      "secretsmanager:RotateSecret",
+      "secretsmanager:RestoreSecret",
+      "secretsmanager:PutSecretValue",
+      "secretsmanager:DeleteSecret",
+      "secretsmanager:CreateSecret",
+      "secretsmanager:CancelRotateSecret"
+    ]
+    resources = [
+      "arn:aws:secretsmanager:eu-west-1:108782061116:secret:iamind*"
+    ]
+  }
 }
 
 
