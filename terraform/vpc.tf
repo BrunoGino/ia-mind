@@ -160,8 +160,8 @@ resource "aws_network_acl" "iamind_main_nacl" {
     rule_no    = 120
     action     = "allow"
     cidr_block = "0.0.0.0/0"
-    from_port  = 8080
-    to_port    = 8080
+    from_port  = 1024
+    to_port    = 65535
   }
 
   # Egress Rules

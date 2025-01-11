@@ -282,7 +282,7 @@ data "aws_iam_policy_document" "deployment_policy_document_2" {
     ]
     resources = [
       "arn:aws:logs:eu-west-1:108782061116:log-group:/aws/ecs/iamind-cluster:log-stream",
-      "arn:aws:logs:eu-west-1:108782061116:log-group:/aws/ecs/session-management/session-management:log-stream",
+      "arn:aws:logs:eu-west-1:108782061116:log-group:/ecs/*",
 
     ]
   }
