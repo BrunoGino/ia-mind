@@ -195,7 +195,6 @@ resource "aws_network_acl" "iamind_main_nacl" {
   tags = local.default_tags
 }
 
-
 #####################################
 #    Internet Gateway
 #####################################
@@ -215,6 +214,7 @@ resource "aws_route_table" "iamind_rtb_public" {
     cidr_block = "0.0.0.0/0"
     gateway_id = aws_internet_gateway.iamind_vpc_ig.id
   }
+
 
   route {
     cidr_block = "13.3.0.0/16"
