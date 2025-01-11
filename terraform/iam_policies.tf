@@ -278,7 +278,9 @@ data "aws_iam_policy_document" "deployment_policy_document_2" {
     sid    = "LogsControl"
     effect = "Allow"
     actions = [
-      "logs:CreateLogGroup"
+      "logs:CreateLogGroup",
+      "logs:TagResource",
+      "logs:UntagResource"
     ]
     resources = [
       "arn:aws:logs:eu-west-1:108782061116:log-group:/aws/ecs/iamind-cluster:log-stream",
@@ -417,6 +419,18 @@ data "aws_iam_policy_document" "ecs_tasks_policy_document" {
     effect    = "Allow"
     actions   = ["kms:Decrypt", "secretsmanager:GetSecretValue"]
     resources = ["arn:aws:secretsmanager:eu-west-1:108782061116:secret:iamind*", "arn:aws:eu-west-1:108782061116:key:/*"]
+  }
+
+  statement {
+    sid    = "ECRIntegration"
+    effect = "Allow"
+    actions = [
+      "ecr:GetAuthorizationToken",
+      "ecr:BatchCheckLayerAvailability",
+      "ecr:GetDownloadUrlForLayer",
+      "ecr:BatchGetImage"
+    ]
+    resources = ["*"]
   }
 
 }
