@@ -278,13 +278,21 @@ data "aws_iam_policy_document" "deployment_policy_document_2" {
     sid    = "LogsControl"
     effect = "Allow"
     actions = [
-      "logs:CreateLogGroup",
-      "logs:TagResource",
-      "logs:UntagResource"
+      "logs:Untag*",
+      "logs:Tag*",
+      "logs:Create*",
+      "logs:Describe*",
+      "logs:List*",
+      "logs:Get*",
+      "logs:Create*",
+      "logs:Delete*",
+      "logs:Put*",
+      "logs:Update*"
     ]
     resources = [
       "arn:aws:logs:eu-west-1:108782061116:log-group:/aws/ecs/iamind-cluster:log-stream",
       "arn:aws:logs:eu-west-1:108782061116:log-group:/ecs/*",
+      "arn:aws:logs:eu-west-1:108782061116:log-group::log-stream*"
 
     ]
   }
