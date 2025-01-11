@@ -27,18 +27,33 @@ resource "aws_ecs_cluster_capacity_providers" "iamind_capacity_provider" {
   }
 }
 
-data "template_file" "session_management_container_definitions" {
-  template = file("task-definitions/task-template.json")
-
-  vars = {
-    name  = "session_management_task"
-    image = "brunogino/iamind-session_management:latest"
-  }
-}
-
 resource "aws_ecs_task_definition" "session_management_task_definition" {
-  family                   = "session_management_task"
-  container_definitions    = data.template_file.session_management_container_definitions.rendered
+  family = "session_management_task"
+  container_definitions = jsonencode([
+    {
+      name      = "session_management_task",
+      image     = "brunogino/iamind-session_management:latest",
+      essential = true,
+      logConfigurations = {
+        logDriver     = "awslogs",
+        secretOptions = [],
+        options = {
+          awslogs-group         = aws_cloudwatch_log_group.session_management_task_logs.name,
+          awslogs-region        = "eu-west-1",
+          awslogs-stream-prefix = "ecs"
+        }
+      },
+      portMappings = [
+        {
+          containerPort = 8080,
+          hostPort      = 8080
+        }
+      ],
+      repositoryCredentials = {
+        credentialsParameter = aws_secretsmanager_secret.iamind_docker_hub_secret.arn
+      }
+    }
+  ])
   requires_compatibilities = ["FARGATE"]
   network_mode             = "awsvpc"
   execution_role_arn       = aws_iam_role.deployment_role.arn

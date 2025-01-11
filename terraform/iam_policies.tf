@@ -423,10 +423,14 @@ data "aws_iam_policy_document" "ecs_tasks_policy_document" {
   }
 
   statement {
-    sid       = "SecretsIntegration"
-    effect    = "Allow"
-    actions   = ["kms:Decrypt", "secretsmanager:GetSecretValue"]
-    resources = ["arn:aws:secretsmanager:eu-west-1:108782061116:secret:iamind*", "arn:aws:eu-west-1:108782061116:key:/*"]
+    sid    = "SecretsIntegration"
+    effect = "Allow"
+    actions = [
+      "kms:Decrypt",
+      "secretsmanager:GetSecretValue",
+      "secretsmanager:DescribeSecret"
+    ]
+    resources = [aws_secretsmanager_secret.iamind_docker_hub_secret.arn, "arn:aws:eu-west-1:108782061116:key:/*"]
   }
 
   statement {
