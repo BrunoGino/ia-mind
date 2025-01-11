@@ -38,7 +38,7 @@ resource "aws_ecs_task_definition" "session_management_task_definition" {
         logDriver     = "awslogs",
         secretOptions = [],
         options = {
-          awslogs-group         = aws_cloudwatch_log_group.session_management_task_logs.name,
+          awslogs-group         = "/ecs/session_management_task-logs",
           awslogs-region        = "eu-west-1",
           awslogs-stream-prefix = "ecs"
         }
@@ -50,7 +50,7 @@ resource "aws_ecs_task_definition" "session_management_task_definition" {
         }
       ],
       repositoryCredentials = {
-        credentialsParameter = aws_secretsmanager_secret.iamind_docker_hub_secret.arn
+        credentialsParameter = "arn:aws:secretsmanager:eu-west-1:108782061116:secret:iamind_docker_hub_secret-XQ0rOK"
       }
     }
   ])
