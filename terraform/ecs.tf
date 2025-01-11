@@ -55,7 +55,7 @@ resource "aws_ecs_service" "session_management_service" {
   cluster         = aws_ecs_cluster.iamind_ecs_cluster.id
   task_definition = aws_ecs_task_definition.session_management_task_definition.arn
   launch_type     = "FARGATE"
-  desired_count   = 2
+  desired_count   = 1
 
   network_configuration {
     security_groups = [aws_security_group.iamind_sg_tls_http.id]

@@ -398,10 +398,18 @@ data "aws_iam_policy_document" "ecs_tasks_policy_document" {
   }
 
   statement {
-    sid       = "CloudwatchIntegration"
-    effect    = "Allow"
-    actions   = ["cloudwatch:PutMetricAlarm", "cloudwatch:DeleteAlarms"]
-    resources = ["arn:aws:cloudwatch:eu-west-1:108782061116:alarm:iamind-*"]
+    sid    = "CloudwatchIntegration"
+    effect = "Allow"
+    actions = [
+      "cloudwatch:PutMetricAlarm",
+      "cloudwatch:DeleteAlarms",
+      "logs:CreateLogStream",
+      "logs:PutLogEvents"
+    ]
+    resources = [
+      "arn:aws:cloudwatch:eu-west-1:108782061116:alarm:iamind-*",
+      "arn:aws:logs:eu-west-1:108782061116:log-group:/ecs/*"
+    ]
   }
 
   statement {

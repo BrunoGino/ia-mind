@@ -107,6 +107,15 @@ resource "aws_vpc_security_group_ingress_rule" "allow_https_in" {
   tags              = local.default_tags
 }
 
+resource "aws_vpc_security_group_ingress_rule" "allow_ephemeral_in" {
+  security_group_id = aws_security_group.iamind_sg_tls_http.id
+  cidr_ipv4         = "0.0.0.0/0"
+  from_port         = 1024
+  to_port           = 65535
+  ip_protocol       = "tcp"
+  tags              = local.default_tags
+}
+
 resource "aws_vpc_security_group_egress_rule" "allow_http_traffic_ipv4" {
   security_group_id = aws_security_group.iamind_sg_tls_http.id
   cidr_ipv4         = "0.0.0.0/0"
