@@ -426,11 +426,18 @@ data "aws_iam_policy_document" "ecs_tasks_policy_document" {
     sid    = "SecretsIntegration"
     effect = "Allow"
     actions = [
-      "kms:Decrypt",
       "secretsmanager:GetSecretValue",
-      "secretsmanager:DescribeSecret"
+      "secretsmanager:DescribeSecret",
+      "kms:Decrypt",
+      "kms:DescribeKey",
+      "kms:GetPublicKey",
+      "kms:GetKeyPolicy",
+      "kms:Encrypt"
     ]
-    resources = [aws_secretsmanager_secret.iamind_docker_hub_secret.arn, "arn:aws:eu-west-1:108782061116:key:/*"]
+    resources = [
+      aws_secretsmanager_secret.iamind_docker_hub_secret.arn,
+      aws_kms_key.iamind_kms_key.arn
+    ]
   }
 
   statement {
