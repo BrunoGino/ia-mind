@@ -18,7 +18,7 @@ data "aws_iam_policy_document" "iamind_developers_group_policy_document" {
     actions = [
       "sts:AssumeRole"
     ]
-    resources = [ aws_iam_role.iamind_developer_role.arn ]
+    resources = [aws_iam_role.iamind_developer_role.arn]
   }
 }
 

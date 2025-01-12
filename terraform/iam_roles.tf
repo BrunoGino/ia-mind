@@ -134,7 +134,7 @@ data "aws_iam_policy_document" "iamind_developer_assume_role_policy_document" {
       "sts:AssumeRole"
     ]
     principals {
-      type = "AWS"
+      type        = "AWS"
       identifiers = [aws_iam_user.iamind_local_dev.arn]
     }
   }

@@ -48,16 +48,11 @@ data "aws_iam_policy_document" "deployment_policy_document_1" {
     actions = [
       "wafv2:Get*",
       "wafv2:List*",
-      "wafv2:TagResource",
-      "wafv2:UntagResource",
+      "wafv2:*Resource",
       "wafv2:AssociateWebACL",
       "wafv2:CreateWebACL",
       "wafv2:DeleteWebACL",
-      "wafv2:UpdateRuleGroup",
-      "wafv2:UpdateRegexPatternSet",
-      "wafv2:UpdateManagedRuleSetVersionExpiryDate",
-      "wafv2:UpdateIPSet",
-      "wafv2:UpdateWebACL"
+      "wafv2:Update*"
     ]
     resources = [
       "arn:aws:wafv2:eu-west-1:108782061116:regional/managedruleset/*/*",
@@ -88,9 +83,7 @@ data "aws_iam_policy_document" "deployment_policy_document_1" {
       "iam:Update*",
       "iam:PassRole",
       "iam:Create*",
-      "iam:PutRolePolicy",
-      "iam:AttachRolePolicy",
-      "iam:DetachRolePolicy"
+      "iam:*Policy"
     ]
     resources = [
       "arn:aws:iam::108782061116:role/iamind*",
@@ -98,8 +91,8 @@ data "aws_iam_policy_document" "deployment_policy_document_1" {
       "arn:aws:iam::108782061116:role/aws_gino_sol*",
       "arn:aws:iam::108782061116:role/AWSServiceRole*",
       "arn:aws:iam::108782061116:policy/aws_gino_sol*",
-      "arn:aws:iam::108782061116:group/iamind*",
-      "arn:aws:iam::108782061116:user/iamind*"
+      aws_iam_group.iamind_developers.arn,
+      aws_iam_user.iamind_local_dev.arn
     ]
   }
 
