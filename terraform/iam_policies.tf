@@ -462,6 +462,11 @@ resource "aws_iam_policy" "ecs_tasks_policy" {
   policy      = data.aws_iam_policy_document.ecs_tasks_policy_document.json
 }
 
+
+#####################################
+#    VPC FLOW LOGS POLICY
+#####################################
+
 resource "aws_iam_role_policy" "iamind_flow_logs_policy" {
   name = "iamind_flow_logs_policy"
   role = aws_iam_role.iamind_flow_logs_role.id
@@ -483,4 +488,100 @@ resource "aws_iam_role_policy" "iamind_flow_logs_policy" {
       }
     ]
   })
+}
+
+
+#####################################
+#    DEVELOPER POLICY
+#####################################
+data "aws_iam_policy_document" "iamind_developer_policy_document" {
+
+  version = "2012-10-17"
+
+  statement {
+    sid    = "DynamoDBAccess"
+    effect = "Allow"
+    actions = [
+      "dynamodb:*Item",
+      "dynamodb:Scan",
+      "dynamodb:Query",
+      "dynamodb:Describe*",
+      "dynamodb:List*"
+    ]
+    resources = [
+      "arn:aws:dynamodb:eu-west-1:108782061116:table/iamind-*"
+    ]
+  }
+
+  statement {
+    sid    = "S3Access"
+    effect = "Allow"
+    actions = [
+      "s3:*Object",
+      "s3:Get*",
+      "s3:Put*"
+    ]
+    resources = [
+      aws_s3_bucket.iamind_access_logs_bucket.arn
+    ]
+  }
+
+  statement {
+    sid    = "SNSIntegration"
+    effect = "Allow"
+    actions = [
+      "sns:Publish",
+      "sns:ListSubscriptionsByTopic",
+      "sns:GetTopicAttributes"
+    ]
+    resources = [
+      "arn:aws:sns:eu-west-1:108782061116:iamind-*"
+    ]
+  }
+
+  statement {
+    sid       = "SQSIntegration"
+    effect    = "Allow"
+    actions   = ["sqs:DeleteMessage", "sqs:GetQueueUrl", "sqs:GetQueueAttributes", "sqs:ReceiveMessage", "sqs:SendMessage"]
+    resources = ["arn:aws:sqs:eu-west-1:108782061116:iamind-*"]
+  }
+
+  statement {
+    sid    = "CloudwatchIntegration"
+    effect = "Allow"
+    actions = [
+      "cloudwatch:PutMetricAlarm",
+      "cloudwatch:DeleteAlarms",
+      "logs:CreateLogStream",
+      "logs:PutLogEvents"
+    ]
+    resources = [
+      "arn:aws:cloudwatch:eu-west-1:108782061116:alarm:iamind-*",
+      "arn:aws:logs:eu-west-1:108782061116:log-group:/ecs/*"
+    ]
+  }
+
+  statement {
+    sid    = "SecretsIntegration"
+    effect = "Allow"
+    actions = [
+      "secretsmanager:GetSecretValue",
+      "secretsmanager:DescribeSecret",
+      "kms:Decrypt",
+      "kms:DescribeKey",
+      "kms:GetPublicKey",
+      "kms:GetKeyPolicy",
+      "kms:Encrypt"
+    ]
+    resources = [
+      aws_secretsmanager_secret.iamind_docker_hub_secret.arn,
+      aws_kms_key.iamind_kms_key.arn
+    ]
+  }
+}
+
+resource "aws_iam_policy" "iamind_developer_policy" {
+  name        = "iamind_developer_policy"
+  description = "The policy that grants permissions to the developer to do local functions"
+  policy      = data.aws_iam_policy_document.iamind_developer_policy_document.json
 }
