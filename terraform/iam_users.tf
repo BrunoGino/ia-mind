@@ -5,7 +5,7 @@ resource "aws_iam_user" "iamind_local_dev" {
 }
 
 resource "aws_iam_group" "iamind_developers" {
-  name = "developers"
+  name = "iamind_developers"
 }
 
 data "aws_iam_policy_document" "iamind_developers_group_policy_document" {

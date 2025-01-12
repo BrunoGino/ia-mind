@@ -97,7 +97,7 @@ data "aws_iam_policy_document" "deployment_policy_document_1" {
       "arn:aws:iam::108782061116:policy/iamind*",
       "arn:aws:iam::108782061116:role/aws_gino_sol*",
       "arn:aws:iam::108782061116:role/AWSServiceRole*",
-      "arn:aws:iam::108782061116:policy/aws_gino_sol*"
+      "arn:aws:iam::108782061116:policy/aws_gino_sol*"      
     ]
   }
 
