@@ -178,9 +178,9 @@ export default function Models() {
                                                     <li key={product.id} className="fn__model_item" onMouseEnter={() => handleMouseEnter(index)} onMouseLeave={handleMouseLeave} onClick={() => handleItemClick(product.id)}>
                                                         <div className="fn__model_content_item">
                                                             {/* Imagem à esquerda */}
-                                                            <div className="fn__model_image">
+                                                            {/*<div className="fn__model_image">
                                                                 <img src={product.img} alt={product.title} />
-                                                            </div>
+                                                            </div>*/}
                                                             <div className="fn__model_data_items">
                                                                 {/* Informações centrais */}
                                                                 <div className="fn__model__info">

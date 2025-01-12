@@ -1,4 +1,5 @@
 @charset "utf-8";
+
 /*
 /*	Copyright (c) 2023 Frenify
 /*	Author: Frenify
@@ -83,10 +84,6 @@
 /*------------------------------------------------------------------*/
 /*	01) ROOT
 /*------------------------------------------------------------------*/
-
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
 
 :root{
 	color-scheme: dark;
@@ -6874,17 +6871,97 @@ a.fn__like.no_border .fn__svg{
 	padding-top: 100px;
 	margin-bottom: 73px;
 }
+
+/****
+* 66) Formulário Studantes / Professores
+*/
+
+.students-fomrs {
+	padding: 15px 0;
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+}
+
+.students-fomrs fieldset{
+	border: 1px solid var(--techwave-border-color);
+	border-radius: 5px;
+	background-color: var(--techwave-some-r-bg-color);
+	padding: 15px;
+	margin: 10px 0;
+}
+
+.students-fomrs fieldset legend{
+	font-family: var(--techwave-heading-font-family);
+	font-weight: 400;
+    font-size: 20px;
+}
+
+/* Ajustando os campos do formulário para flexibilidade */
+.students-fomrs input, select, textarea, button {
+	font-family: var(--techwave-heading-font-family);
+}
+
+.students-fomrs input[type=text]{
+	width: 100%!important;
+}
+
+.students-fomrs textarea {
+	width: 100%!important;
+}
+
+.professional-fomrs {
+	padding: 15px 0;
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+}
+
+.professional-fomrs fieldset{
+	border: 1px solid var(--techwave-border-color);
+	border-radius: 5px;
+	background-color: var(--techwave-some-r-bg-color);
+	padding: 15px;
+	margin: 10px 0;
+}
+
+.professional-fomrs fieldset legend{
+	font-family: var(--techwave-heading-font-family);
+	font-weight: 400;
+    font-size: 20px;
+}
+
+/* Ajustando os campos do formulário para flexibilidade */
+.professional-fomrs input, select, textarea, button {
+	font-family: var(--techwave-heading-font-family);
+}
+
+.professional-fomrs input[type=text], input[type=email]{
+	width: 100%!important;
+}
+
+.professional-fomrs textarea {
+	width: 100%!important;
+}
+
+/* Responsividade para telas menores */
+@media (max-width: 640px) {
+    .students-fomrs form input, select, textarea, button {
+        @apply w-full; /* Campos ocupam 100% da largura em telas pequenas */
+    }
+}
+
 /*------------------------------------------------------------------*/
 /*	66) Media Queries (Responsive)
 /*------------------------------------------------------------------*/
 @media(max-width: 1400px){
-	.fn__model_item{width: 25%;}
+	/*.fn__model_item{width: 25%;}*/
 }
 @media(max-width: 1367px){
 	.techwave_fn_interactive_list li{width: 100%;max-width: 100%;}
 }
 @media(max-width: 1200px){
-	.fn__model_item{width: 33.3333%;}
+	/*.fn__model_item{width: 33.3333%;}*/
 }
 @media(max-width: 1040px){
 	.techwave_fn_pricing .pricing__content{display: none;}

@@ -9,10 +9,6 @@
 /*	1. Base CSS
 /*------------------------------------------------------------------*/
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 a,abbr,acronym,address,applet,b,big,blockquote,body,caption,center,cite,code,dd,del,dfn,div,dl,dt,em,fieldset,font,form,h1,h2,h3,h4,h5,h6,html,i,iframe,ins,kbd,label,legend,li,object,ol,p,pre,q,s,samp,small,span,strike,strong,sub,sup,table,tbody,td,tfoot,th,thead,tr,tt,u,ul,var{
     background:0 0;
     border:0;

@@ -1,4 +1,5 @@
 import './globals.css'
+import 'bootstrap/dist/css/bootstrap-grid.min.css';
 import '../public/css/plugins.css'
 import '../public/css/style.css'
 import { Heebo, Work_Sans } from 'next/font/google'
