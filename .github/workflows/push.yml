@@ -66,12 +66,19 @@ jobs:
         - name: Checkout code
           uses: actions/checkout@v4
 
-        - name: Docker Build & Publish
+        - name: Docker Build & Publish - Session Management
           uses: ./.github/actions/docker-publish
           with:
             image_name: brunogino/iamind-session_management:latest
             project_path: ./session_management
-            docker_repo: ${{secrets.SESSION_MANAGEMENT_DOCKER_REPO}}
+            docker_repo_token: ${{secrets.DOCKER_REPO_TOKEN}}
+            docker_repo_user: ${{secrets.DOCKER_REPO_USER}}
+
+        - name: Docker Build & Publish - Session Management
+          uses: ./.github/actions/docker-publish
+          with:
+            image_name: brunogino/iamind-user-ms:latest
+            project_path: ./back/user-ms    
             docker_repo_token: ${{secrets.DOCKER_REPO_TOKEN}}
             docker_repo_user: ${{secrets.DOCKER_REPO_USER}}
 
@@ -86,8 +93,11 @@ jobs:
 
         - name: Deploy with terraform
           uses: ./.github/actions/aws-deploy
+          env:
+            TF_INPUT: 0      
+            TF_VAR_session_management_docker_image: brunogino/iamind-session_management
+            TF_VAR_docker_hub_token: ${{inputs.docker_repo_token}}
+            TF_VAR_docker_hub_user: ${{inputs.docker_repo_user}}
+            TF_VAR_access_key_id: ${{inputs.aws_access_key_id}}
           with:
             aws_deployment_role: ${{secrets.AWS_DEPLOYMENT_ROLE_ARN}}
-            aws_access_key_id: ${{secrets.AWS_ACCESS_KEY_ID}}
-            docker_repo_token: ${{secrets.DOCKER_REPO_TOKEN}}
-            docker_repo_user: ${{secrets.DOCKER_REPO_USER}}
