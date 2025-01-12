@@ -1,0 +1,57 @@
+name: User MS
+
+on: 
+    push:
+        branches: 
+            - 'main'
+        paths:
+            - 'back/user-ms/**'
+            - 'terraform/**'
+            - '.github/workflows/user-ms.yml'
+  
+
+permissions:
+  id-token: write
+  contents: read
+  
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        name: Install dependencies and run unit tests
+        steps:
+            - uses: actions/checkout@v4
+            
+    docker:
+      runs-on: ubuntu-latest
+      needs:
+        - build
+      name: Generate and Publish Docker Image
+      steps:
+        - name: Checkout code
+          uses: actions/checkout@v4
+
+        - name: Docker Build & Publish
+          uses: ./.github/actions/docker-publish
+          with:
+            image_name: brunogino/iamind-user-ms:latest
+            project_path: ./back/user-ms
+            docker_repo: ${{secrets.SESSION_MANAGEMENT_DOCKER_REPO}}
+            docker_repo_token: ${{secrets.DOCKER_REPO_TOKEN}}
+            docker_repo_user: ${{secrets.DOCKER_REPO_USER}}
+
+    deploy-to-aws:
+      runs-on: ubuntu-latest
+      name: Deploy to AWS
+      needs:
+        - docker
+      steps:
+        - name: Checkout code
+          uses: actions/checkout@v4
+
+        - name: Deploy with terraform
+          uses: ./.github/actions/aws-deploy
+          with:
+            aws_deployment_role: ${{secrets.AWS_DEPLOYMENT_ROLE_ARN}}
+            aws_access_key_id: ${{secrets.AWS_ACCESS_KEY_ID}}
+            docker_repo_token: ${{secrets.DOCKER_REPO_TOKEN}}
+            docker_repo_user: ${{secrets.DOCKER_REPO_USER}}
