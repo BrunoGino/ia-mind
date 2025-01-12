@@ -7,7 +7,7 @@ load_dotenv()  #
 
 app = Flask(__name__)
 
-app.register_blueprint(game_bp, url_prefix='/games')
+app.register_blueprint(game_bp, url_prefix='/api/games')
 
 if __name__ == "__main__":
     if os.environ.get("FLASK_ENV") == "development":
