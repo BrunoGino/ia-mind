@@ -1,4 +1,4 @@
-# How to run
+# How to connect to AWS locally
 
 ## 1. Install AWS CLI on Windows
 ### Using the MSI Installer (Recommended for Windows users)
@@ -84,3 +84,14 @@ For example, to list dynamodb tables using the assumed role: \
 ```bash
 aws dynamodb list-tables --profile iamind-developer
 ```
+
+## Using IntelliJ
+Once you have setup awscli, do the following In IntelliJ IDEA to run your app locally. You can do this by adding environment variables in your run/debug configurations:
+
+1. Open IntelliJ IDEA and go to Run > Edit Configurations.
+2. Select the Spring Boot application run configuration.
+3. In the Environment Variables section, add the following variables:
+    - **AWS_ACCESS_KEY_ID**=your-access-key-id
+    - **AWS_SECRET_ACCESS_KEY**=your-secret-key
+    - **AWS_PROFILE**=iamind-developer
+    - **AWS_REGION**=eu-west-1
