@@ -23,7 +23,7 @@ data "aws_iam_policy_document" "iamind_developers_group_policy_document" {
 }
 
 resource "aws_iam_policy" "iamind_developer_group_policy" {
-  name        = "iamind_developer_policy"
+  name        = "iamind_developer_group_policy"
   description = "The policy that grants permission to the group to assume the role"
   policy      = data.aws_iam_policy_document.iamind_developers_group_policy_document.json
 }
