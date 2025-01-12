@@ -1,4 +1,4 @@
-name: Session Management
+name: Push - CD
 
 on: 
     push:
