@@ -23,3 +23,8 @@ variable "docker_hub_user" {
   type        = string
   description = "The Docker Hub user to pull images"
 }
+
+variable "access_key_id" {
+  type        = string
+  description = "The access key id to develop locally"
+}

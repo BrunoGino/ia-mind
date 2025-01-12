@@ -102,7 +102,9 @@ resource "aws_iam_role_policy_attachment" "ecs_tasks_role_policy_attch" {
   policy_arn = aws_iam_policy.ecs_tasks_policy.arn
 }
 
-
+#####################################
+#    VPC FLOW LOGS ROLE
+#####################################
 resource "aws_iam_role" "iamind_flow_logs_role" {
   name = "iamind_flow_logs_role"
 
@@ -116,4 +118,38 @@ resource "aws_iam_role" "iamind_flow_logs_role" {
       }
     ]
   })
+}
+
+#####################################
+#    DEVELOPER ROLE
+#####################################
+data "aws_iam_policy_document" "iamind_developer_assume_role_policy_document" {
+
+  version = "2012-10-17"
+
+  statement {
+    sid    = "STSAccess"
+    effect = "Allow"
+    actions = [
+      "sts:AssumeRole"
+    ]
+    principals {
+      type        = "AWS"
+      identifiers = [aws_iam_user.iamind_local_dev.arn]
+    }
+  }
+}
+
+
+resource "aws_iam_role" "iamind_developer_role" {
+  name = "iamind_developer_role"
+
+  assume_role_policy = data.aws_iam_policy_document.iamind_developer_assume_role_policy_document.json
+
+  tags = local.default_tags
+}
+
+resource "aws_iam_role_policy_attachment" "iamind_developer_role_policy_attch" {
+  role       = aws_iam_role.iamind_developer_role.name
+  policy_arn = aws_iam_policy.iamind_developer_policy.arn
 }

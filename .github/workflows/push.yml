@@ -1,4 +1,4 @@
-name: Session Management - CI
+name: Push - CD
 
 on: 
     push:
@@ -6,13 +6,12 @@ on:
             - 'main'
         paths:
             - 'session_management/**'
+            - 'back/user-ms/**'
             - 'terraform/**'
-            - '.github/workflows/session-management-ci.yml'
+            - '.github/workflows/push.yml'
 
 env:
   PYTHON_VERSION: "3.13"
-  MAIN_AWS_REGION: "eu-west-1"
-  
 
 permissions:
   id-token: write
@@ -62,17 +61,26 @@ jobs:
       runs-on: ubuntu-latest
       needs:
         - build
-      name: Generate and Publish Docker Image
+      name: Generate and Publish Docker Images
       steps:
         - name: Checkout code
           uses: actions/checkout@v4
 
-        - name: Docker Build & Publish
+        - name: Docker Build & Publish - Session Management
           uses: ./.github/actions/docker-publish
           with:
-            image_name: brunogino/iamind-session_management:latest
+            image_name: brunogino/iamind-session_management
+            image_tag: latest
             project_path: ./session_management
-            docker_repo: ${{secrets.SESSION_MANAGEMENT_DOCKER_REPO}}
+            docker_repo_token: ${{secrets.DOCKER_REPO_TOKEN}}
+            docker_repo_user: ${{secrets.DOCKER_REPO_USER}}
+
+        - name: Docker Build & Publish - User Ms
+          uses: ./.github/actions/docker-publish
+          with:
+            image_name: brunogino/iamind-user-ms
+            image_tag: latest
+            project_path: ./back/user-ms    
             docker_repo_token: ${{secrets.DOCKER_REPO_TOKEN}}
             docker_repo_user: ${{secrets.DOCKER_REPO_USER}}
 
@@ -81,41 +89,17 @@ jobs:
       name: Deploy to AWS
       needs:
         - docker
-      defaults:
-        run:
-          working-directory: terraform
       env:
         TF_INPUT: 0      
         TF_VAR_session_management_docker_image: brunogino/iamind-session_management
-        TF_VAR_docker_hub_token: ${{secrets.DOCKER_REPO_TOKEN}}
-        TF_VAR_docker_hub_user: ${{secrets.DOCKER_REPO_USER}}
+        TF_VAR_docker_hub_token: ${{inputs.docker_repo_token}}
+        TF_VAR_docker_hub_user: ${{inputs.docker_repo_user}}
+        TF_VAR_access_key_id: ${{inputs.aws_access_key_id}}
       steps:
-        - uses: actions/checkout@v4
-        - name: Configure AWS credentials
-          uses: aws-actions/configure-aws-credentials@v4
+        - name: Checkout code
+          uses: actions/checkout@v4
+
+        - name: Deploy with terraform
+          uses: ./.github/actions/aws-deploy
           with:
-            role-to-assume: ${{secrets.AWS_DEPLOYMENT_ROLE_ARN}}
-            role-session-name: github-to-aws-via-oidc
-            aws-region: ${{env.MAIN_AWS_REGION}}
-            role-skip-session-tagging: true
-        
-        - name: Setup Terraform
-          uses: hashicorp/setup-terraform@v3
-          with:
-            terraform_version: "1.10.3"
-
-        - name: Terraform Init
-          id: terraform-init
-          run: terraform init
-
-        - name: Terraform Validate
-          id: terraform-validate
-          run: terraform validate
-
-        - name: Terraform Plan
-          id: terraform-plan
-          run: terraform plan -lock=false
-        
-        - name: Terraform Apply
-          id: terraform-apply
-          run: terraform apply -auto-approve -lock=false
+            aws_deployment_role: ${{secrets.AWS_DEPLOYMENT_ROLE_ARN}}
