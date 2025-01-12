@@ -25,3 +25,14 @@ resource "aws_dynamodb_table" "iamind_session_table" {
   }
   tags = merge(local.default_tags, { Name : "IAMind session management table" })
 }
+
+resource "aws_dynamodb_table" "iamind_users_table" {
+  name         = "iamind_users_table"
+  billing_mode = "PAY_PER_REQUEST"
+  hash_key     = "id"
+  attribute {
+    name = "id"
+    type = "S"
+  }
+  tags = merge(local.default_tags, { Name : "IAMind users table" })
+}
