@@ -89,17 +89,17 @@ jobs:
       name: Deploy to AWS
       needs:
         - docker
+      env:
+        TF_INPUT: 0      
+        TF_VAR_session_management_docker_image: brunogino/iamind-session_management
+        TF_VAR_docker_hub_token: ${{inputs.docker_repo_token}}
+        TF_VAR_docker_hub_user: ${{inputs.docker_repo_user}}
+        TF_VAR_access_key_id: ${{inputs.aws_access_key_id}}
       steps:
         - name: Checkout code
           uses: actions/checkout@v4
 
         - name: Deploy with terraform
           uses: ./.github/actions/aws-deploy
-          env:
-            TF_INPUT: 0      
-            TF_VAR_session_management_docker_image: brunogino/iamind-session_management
-            TF_VAR_docker_hub_token: ${{inputs.docker_repo_token}}
-            TF_VAR_docker_hub_user: ${{inputs.docker_repo_user}}
-            TF_VAR_access_key_id: ${{inputs.aws_access_key_id}}
           with:
             aws_deployment_role: ${{secrets.AWS_DEPLOYMENT_ROLE_ARN}}
