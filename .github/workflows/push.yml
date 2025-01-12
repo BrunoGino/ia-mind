@@ -6,8 +6,9 @@ on:
             - 'main'
         paths:
             - 'session_management/**'
+            - 'back/user-ms/**'
             - 'terraform/**'
-            - '.github/workflows/session-management.yml'
+            - '.github/workflows/push.yml'
 
 env:
   PYTHON_VERSION: "3.13"
