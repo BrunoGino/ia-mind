@@ -48,11 +48,39 @@ aws --version
 ## 3. Configure AWS CLI with Your Credentials
 Once you’ve installed the AWS CLI, you need to configure it with your AWS credentials. Run:
 ```bash
-aws configure
+aws configure --profile iamind-developer
 ```
 **This command will prompt you to enter:**
 
-**AWS Access Key ID** – You can find this in the AWS Management Console under IAM (Identity and Access Management) > Users > [Your User] > Security Credentials.
-**AWS Secret Access Key** – This can also be found in the same place as your access key.
-**Default region name** – This is the AWS region you want to use (e.g., us-west-2, us-east-1).
-**Default output format** – The format in which you want the AWS CLI to output information (options are json, yaml, text, or table).
+**AWS Access Key ID** – You can find this in the AWS Management Console under IAM (Identity and Access Management) > Users > [Your User] > Security Credentials. \
+**AWS Secret Access Key** – This can also be found in the same place as your access key. \
+**Default region name** – This is the AWS region you want to use (e.g., us-west-2, us-east-1). \
+**Default output format** – The format in which you want the AWS CLI to output information (options are json, yaml, text, or table). \
+
+## 4.  Manually Edit the ~/.aws/config File to Automatically Assume the Role correct role
+After you have set up the base profile, manually edit the ~/.aws/config file to set up the role assumption.
+1. Open the ~/.aws/config file: You can open this file in a text editor like nano, vim, or any text editor you prefer.
+```bash
+nano ~/.aws/config
+```
+2. Add a profile that automatically assumes the role:
+In the ~/.aws/config file, add a profile that assumes the role using the role_arn and source_profile options. \
+Here's an example: \
+```bash
+[profile iamind-developer]
+role_arn = arn:aws:iam::108782061116:role/iamind_developer_role
+region = eu-west-1
+output = json
+source_profile = iamind-developer
+```
+- **role_arn**: The ARN of the role you want to assume.
+- **source_profile**: This refers to the base profile you created earlier with aws configure.
+- **region**: The AWS region you want to work with (e.g., us-west-1).
+- **output**: The output format (e.g., json).
+
+3. Using the Role
+Now, whenever you use the iamind-developer profile, the AWS CLI will automatically assume the role. \
+For example, to list dynamodb tables using the assumed role: \
+```bash
+aws dynamodb list-tables --profile iamind-developer
+```
