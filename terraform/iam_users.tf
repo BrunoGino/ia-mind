@@ -42,3 +42,13 @@ resource "aws_iam_group_membership" "iamind_local_developer_membership" {
 
   group = aws_iam_group.iamind_developers.name
 }
+
+
+import {
+  to = aws_iam_access_key.iamind_local_access_key
+  id = var.access_key_id
+}
+
+resource "aws_iam_access_key" "iamind_local_access_key" {
+  user = aws_iam_user.iamind_local_dev.name
+}
