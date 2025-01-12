@@ -83,7 +83,9 @@ data "aws_iam_policy_document" "deployment_policy_document_1" {
       "iam:Update*",
       "iam:PassRole",
       "iam:Create*",
-      "iam:*Policy"
+      "iam:*Policy",
+      "iam:AddUserToGroup",
+      "iam:RemoveUserFromGroup"
     ]
     resources = [
       "arn:aws:iam::108782061116:role/iamind*",
