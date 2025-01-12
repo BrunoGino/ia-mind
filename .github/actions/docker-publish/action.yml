@@ -17,13 +17,17 @@ inputs:
     required: true
     description: Repository user
 
+  image_tag:
+    required: true
+    description: The image tag to push to the repo
+
 runs:
   using: composite
   steps:
     - name: Docker Build
       shell: bash
       run: |
-        docker build --no-cache -t ${{inputs.image_name}} ${{inputs.project_path}}
+        docker build --no-cache -t ${{inputs.image_name}}:${{inputs.image_tag}} ${{inputs.project_path}}
 
     - name: Docker Publish
       env:

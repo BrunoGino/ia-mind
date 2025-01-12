@@ -70,14 +70,16 @@ jobs:
           uses: ./.github/actions/docker-publish
           with:
             image_name: brunogino/iamind-session_management:latest
+            image_tag: latest
             project_path: ./session_management
             docker_repo_token: ${{secrets.DOCKER_REPO_TOKEN}}
             docker_repo_user: ${{secrets.DOCKER_REPO_USER}}
 
-        - name: Docker Build & Publish - Session Management
+        - name: Docker Build & Publish - User Ms
           uses: ./.github/actions/docker-publish
           with:
-            image_name: brunogino/iamind-user-ms:latest
+            image_name: brunogino/iamind-user-ms
+            image_tag: latest
             project_path: ./back/user-ms    
             docker_repo_token: ${{secrets.DOCKER_REPO_TOKEN}}
             docker_repo_user: ${{secrets.DOCKER_REPO_USER}}
