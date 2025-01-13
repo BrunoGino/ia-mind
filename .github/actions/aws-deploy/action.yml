@@ -8,12 +8,8 @@ inputs:
 runs:
   using: composite
   steps:
-      - name: Enter terraform folder
-        shell: bash
-        run: cd terraform
-
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
+        uses: aws-actions/configure-aws-credentials@v4        
         with:
           role-to-assume: ${{inputs.aws_deployment_role}}
           role-session-name: github-to-aws-via-oidc
@@ -21,26 +17,30 @@ runs:
           role-skip-session-tagging: true
       
       - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v3
+        uses: hashicorp/setup-terraform@v3        
         with:
           terraform_version: "1.10.3"
 
       - name: Terraform Init
+        working-directory: terraform
         shell: bash
         id: terraform-init
         run: terraform init
 
       - name: Terraform Validate
+        working-directory: terraform
         shell: bash
         id: terraform-validate
         run: terraform validate
 
       - name: Terraform Plan
+        working-directory: terraform
         shell: bash
         id: terraform-plan
         run: terraform plan -lock=false
       
       - name: Terraform Apply
+        working-directory: terraform
         shell: bash
         id: terraform-apply
         run: terraform apply -auto-approve -lock=false
