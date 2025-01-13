@@ -16,15 +16,11 @@ const data = [
     children: [
       {
         title: "Novo Aluno",
-        pathname: "/students/new",
+        pathname: "/student",
       },
       {
         title: "Todos os Alunos",
         pathname: "/models",
-      },
-      {
-        title: "Categorias",
-        pathname: "/students/categories",
       },
     ],
   },
@@ -35,15 +31,11 @@ const data = [
     children: [
       {
         title: "Novo Professor",
-        pathname: "/teachers/new",
+        pathname: "/professional",
       },
       {
         title: "Todos os Professores",
         pathname: "/models",
-      },
-      {
-        title: "Categorias",
-        pathname: "/teachers/categories",
       },
     ],
   },
