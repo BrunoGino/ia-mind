@@ -79,7 +79,7 @@ resource "aws_ecs_service" "session_management_service" {
   }
 
   load_balancer {
-    target_group_arn = aws_lb_target_group.iamind_alb_tg_https.arn
+    target_group_arn = aws_lb_target_group.iamind_session_management_tg.arn
     container_name   = "session_management_task"
     container_port   = 5000
   }
@@ -140,7 +140,7 @@ resource "aws_ecs_service" "user_ms_service" {
   }
 
   load_balancer {
-    target_group_arn = aws_lb_target_group.iamind_alb_tg_https.arn
+    target_group_arn = aws_lb_target_group.iamind_user_ms_tg.arn
     container_name   = "user_ms_task"
     container_port   = 5000
   }

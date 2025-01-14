@@ -11,4 +11,4 @@ app.register_blueprint(game_bp, url_prefix='/api/games')
 
 if __name__ == "__main__":
     if os.environ.get("FLASK_ENV") == "development":
-        app.run(debug=True,port=8080)
+        app.run(debug=True)

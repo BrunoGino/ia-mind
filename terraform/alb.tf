@@ -16,16 +16,16 @@ resource "aws_lb" "iamind_alb" {
   tags = local.default_tags
 }
 
-resource "aws_lb_target_group" "iamind_alb_session_management_tg_https" {
-  name        = "iamind_alb_session_management_tg_https"
+resource "aws_lb_target_group" "iamind_session_management_tg" {
+  name        = "iamind-session-management-tg"
   port        = 80
   protocol    = "HTTP"
   target_type = "ip"
   vpc_id      = aws_vpc.iamind_vpc.id
 }
 
-resource "aws_lb_target_group" "iamind_alb_user_ms_tg_https" {
-  name        = "iamind_alb_user_ms_tg_https"
+resource "aws_lb_target_group" "iamind_user_ms_tg" {
+  name        = "iamind-user-ms-tg"
   port        = 80
   protocol    = "HTTP"
   target_type = "ip"
@@ -56,7 +56,7 @@ resource "aws_lb_listener_rule" "iamind_session_management_rule" {
   priority     = 1
   action {
     type             = "forward"
-    target_group_arn = aws_lb_target_group.iamind_alb_session_management_tg_https.arn
+    target_group_arn = aws_lb_target_group.iamind_session_management_tg.arn
   }
 
   condition {
@@ -71,7 +71,7 @@ resource "aws_lb_listener_rule" "iamind_user_ms_rule" {
   priority     = 1
   action {
     type             = "forward"
-    target_group_arn = aws_lb_target_group.iamind_alb_user_ms_tg_https.arn
+    target_group_arn = aws_lb_target_group.iamind_user_ms_tg.arn
   }
 
   condition {
