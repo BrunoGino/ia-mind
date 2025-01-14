@@ -16,13 +16,22 @@ resource "aws_lb" "iamind_alb" {
   tags = local.default_tags
 }
 
-resource "aws_lb_target_group" "iamind_alb_tg_https" {
-  name        = "iamind-alb-tg-https"
+resource "aws_lb_target_group" "iamind_alb_session_management_tg_https" {
+  name        = "iamind_alb_session_management_tg_https"
   port        = 80
   protocol    = "HTTP"
   target_type = "ip"
   vpc_id      = aws_vpc.iamind_vpc.id
 }
+
+resource "aws_lb_target_group" "iamind_alb_user_ms_tg_https" {
+  name        = "iamind_alb_user_ms_tg_https"
+  port        = 80
+  protocol    = "HTTP"
+  target_type = "ip"
+  vpc_id      = aws_vpc.iamind_vpc.id
+}
+
 
 resource "aws_lb_listener" "iamind_alb_listener_https" {
   load_balancer_arn = aws_lb.iamind_alb.arn
@@ -42,17 +51,33 @@ resource "aws_lb_listener" "iamind_alb_listener_https" {
   }
 }
 
-resource "aws_lb_listener_rule" "iamind_backend_rule" {
+resource "aws_lb_listener_rule" "iamind_session_management_rule" {
   listener_arn = aws_lb_listener.iamind_alb_listener_https.arn
   priority     = 1
   action {
     type             = "forward"
-    target_group_arn = aws_lb_target_group.iamind_alb_tg_https.arn
+    target_group_arn = aws_lb_target_group.iamind_alb_session_management_tg_https.arn
   }
 
   condition {
     path_pattern {
-      values = ["/api/*"]
+      values = ["/api/session", "/api/session/*"]
     }
   }
 }
+
+resource "aws_lb_listener_rule" "iamind_user_ms_rule" {
+  listener_arn = aws_lb_listener.iamind_alb_listener_https.arn
+  priority     = 1
+  action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.iamind_alb_user_ms_tg_https.arn
+  }
+
+  condition {
+    path_pattern {
+      values = ["/api/user", "/api/user/*"]
+    }
+  }
+}
+

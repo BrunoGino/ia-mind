@@ -14,6 +14,11 @@ variable "session_management_docker_image" {
   description = "The docker image name for session_management microservice"
 }
 
+variable "user_ms_docker_image" {
+  type        = string
+  description = "The docker image name for user-ms microservice"
+}
+
 variable "docker_hub_token" {
   type        = string
   description = "The Docker Hub token to pull images"
