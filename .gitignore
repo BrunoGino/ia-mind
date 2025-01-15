@@ -103,3 +103,4 @@ virtualenv/
 
 .github/.secrets
 .secrets
+.codegpt
