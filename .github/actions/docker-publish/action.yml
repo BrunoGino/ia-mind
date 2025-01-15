@@ -1,0 +1,40 @@
+name: docker-publish
+description: Docker build and publish
+inputs:
+  image_name:
+    required: true
+    description: Image name
+
+  project_path:
+    required: true
+    description: Project path
+
+  docker_repo_token:
+    required: true
+    description: Repository token
+
+  docker_repo_user:
+    required: true
+    description: Repository user
+
+  image_tag:
+    required: true
+    description: The image tag to push to the repo
+
+runs:
+  using: composite
+  steps:
+    - name: Docker Build
+      shell: bash
+      run: |
+        docker build --no-cache -t ${{inputs.image_name}}:${{inputs.image_tag}} ${{inputs.project_path}}
+
+    - name: Docker Publish
+      env:
+        DOCKER_REPO: ${{inputs.image_name}}
+        DOCKER_REPO_TOKEN: ${{inputs.docker_repo_token}}
+        DOCKER_REPO_USER: ${{inputs.docker_repo_user}}
+      shell: bash
+      run: |
+        echo $DOCKER_REPO_TOKEN | docker login -u $DOCKER_REPO_USER --password-stdin
+        docker push ${DOCKER_REPO} -a

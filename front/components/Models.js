@@ -7,13 +7,13 @@ export default function Models() {
 
     // For filter
     const products = [
-        { id: 1, category: 1, img: "img/models/1.jpg", title: 'GameVisuals1', hasBookmark: false, desc: "A versatile model great at both photorealism and anime, includes noise offset training... by Lykon.", author_pic: "img/user/user.jpg", author_name: "Caden", tags: ['Buildings', 'Environments', 'Illustration', 'Textures', ''] },
-        { id: 2, category: 1, img: "img/models/2.jpg", title: 'GameVisuals2', hasBookmark: false, desc: "A versatile model great at both photorealism and anime, includes noise offset training... by Lykon.", author_pic: "img/user/user.jpg", author_name: "Caden", tags: ['Characters', 'Fashion', 'Graphical', 'Photography', 'Environments'] },
-        { id: 3, category: 1, img: "img/models/3.jpg", title: 'GameVisuals3', hasBookmark: false, desc: "A versatile model great at both photorealism and anime, includes noise offset training... by Lykon.", author_pic: "img/user/user.jpg", author_name: "Caden", tags: ['Buildings', 'Environments', 'Characters', 'Graphical', ''] },
-        { id: 4, category: 1, img: "img/models/4.jpg", title: 'GameVisuals4', hasBookmark: false, desc: "A versatile model great at both photorealism and anime, includes noise offset training... by Lykon.", author_pic: "img/user/user.jpg", author_name: "Caden", tags: ['Fashion', 'Environments', 'Illustration', 'Textures', ''] },
-        { id: 5, category: 1, img: "img/models/5.jpg", title: 'GameVisuals5', hasBookmark: false, desc: "A versatile model great at both photorealism and anime, includes noise offset training... by Lykon.", author_pic: "img/user/user.jpg", author_name: "Caden", tags: ['Buildings', 'Characters', 'Photography', 'Illustration', ''] },
-        { id: 6, category: 1, img: "img/models/6.jpg", title: 'GameVisuals6', hasBookmark: false, desc: "A versatile model great at both photorealism and anime, includes noise offset training... by Lykon.", author_pic: "img/user/user.jpg", author_name: "Caden", tags: ['Fashion', 'Environments', 'Graphical', 'Textures', 'Characters'] },
-        { id: 7, category: 1, img: "img/models/7.jpg", title: 'GameVisuals7', hasBookmark: false, desc: "A versatile model great at both photorealism and anime, includes noise offset training... by Lykon.", author_pic: "img/user/user.jpg", author_name: "Caden", tags: ['Illustration', 'Environments', 'Graphical', 'Textures', ''] },
+        { id: 1, category: 1, img: "img/models/1.jpg", title: 'Felipe Lenin Alvarenga Siqueira', hasBookmark: false, desc: "A versatile model great at both photorealism and anime, includes noise offset training... by Lykon.", author_pic: "img/user/user.jpg", author_name: "Caden", tags: ['Buildings', 'Environments', 'Illustration', 'Textures', ''] },
+        { id: 2, category: 1, img: "img/models/2.jpg", title: 'Bruno Gino', hasBookmark: false, desc: "A versatile model great at both photorealism and anime, includes noise offset training... by Lykon.", author_pic: "img/user/user.jpg", author_name: "Caden", tags: ['Characters', 'Fashion', 'Graphical', 'Photography', 'Environments'] },
+        { id: 3, category: 1, img: "img/models/3.jpg", title: 'Gustavo Borges', hasBookmark: false, desc: "A versatile model great at both photorealism and anime, includes noise offset training... by Lykon.", author_pic: "img/user/user.jpg", author_name: "Caden", tags: ['Buildings', 'Environments', 'Characters', 'Graphical', ''] },
+        { id: 4, category: 1, img: "img/models/4.jpg", title: 'Letícia', hasBookmark: false, desc: "A versatile model great at both photorealism and anime, includes noise offset training... by Lykon.", author_pic: "img/user/user.jpg", author_name: "Caden", tags: ['Fashion', 'Environments', 'Illustration', 'Textures', ''] },
+        { id: 5, category: 1, img: "img/models/5.jpg", title: 'Glaucia M de Oliveira Alvarenga', hasBookmark: false, desc: "A versatile model great at both photorealism and anime, includes noise offset training... by Lykon.", author_pic: "img/user/user.jpg", author_name: "Caden", tags: ['Buildings', 'Characters', 'Photography', 'Illustration', ''] },
+        { id: 6, category: 1, img: "img/models/6.jpg", title: 'Dunha Costa Unha', hasBookmark: false, desc: "A versatile model great at both photorealism and anime, includes noise offset training... by Lykon.", author_pic: "img/user/user.jpg", author_name: "Caden", tags: ['Fashion', 'Environments', 'Graphical', 'Textures', 'Characters'] },
+        { id: 7, category: 1, img: "img/models/7.jpg", title: 'Ramirez Rodiguez', hasBookmark: false, desc: "A versatile model great at both photorealism and anime, includes noise offset training... by Lykon.", author_pic: "img/user/user.jpg", author_name: "Caden", tags: ['Illustration', 'Environments', 'Graphical', 'Textures', ''] },
         { id: 8, category: 1, img: "img/models/8.jpg", title: 'GameVisuals8', hasBookmark: false, desc: "A versatile model great at both photorealism and anime, includes noise offset training... by Lykon.", author_pic: "img/user/user.jpg", author_name: "Caden", tags: ['Buildings', 'Characters', 'Fashion', 'Photography', ''] },
         { id: 9, category: 1, img: "img/models/9.jpg", title: 'GameVisuals9', hasBookmark: false, desc: "A versatile model great at both photorealism and anime, includes noise offset training... by Lykon.", author_pic: "img/user/user.jpg", author_name: "Caden", tags: ['Graphical', 'Characters', 'Illustration', 'Photography', ''] },
         { id: 10, category: 1, img: "img/models/10.jpg", title: 'GameVisuals10', hasBookmark: false, desc: "A versatile model great at both photorealism and anime, includes noise offset training... by Lykon.", author_pic: "img/user/user.jpg", author_name: "Caden", tags: ['Textures', 'Characters', 'Fashion', 'Photography', ''] },
@@ -46,6 +46,16 @@ export default function Models() {
     const [activeIndex, setActiveIndex] = useState(1);
     const [selectedTag, setSelectedTag] = useState('');
     const [bookmarkStates, setBookmarkStates] = useState(products.map(() => false));
+
+    const [hoveredIndex, setHoveredIndex] = useState(null); // Estado para gerenciar hover
+
+    const handleMouseEnter = (index) => setHoveredIndex(index);
+    const handleMouseLeave = () => setHoveredIndex(null);
+
+    const handleItemClick = (id) => {
+        // Redireciona para o perfil do aluno/professor
+        window.location.href = `/profile/${id}`;
+    };
 
     const handleOnClick = (index) => {
         setActiveIndex(index);
@@ -165,23 +175,31 @@ export default function Models() {
                                         <ul className="fn__model_items">
                                             {/*  model item goes here */}{
                                                 filteredProducts.map((product, index) => (
-                                                    <li key={product.id} className="fn__model_item">
-                                                        <div className="item">
-                                                            <a onClick={() => hasBookmarkSwitch(product.id)}
-                                                                className={bookmarkStates[index] ? "fn__bookmark has__bookmark" : "fn__bookmark"}>
-                                                                <img src="svg/bookmark.svg" alt="" className="fn__svg hasntbook" />
-                                                                <img src="svg/bookmarked.svg" alt="" className="fn__svg hasbook" />
-                                                            </a>
-                                                            <div className="img">
-                                                                <img src={product.img} alt="" />
-                                                            </div>
-                                                            <div className="item__info">
-                                                                <h3 className="title">{product.title}</h3>
-                                                                <p className="desc">{product.desc}</p>
-                                                            </div>
-                                                            <div className="item__author">
-                                                                <img src={product.author_pic} alt="" />
-                                                                <h3 className="author_name">{product.author_name}</h3>
+                                                    <li key={product.id} className="fn__model_item" onMouseEnter={() => handleMouseEnter(index)} onMouseLeave={handleMouseLeave} onClick={() => handleItemClick(product.id)}>
+                                                        <div className="fn__model_content_item">
+                                                            {/* Imagem à esquerda */}
+                                                            {/*<div className="fn__model_image">
+                                                                <img src={product.img} alt={product.title} />
+                                                            </div>*/}
+                                                            <div className="fn__model_data_items">
+                                                                {/* Informações centrais */}
+                                                                <div className="fn__model__info">
+                                                                    <h3 className="fn__model__title">{product.title}</h3>
+                                                                    <h6 className="fn__model__categories">
+                                                                        Categories: <i>{product.tags.join(", ")}</i>
+                                                                    </h6>
+                                                                    <p className="desc">{product.desc}</p>
+                                                                </div>
+                                                                {/* Ações à direita */}
+                                                                {hoveredIndex === index && ( // Exibe ações somente no hover
+                                                                <div className="fn__model__actions">
+                                                                    <div className="fn__actions__hover fn__model_bt_tools">
+                                                                        <a href="#"><b>Editar</b></a>
+                                                                        <a href="#"><b>Excluir</b></a>
+                                                                        <a href="#"><b>Relatórios</b></a>
+                                                                    </div>
+                                                                </div>
+                                                                )}
                                                             </div>
                                                         </div>
                                                     </li>
