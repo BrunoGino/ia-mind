@@ -89,8 +89,23 @@ aws dynamodb list-tables --profile iamind-developer
 Once you have setup awscli, do the following In IntelliJ IDEA to run your app locally. You can do this by adding environment variables in your run/debug configurations:
 
 1. Open IntelliJ IDEA and go to Run > Edit Configurations.
-2. Select the Spring Boot application run configuration.
 3. In the Environment Variables section, add the following variables:
+    - **AWS_ACCESS_KEY_ID**=your-access-key-id
+    - **AWS_SECRET_ACCESS_KEY**=your-secret-key
+    - **AWS_PROFILE**=iamind-developer
+    - **AWS_REGION**=eu-west-1
+
+
+## Using Visual Studio Code
+Install the [AWS Toolkit for Visual Studio Code](https://marketplace.visualstudio.com/items?itemName=amazonwebservices.aws-toolkit-vscode). The AWS Toolkit provides an integrated experience for working with AWS services.
+
+1. Open VSCode
+2. Go to the Extensions Marketplace (Ctrl+Shift+X or Cmd+Shift+X on macOS)
+3. Search for AWS Toolkit and click Install
+4. Once installed open the AWS Toolkit in VSCode by clicking the AWS icon in the Activity Bar on the left
+5. Click Connect to AWS and select the appropriate AWS profile (configured in ~/.aws/credentials)
+6. After connecting, the AWS Explorer will display your available services and resources (e.g., S3 buckets, Lambda functions, etc.)
+7. Create a .env file and add the following variables:
     - **AWS_ACCESS_KEY_ID**=your-access-key-id
     - **AWS_SECRET_ACCESS_KEY**=your-secret-key
     - **AWS_PROFILE**=iamind-developer
