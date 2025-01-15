@@ -382,7 +382,7 @@ data "aws_iam_policy_document" "ecs_tasks_policy_document" {
       "dynamodb:Describe*"
     ]
     resources = [
-      "arn:aws:dynamodb:eu-west-1:108782061116:table/iamind-*"
+      "arn:aws:dynamodb:eu-west-1:108782061116:table/iamind*"
     ]
   }
 
