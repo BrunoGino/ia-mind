@@ -4,7 +4,7 @@ WORKDIR /user-ms
 
 COPY . .
 
-RUN mvn clean package -DskipTests
+RUN mvn clean package -Dmaven.test.skip=true
 
 FROM amazoncorretto:21
 
