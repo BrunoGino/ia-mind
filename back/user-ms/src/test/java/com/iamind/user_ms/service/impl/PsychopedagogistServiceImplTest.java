@@ -1,14 +1,18 @@
 package com.iamind.user_ms.service.impl;
 
+import com.iamind.user_ms.converter.UserTableToPsychopedagogistConverter;
 import com.iamind.user_ms.dto.PsychopedagogistRequestDTO;
 import com.iamind.user_ms.dto.PsychopedagogistResponseDTO;
 import com.iamind.user_ms.exception.ResourceNotFoundException;
 import com.iamind.user_ms.model.Psychopedagogist;
+import com.iamind.user_ms.model.dynamodb.DynamoDbRepository;
+import com.iamind.user_ms.model.dynamodb.UserTable;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
@@ -22,169 +26,143 @@ import static org.mockito.Mockito.*;
 class PsychopedagogistServiceImplTest {
 
     @Mock
-    private PsychopedagogistRepository psychopedagogistRepository;
+    private DynamoDbRepository<UserTable> userRepository;
+
+    @Mock
+    private UserTableToPsychopedagogistConverter converter;
 
     @InjectMocks
-    private PsychopedagogistServiceImpl psychopedagogistService;
+    private PsychopedagogistServiceImpl service;
 
-    private Psychopedagogist psychopedagogist;
-    private PsychopedagogistRequestDTO psychopedagogistRequestDTO;
-
-    @BeforeEach
-    void setUp() {
-        psychopedagogist = Psychopedagogist.builder()
-                .id(1L)
-                .firstName("John")
-                .lastName("Doe")
-                .dateOfBirth(LocalDate.of(1985, 7, 12))
-                .gender("Male")
-                .fullAddress("456 Elm Street")
-                .email("john.doe@example.com")
-                .phone("+1-555-9876")
-                .professionalRegistration("CRP-12345")
-                .academicFormation("Psychology PhD")
-                .specializations("Autism, ADHD")
-                .experienceInYears(10)
-                .build();
-
-        psychopedagogistRequestDTO = new PsychopedagogistRequestDTO(
-                "John",
-                "Doe",
-                LocalDate.of(1985, 7, 12),
-                "Male",
-                "456 Elm Street",
-                "john.doe@example.com",
-                "+1-555-9876",
-                "CRP-12345",
-                "Psychology PhD",
-                "Autism, ADHD",
-                10
-        );
-    }
-
-    // ---------------------------------------
-    // ✅ GET ALL PSYCHOPEDAGOGISTS
-    // ---------------------------------------
     @Test
-    void shouldReturnAllPsychopedagogistsSuccessfully() {
+    void testGetAllPsychopedagogists() {
         // Arrange
-        when(psychopedagogistRepository.findAll()).thenReturn(List.of(psychopedagogist));
+        UserTable userTable = new UserTable();
+        Psychopedagogist psychopedagogist = new Psychopedagogist();
+        PsychopedagogistResponseDTO responseDTO = new PsychopedagogistResponseDTO("1", "John", "Doe", null, "Male", "Address", "email", "phone", "reg", "edu", "spec", 5, "notes");
+
+        when(userRepository.findAll()).thenReturn(List.of(userTable));
+        when(converter.convert(userTable)).thenReturn(psychopedagogist);
 
         // Act
-        List<PsychopedagogistResponseDTO> psychopedagogists = psychopedagogistService.getAllPsychopedagogists();
+        List<PsychopedagogistResponseDTO> result = service.getAllPsychopedagogists();
 
         // Assert
-        assertFalse(psychopedagogists.isEmpty());
-        assertEquals(1, psychopedagogists.size());
-        assertEquals("John", psychopedagogists.getFirst().firstName());
-        verify(psychopedagogistRepository, times(1)).findAll();
+        assertNotNull(result);
+        assertEquals(1, result.size());
+        assertEquals("John", result.get(0).firstName());
+        verify(userRepository, times(1)).findAll();
     }
 
     @Test
-    void shouldReturnEmptyListWhenNoPsychopedagogistsExist() {
+    void testGetPsychopedagogistById_Success() {
         // Arrange
-        when(psychopedagogistRepository.findAll()).thenReturn(List.of());
+        String id = "1";
+        UserTable userTable = new UserTable();
+        Psychopedagogist psychopedagogist = new Psychopedagogist();
+        PsychopedagogistResponseDTO responseDTO = new PsychopedagogistResponseDTO("1", "John", "Doe", null, "Male", "Address", "email", "phone", "reg", "edu", "spec", 5, "notes");
+
+        when(userRepository.findById(id)).thenReturn(Optional.of(userTable));
+        when(converter.convert(userTable)).thenReturn(psychopedagogist);
 
         // Act
-        List<PsychopedagogistResponseDTO> psychopedagogists = psychopedagogistService.getAllPsychopedagogists();
+        PsychopedagogistResponseDTO result = service.getPsychopedagogistById(id);
 
         // Assert
-        assertTrue(psychopedagogists.isEmpty());
-        verify(psychopedagogistRepository, times(1)).findAll();
-    }
-
-    // ---------------------------------------
-    // ✅ GET PSYCHOPEDAGOGIST BY ID
-    // ---------------------------------------
-    @Test
-    void shouldReturnPsychopedagogistByIdSuccessfully() {
-        // Arrange
-        when(psychopedagogistRepository.findById(1L)).thenReturn(Optional.of(psychopedagogist));
-
-        // Act
-        PsychopedagogistResponseDTO response = psychopedagogistService.getPsychopedagogistById(1L);
-
-        // Assert
-        assertNotNull(response);
-        assertEquals("John", response.firstName());
-        verify(psychopedagogistRepository, times(1)).findById(1L);
+        assertNotNull(result);
+        assertEquals("John", result.firstName());
+        verify(userRepository, times(1)).findById(id);
     }
 
     @Test
-    void shouldThrowExceptionWhenPsychopedagogistNotFoundById() {
+    void testGetPsychopedagogistById_NotFound() {
         // Arrange
-        when(psychopedagogistRepository.findById(1L)).thenReturn(Optional.empty());
+        String id = "1";
+        when(userRepository.findById(id)).thenReturn(Optional.empty());
 
         // Act & Assert
-        assertThrows(ResourceNotFoundException.class, () -> psychopedagogistService.getPsychopedagogistById(1L));
-        verify(psychopedagogistRepository, times(1)).findById(1L);
+        assertThrows(ResourceNotFoundException.class, () -> service.getPsychopedagogistById(id));
+        verify(userRepository, times(1)).findById(id);
     }
 
-    // ---------------------------------------
-    // ✅ CREATE PSYCHOPEDAGOGIST
-    // ---------------------------------------
     @Test
-    void shouldCreatePsychopedagogistSuccessfully() {
+    void testCreatePsychopedagogist() {
         // Arrange
-        when(psychopedagogistRepository.save(any(Psychopedagogist.class))).thenReturn(psychopedagogist);
+        PsychopedagogistRequestDTO requestDTO = new PsychopedagogistRequestDTO("John", "Doe", LocalDate.now(), "Male", "Address", "email", "phone", "reg", "edu", "spec", 5);
+        Psychopedagogist psychopedagogist = new Psychopedagogist();
+        psychopedagogist.setId("1");
+        UserTable userTable = new UserTable();
+
+        when(converter.convert(psychopedagogist)).thenReturn(userTable);
+        when(userRepository.findById("1")).thenReturn(Optional.of(userTable));
+        when(converter.convert(userTable)).thenReturn(psychopedagogist);
 
         // Act
-        PsychopedagogistResponseDTO response = psychopedagogistService.createPsychopedagogist(psychopedagogistRequestDTO);
+        PsychopedagogistResponseDTO result = service.createPsychopedagogist(requestDTO);
 
         // Assert
-        assertNotNull(response);
-        assertEquals("John", response.firstName());
-        verify(psychopedagogistRepository, times(1)).save(any(Psychopedagogist.class));
+        assertNotNull(result);
+        assertEquals("John", result.firstName());
+        verify(userRepository, times(1)).save(userTable);
     }
 
-    // ---------------------------------------
-    // ✅ UPDATE PSYCHOPEDAGOGIST
-    // ---------------------------------------
     @Test
-    void shouldUpdatePsychopedagogistSuccessfully() {
+    void testUpdatePsychopedagogist_Success() {
         // Arrange
-        when(psychopedagogistRepository.findById(1L)).thenReturn(Optional.of(psychopedagogist));
-        when(psychopedagogistRepository.save(any(Psychopedagogist.class))).thenReturn(psychopedagogist);
+        String id = "1";
+        PsychopedagogistRequestDTO requestDTO = new PsychopedagogistRequestDTO("John", "Doe", LocalDate.now(), "Male", "New Address", "newemail", "newphone", "newreg", "newedu", "newspec", 10);
+        UserTable userTable = new UserTable();
+        Psychopedagogist psychopedagogist = new Psychopedagogist();
+
+        when(userRepository.findById(id)).thenReturn(Optional.of(userTable));
+        when(converter.convert(userTable)).thenReturn(psychopedagogist);
+        when(converter.convert(psychopedagogist)).thenReturn(userTable);
 
         // Act
-        PsychopedagogistResponseDTO response = psychopedagogistService.updatePsychopedagogist(1L, psychopedagogistRequestDTO);
+        PsychopedagogistResponseDTO result = service.updatePsychopedagogist(id, requestDTO);
 
         // Assert
-        assertNotNull(response);
-        assertEquals("John", response.firstName());
-        verify(psychopedagogistRepository, times(1)).findById(1L);
-        verify(psychopedagogistRepository, times(1)).save(any(Psychopedagogist.class));
+        assertNotNull(result);
+        assertEquals("John", result.firstName());
+        assertEquals("New Address", result.fullAddress());
+        verify(userRepository, times(1)).save(userTable);
     }
 
     @Test
-    void shouldThrowExceptionWhenUpdatingNonExistingPsychopedagogist() {
+    void testUpdatePsychopedagogist_NotFound() {
         // Arrange
-        when(psychopedagogistRepository.findById(1L)).thenReturn(Optional.empty());
+        String id = "1";
+        PsychopedagogistRequestDTO requestDTO = new PsychopedagogistRequestDTO("John", "Doe", LocalDate.now(), "Male", "New Address", "newemail", "newphone", "newreg", "newedu", "newspec", 10);
+
+        when(userRepository.findById(id)).thenReturn(Optional.empty());
 
         // Act & Assert
-        assertThrows(ResourceNotFoundException.class, () -> psychopedagogistService.updatePsychopedagogist(1L, psychopedagogistRequestDTO));
-        verify(psychopedagogistRepository, times(1)).findById(1L);
-    }
-
-    // ---------------------------------------
-    // ✅ DELETE PSYCHOPEDAGOGIST
-    // ---------------------------------------
-    @Test
-    void shouldDeletePsychopedagogistSuccessfully() {
-        when(psychopedagogistRepository.existsById(1L)).thenReturn(true);
-        doNothing().when(psychopedagogistRepository).deleteById(1L);
-
-        psychopedagogistService.deletePsychopedagogist(1L);
-
-        verify(psychopedagogistRepository, times(1)).existsById(1L);
-        verify(psychopedagogistRepository, times(1)).deleteById(1L);
+        assertThrows(ResourceNotFoundException.class, () -> service.updatePsychopedagogist(id, requestDTO));
+        verify(userRepository, times(1)).findById(id);
     }
 
     @Test
-    void shouldThrowExceptionWhenDeletingNonExistingPsychopedagogist() {
-        when(psychopedagogistRepository.existsById(1L)).thenReturn(false);
+    void testDeletePsychopedagogist_Success() {
+        // Arrange
+        String id = "1";
+        UserTable userTable = new UserTable();
+        when(userRepository.findById(id)).thenReturn(Optional.of(userTable));
 
-        assertThrows(ResourceNotFoundException.class, () -> psychopedagogistService.deletePsychopedagogist(1L));
-        verify(psychopedagogistRepository, times(1)).existsById(1L);
+        // Act
+        service.deletePsychopedagogist(id);
+
+        // Assert
+        verify(userRepository, times(1)).delete(userTable);
+    }
+
+    @Test
+    void testDeletePsychopedagogist_NotFound() {
+        // Arrange
+        String id = "1";
+        when(userRepository.findById(id)).thenReturn(Optional.empty());
+
+        // Act & Assert
+        assertThrows(ResourceNotFoundException.class, () -> service.deletePsychopedagogist(id));
+        verify(userRepository, times(1)).findById(id);
     }
 }

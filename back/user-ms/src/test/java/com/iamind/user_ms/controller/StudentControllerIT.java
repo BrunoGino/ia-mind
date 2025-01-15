@@ -11,7 +11,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.transaction.annotation.Transactional;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.time.LocalDate;
@@ -26,7 +25,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ActiveProfiles("test")
 @ContextConfiguration(classes = {com.iamind.user_ms.config.TestContainerConfig.class})
 @Testcontainers
-@Transactional
 class StudentControllerIT {
 
     @Autowired
@@ -63,20 +61,20 @@ class StudentControllerIT {
 
     @Test
     void shouldReturnAllStudents() throws Exception {
-        mockMvc.perform(get("/api/students"))
+        mockMvc.perform(get("/api/users/students"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(0)));
 
         createStudent(studentRequest);
 
-        mockMvc.perform(get("/api/students"))
+        mockMvc.perform(get("/api/users/students"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)));
     }
 
     @Test
     void shouldCreateStudent() throws Exception {
-        mockMvc.perform(post("/api/students")
+        mockMvc.perform(post("/api/users/students")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(studentRequest)))
                 .andExpect(status().isOk())
@@ -87,7 +85,7 @@ class StudentControllerIT {
     void shouldGetStudentById() throws Exception {
         long id = createStudent(studentRequest);
 
-        mockMvc.perform(get("/api/students/" + id))
+        mockMvc.perform(get("/api/users/students/" + id))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.firstName").value("Alice"));
     }
@@ -117,7 +115,7 @@ class StudentControllerIT {
                 "john@example.com"
         );
 
-        mockMvc.perform(put("/api/students/" + id)
+        mockMvc.perform(put("/api/users/students/" + id)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(updatedRequest)))
                 .andExpect(status().isOk())
@@ -128,15 +126,15 @@ class StudentControllerIT {
     void shouldDeleteStudent() throws Exception {
         long id = createStudent(studentRequest);
 
-        mockMvc.perform(delete("/api/students/" + id))
+        mockMvc.perform(delete("/api/users/students/" + id))
                 .andExpect(status().isNoContent());
 
-        mockMvc.perform(get("/api/students/" + id))
+        mockMvc.perform(get("/api/users/students/" + id))
                 .andExpect(status().isNotFound());
     }
 
     private long createStudent(StudentRequestDTO request) throws Exception {
-        String responseBody = mockMvc.perform(post("/api/students")
+        String responseBody = mockMvc.perform(post("/api/users/students")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())

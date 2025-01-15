@@ -11,7 +11,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.transaction.annotation.Transactional;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.time.LocalDate;
@@ -26,7 +25,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ActiveProfiles("test")
 @ContextConfiguration(classes = {com.iamind.user_ms.config.TestContainerConfig.class})
 @Testcontainers
-@Transactional
 class PsychopedagogistControllerIT {
 
     @Autowired
@@ -56,20 +54,20 @@ class PsychopedagogistControllerIT {
 
     @Test
     void shouldReturnAllPsychopedagogists() throws Exception {
-        mockMvc.perform(get("/api/psychopedagogists"))
+        mockMvc.perform(get("/api/users/psychopedagogists"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(0)));
 
         createPsychopedagogist(psychopedagogistRequest);
 
-        mockMvc.perform(get("/api/psychopedagogists"))
+        mockMvc.perform(get("/api/users/psychopedagogists"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)));
     }
 
     @Test
     void shouldCreatePsychopedagogist() throws Exception {
-        mockMvc.perform(post("/api/psychopedagogists")
+        mockMvc.perform(post("/api/users/psychopedagogists")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(psychopedagogistRequest)))
                 .andExpect(status().isOk())
@@ -80,7 +78,7 @@ class PsychopedagogistControllerIT {
     void shouldGetPsychopedagogistById() throws Exception {
         long id = createPsychopedagogist(psychopedagogistRequest);
 
-        mockMvc.perform(get("/api/psychopedagogists/" + id))
+        mockMvc.perform(get("/api/users/psychopedagogists/" + id))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.firstName").value("John"));
     }
@@ -103,7 +101,7 @@ class PsychopedagogistControllerIT {
                 5
         );
 
-        mockMvc.perform(put("/api/psychopedagogists/" + id)
+        mockMvc.perform(put("/api/users/psychopedagogists/" + id)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(updatedRequest)))
                 .andExpect(status().isOk())
@@ -114,15 +112,15 @@ class PsychopedagogistControllerIT {
     void shouldDeletePsychopedagogist() throws Exception {
         long id = createPsychopedagogist(psychopedagogistRequest);
 
-        mockMvc.perform(delete("/api/psychopedagogists/" + id))
+        mockMvc.perform(delete("/api/users/psychopedagogists/" + id))
                 .andExpect(status().isNoContent());
 
-        mockMvc.perform(get("/api/psychopedagogists/" + id))
+        mockMvc.perform(get("/api/users/psychopedagogists/" + id))
                 .andExpect(status().isNotFound());
     }
 
     private long createPsychopedagogist(PsychopedagogistRequestDTO request) throws Exception {
-        String responseBody = mockMvc.perform(post("/api/psychopedagogists")
+        String responseBody = mockMvc.perform(post("/api/users/psychopedagogists")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())

@@ -1,30 +1,30 @@
 package com.iamind.user_ms.config;
 
+import lombok.RequiredArgsConstructor;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
+import org.springframework.context.annotation.Profile;
+import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
+import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedClient;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
 
+import java.net.URI;
+
 @Configuration
+@RequiredArgsConstructor
+@EnableConfigurationProperties(value = AwsConfigurationProperties.class)
 public class DynamoDbConfig {
 
-    @Bean
-    @Primary
-    public DynamoDbClient dynamoDbClient() {
-//        String accessKey = System.getenv("AWS_ACCESS_KEY_ID");
-//        String secretKey = System.getenv("AWS_SECRET_ACCESS_KEY");
-//        String region = System.getenv("AWS_REGION");
-//
-//        if (accessKey == null || secretKey == null || region == null) {
-//            throw new IllegalStateException("AWS credentials or region not configured in environment variables.");
-//        }
-//
-//        AwsBasicCredentials awsCredentials = AwsBasicCredentials.create(accessKey, secretKey);
+    private final AwsConfigurationProperties awsConfigurationProperties;
 
+    @Bean
+    @Profile("!test && !local")
+    public DynamoDbClient dynamoDbClient() {
         return DynamoDbClient.builder()
-//                .credentialsProvider(StaticCredentialsProvider.create(awsCredentials))
                 .region(Region.of("eu-west-1"))
                 .build();
     }
@@ -36,18 +36,25 @@ public class DynamoDbConfig {
                 .build();
     }
 
-//    @Bean
-//    public DynamoDBMapperConfig dynamoDBMapperConfig() {
-//        return new DynamoDBMapperConfig.Builder()
-//                .withSaveBehavior(DynamoDBMapperConfig.SaveBehavior.UPDATE)
-//                .withConsistentReads(DynamoDBMapperConfig.ConsistentReads.EVENTUAL)
-//                .withPaginationLoadingStrategy(DynamoDBMapperConfig.PaginationLoadingStrategy.LAZY_LOADING)
-//                .build();
-//
-//    }
-//
-//    @Bean
-//    public DynamoDBMapper dynamoDBMapper(AmazonDynamoDB amazonDynamoDB, DynamoDBMapperConfig dynamoDBMapperConfig) {
-//        return new DynamoDBMapper(amazonDynamoDB, dynamoDBMapperConfig);
-//    }
+    @Bean
+    @Profile("test | local")
+    public DynamoDbClient testDynamoDbClient() {
+        var credentials = constructCredentials();
+        var region = Region.of(awsConfigurationProperties.getRegion());
+        return DynamoDbClient.builder()
+                .endpointOverride(URI.create(awsConfigurationProperties.getEndpoint())) // Custom endpoint for local testing
+                .region(region)
+                .credentialsProvider(credentials)
+                .build();
+    }
+
+    private StaticCredentialsProvider constructCredentials() {
+        var accessKey = awsConfigurationProperties.getAccessKey();
+        var secretAccessKey = awsConfigurationProperties.getSecretAccessKey();
+        return StaticCredentialsProvider.create(
+                AwsBasicCredentials.create(accessKey, secretAccessKey)
+        );
+    }
+
+
 }

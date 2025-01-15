@@ -1,19 +1,16 @@
 package com.iamind.user_ms.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import java.util.UUID;
 
-//@Entity
-//@DiscriminatorValue("PSYCHOPEDAGOGIST")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
+@EqualsAndHashCode(callSuper = true)
 @SuperBuilder
 public class Psychopedagogist extends User {
 
