@@ -58,6 +58,7 @@ public class PsychopedagogistServiceImpl implements PsychopedagogistService {
                 .specializations(dto.specializations())
                 .experienceInYears(dto.experienceInYears())
                 .build();
+        psychopedagogist.setId(psychopedagogist.generateHashKey());
 
         userRepository.save(userTableToPsychopedagogistConverter.convert(psychopedagogist));
 

@@ -82,6 +82,7 @@ public class StudentServiceImpl implements StudentService {
                 .guardianEmail(dto.guardianEmail())
                 .build();
 
+        student.setId(student.generateHashKey());
         userRepository.save(userTableToStudentConverter.convert(student));
 
 
