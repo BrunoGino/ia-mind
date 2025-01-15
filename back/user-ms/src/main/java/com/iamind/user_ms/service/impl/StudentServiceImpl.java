@@ -1,25 +1,33 @@
 package com.iamind.user_ms.service.impl;
 
+import com.iamind.user_ms.converter.UserTableToStudentConverter;
 import com.iamind.user_ms.dto.StudentRequestDTO;
 import com.iamind.user_ms.dto.StudentResponseDTO;
 import com.iamind.user_ms.exception.ResourceNotFoundException;
 import com.iamind.user_ms.model.Student;
-import com.iamind.user_ms.repository.StudentRepository;
+import com.iamind.user_ms.model.dynamodb.DynamoDbRepository;
+import com.iamind.user_ms.model.dynamodb.UserTable;
+import com.iamind.user_ms.repository.impl.UserRepositoryImpl;
 import com.iamind.user_ms.service.StudentService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
-@RequiredArgsConstructor
 public class StudentServiceImpl implements StudentService {
 
-    private final StudentRepository studentRepository;
+    private final DynamoDbRepository<UserTable> userRepository;
+    private final UserTableToStudentConverter userTableToStudentConverter;
+
+    public StudentServiceImpl(UserRepositoryImpl userRepository, UserTableToStudentConverter userTableToStudentConverter) {
+        this.userRepository = userRepository;
+        this.userTableToStudentConverter = userTableToStudentConverter;
+    }
 
     @Override
     public List<StudentResponseDTO> getAllStudents() {
-        return studentRepository.findAll()
+        return userRepository.findAll()
                 .stream()
                 .map(student -> new StudentResponseDTO(
                         student.getId(),
@@ -47,8 +55,9 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public StudentResponseDTO getStudentById(Long id) {
-        Student student = studentRepository.findById(id)
+    public StudentResponseDTO getStudentById(String id) {
+        Student student = userRepository.findById(id)
+                .map(userTableToStudentConverter::convert)
                 .orElseThrow(() -> new ResourceNotFoundException("Student not found with ID: " + id));
 
         return mapToResponseDTO(student);
@@ -73,13 +82,17 @@ public class StudentServiceImpl implements StudentService {
                 .guardianEmail(dto.guardianEmail())
                 .build();
 
-        Student saved = studentRepository.save(student);
+        userRepository.save(userTableToStudentConverter.convert(student));
+
+
+        Student saved = userTableToStudentConverter.convert(this.userRepository.findById(student.getId()).get());
         return mapToResponseDTO(saved);
     }
 
     @Override
-    public StudentResponseDTO updateStudent(Long id, StudentRequestDTO dto) {
-        Student student = studentRepository.findById(id)
+    public StudentResponseDTO updateStudent(String id, StudentRequestDTO dto) {
+        Student student = userRepository.findById(id)
+                .map(userTableToStudentConverter::convert)
                 .orElseThrow(() -> new ResourceNotFoundException("Student not found with ID: " + id));
 
         student.setFirstName(dto.firstName());
@@ -88,16 +101,17 @@ public class StudentServiceImpl implements StudentService {
         student.setGender(dto.gender());
         student.setSchoolYear(dto.schoolYear());
 
-        Student updated = studentRepository.save(student);
+        Student updated = userTableToStudentConverter.convert(this.userRepository.findById(student.getId()).get());
         return mapToResponseDTO(updated);
     }
 
     @Override
-    public void deleteStudent(Long id) {
-        if (!studentRepository.existsById(id)) {
+    public void deleteStudent(String id) {
+        Optional<UserTable> user = userRepository.findById(id);
+        if (user.isEmpty()) {
             throw new ResourceNotFoundException("Student not found with ID: " + id);
         }
-        studentRepository.deleteById(id);
+        userRepository.delete(user.get());
     }
 
     private StudentResponseDTO mapToResponseDTO(Student student) {

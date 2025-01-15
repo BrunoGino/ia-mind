@@ -4,7 +4,6 @@ import com.iamind.user_ms.dto.PsychopedagogistRequestDTO;
 import com.iamind.user_ms.dto.PsychopedagogistResponseDTO;
 import com.iamind.user_ms.exception.ResourceNotFoundException;
 import com.iamind.user_ms.model.Psychopedagogist;
-import com.iamind.user_ms.repository.PsychopedagogistRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

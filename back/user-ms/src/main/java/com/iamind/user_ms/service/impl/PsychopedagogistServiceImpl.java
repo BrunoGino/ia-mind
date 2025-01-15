@@ -1,33 +1,43 @@
 package com.iamind.user_ms.service.impl;
 
+import com.iamind.user_ms.converter.UserTableToPsychopedagogistConverter;
 import com.iamind.user_ms.dto.PsychopedagogistRequestDTO;
 import com.iamind.user_ms.dto.PsychopedagogistResponseDTO;
 import com.iamind.user_ms.exception.ResourceNotFoundException;
 import com.iamind.user_ms.model.Psychopedagogist;
-import com.iamind.user_ms.repository.PsychopedagogistRepository;
+import com.iamind.user_ms.model.dynamodb.DynamoDbRepository;
+import com.iamind.user_ms.model.dynamodb.UserTable;
+import com.iamind.user_ms.repository.impl.UserRepositoryImpl;
 import com.iamind.user_ms.service.PsychopedagogistService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
-@RequiredArgsConstructor
 public class PsychopedagogistServiceImpl implements PsychopedagogistService {
 
-    private final PsychopedagogistRepository psychopedagogistRepository;
+    private final DynamoDbRepository<UserTable> userRepository;
+    private final UserTableToPsychopedagogistConverter userTableToPsychopedagogistConverter;
+
+    public PsychopedagogistServiceImpl(UserRepositoryImpl userRepository, UserTableToPsychopedagogistConverter userTableToPsychopedagogistConverter) {
+        this.userRepository = userRepository;
+        this.userTableToPsychopedagogistConverter = userTableToPsychopedagogistConverter;
+    }
 
     @Override
     public List<PsychopedagogistResponseDTO> getAllPsychopedagogists() {
-        return psychopedagogistRepository.findAll()
+        return userRepository.findAll()
                 .stream()
+                .map(userTableToPsychopedagogistConverter::convert)
                 .map(this::mapToResponseDTO)
                 .toList();
     }
 
     @Override
-    public PsychopedagogistResponseDTO getPsychopedagogistById(Long id) {
-        Psychopedagogist psychopedagogist = psychopedagogistRepository.findById(id)
+    public PsychopedagogistResponseDTO getPsychopedagogistById(String id) {
+        Psychopedagogist psychopedagogist = userRepository.findById(id)
+                .map(userTableToPsychopedagogistConverter::convert)
                 .orElseThrow(() -> new ResourceNotFoundException("Psychopedagogist not found with ID: " + id));
 
         return mapToResponseDTO(psychopedagogist);
@@ -49,13 +59,17 @@ public class PsychopedagogistServiceImpl implements PsychopedagogistService {
                 .experienceInYears(dto.experienceInYears())
                 .build();
 
-        Psychopedagogist saved = psychopedagogistRepository.save(psychopedagogist);
+        userRepository.save(userTableToPsychopedagogistConverter.convert(psychopedagogist));
+
+
+        Psychopedagogist saved = userTableToPsychopedagogistConverter.convert(this.userRepository.findById(psychopedagogist.getId()).get());
         return mapToResponseDTO(saved);
     }
 
     @Override
-    public PsychopedagogistResponseDTO updatePsychopedagogist(Long id, PsychopedagogistRequestDTO dto) {
-        Psychopedagogist psychopedagogist = psychopedagogistRepository.findById(id)
+    public PsychopedagogistResponseDTO updatePsychopedagogist(String id, PsychopedagogistRequestDTO dto) {
+        Psychopedagogist psychopedagogist = userRepository.findById(id)
+                .map(userTableToPsychopedagogistConverter::convert)
                 .orElseThrow(() -> new ResourceNotFoundException("Psychopedagogist not found with ID: " + id));
 
         psychopedagogist.setFirstName(dto.firstName());
@@ -69,16 +83,20 @@ public class PsychopedagogistServiceImpl implements PsychopedagogistService {
         psychopedagogist.setSpecializations(dto.specializations());
         psychopedagogist.setExperienceInYears(dto.experienceInYears());
 
-        Psychopedagogist updated = psychopedagogistRepository.save(psychopedagogist);
+        userRepository.save(userTableToPsychopedagogistConverter.convert(psychopedagogist));
+
+
+        Psychopedagogist updated = userTableToPsychopedagogistConverter.convert(this.userRepository.findById(psychopedagogist.getId()).get());
         return mapToResponseDTO(updated);
     }
 
     @Override
-    public void deletePsychopedagogist(Long id) {
-        if (!psychopedagogistRepository.existsById(id)) {
+    public void deletePsychopedagogist(String id) {
+        Optional<UserTable> user = userRepository.findById(id);
+        if (user.isEmpty()) {
             throw new ResourceNotFoundException("Psychopedagogist not found with ID: " + id);
         }
-        psychopedagogistRepository.deleteById(id);
+        userRepository.delete(user.get());
     }
 
     private PsychopedagogistResponseDTO mapToResponseDTO(Psychopedagogist psychopedagogist) {

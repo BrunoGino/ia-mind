@@ -3,7 +3,7 @@ package com.iamind.user_ms.dto;
 import java.time.LocalDate;
 
 public record StudentResponseDTO(
-        Long id,
+        String id,
         String firstName,
         String lastName,
         LocalDate dateOfBirth,

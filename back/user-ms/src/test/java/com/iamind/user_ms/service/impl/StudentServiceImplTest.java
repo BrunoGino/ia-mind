@@ -4,7 +4,6 @@ import com.iamind.user_ms.dto.StudentRequestDTO;
 import com.iamind.user_ms.dto.StudentResponseDTO;
 import com.iamind.user_ms.exception.ResourceNotFoundException;
 import com.iamind.user_ms.model.Student;
-import com.iamind.user_ms.repository.StudentRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

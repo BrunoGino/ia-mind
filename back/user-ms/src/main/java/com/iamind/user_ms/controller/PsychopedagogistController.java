@@ -24,7 +24,7 @@ public class PsychopedagogistController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<PsychopedagogistResponseDTO> getPsychopedagogistById(@PathVariable Long id) {
+    public ResponseEntity<PsychopedagogistResponseDTO> getPsychopedagogistById(@PathVariable String id) {
         PsychopedagogistResponseDTO psychopedagogist = psychopedagogistService.getPsychopedagogistById(id);
         return ResponseEntity.ok(psychopedagogist);
     }
@@ -37,14 +37,14 @@ public class PsychopedagogistController {
 
     @PutMapping("/{id}")
     public ResponseEntity<PsychopedagogistResponseDTO> updatePsychopedagogist(
-            @PathVariable Long id,
+            @PathVariable String id,
             @Valid @RequestBody PsychopedagogistRequestDTO dto) {
         PsychopedagogistResponseDTO updatedPsychopedagogist = psychopedagogistService.updatePsychopedagogist(id, dto);
         return ResponseEntity.ok(updatedPsychopedagogist);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletePsychopedagogist(@PathVariable Long id) {
+    public ResponseEntity<Void> deletePsychopedagogist(@PathVariable String id) {
         psychopedagogistService.deletePsychopedagogist(id);
         return ResponseEntity.noContent().build();
     }

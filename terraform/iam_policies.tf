@@ -506,7 +506,7 @@ data "aws_iam_policy_document" "iamind_developer_policy_document" {
       "dynamodb:List*"
     ]
     resources = [
-      "arn:aws:dynamodb:eu-west-1:108782061116:table/iamind-*",
+      "arn:aws:dynamodb:eu-west-1:108782061116:table/iamind*",
       "arn:aws:dynamodb:eu-west-1:108782061116:table/*"
     ]
   }

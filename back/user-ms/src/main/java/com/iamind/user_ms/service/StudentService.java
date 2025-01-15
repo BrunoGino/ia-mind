@@ -8,11 +8,11 @@ import java.util.List;
 public interface StudentService {
     List<StudentResponseDTO> getAllStudents();
 
-    StudentResponseDTO getStudentById(Long id);
+    StudentResponseDTO getStudentById(String id);
 
     StudentResponseDTO createStudent(StudentRequestDTO dto);
 
-    StudentResponseDTO updateStudent(Long id, StudentRequestDTO dto);
+    StudentResponseDTO updateStudent(String id, StudentRequestDTO dto);
 
-    void deleteStudent(Long id);
+    void deleteStudent(String id);
 }

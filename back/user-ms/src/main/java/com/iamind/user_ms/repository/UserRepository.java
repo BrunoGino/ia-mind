@@ -1,9 +1,17 @@
 package com.iamind.user_ms.repository;
 
-import com.iamind.user_ms.model.User;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
+import com.iamind.user_ms.model.dynamodb.UserTable;
 
-@Repository
-public interface UserRepository extends JpaRepository<User, Long> {
+import java.util.List;
+import java.util.Optional;
+
+public interface UserRepository {
+
+    List<UserTable> findAll();
+
+    Optional<UserTable> findById(String id);
+
+    UserTable save(UserTable userTableRow);
+
+    void delete(UserTable userTableRow);
 }
