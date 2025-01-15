@@ -493,7 +493,16 @@ resource "aws_iam_role_policy" "iamind_flow_logs_policy" {
 #####################################
 data "aws_iam_policy_document" "iamind_developer_policy_document" {
 
-  version = "2012-10-17"
+    version = "2012-10-17"
+
+  statement {
+    sid    = "STSAccess"
+    effect = "Allow"
+    actions = [
+      "sts:AssumeRole"
+    ]
+    resources = [aws_iam_role.iamind_developer_role.arn]
+  }
 
   statement {
     sid    = "DynamoDBAccess"

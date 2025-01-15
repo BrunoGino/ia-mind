@@ -68,7 +68,7 @@ resource "aws_lb_listener_rule" "iamind_session_management_rule" {
 
 resource "aws_lb_listener_rule" "iamind_user_ms_rule" {
   listener_arn = aws_lb_listener.iamind_alb_listener_https.arn
-  priority     = 1
+  priority     = 2
   action {
     type             = "forward"
     target_group_arn = aws_lb_target_group.iamind_user_ms_tg.arn
