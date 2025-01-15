@@ -61,7 +61,11 @@ resource "aws_lb_listener_rule" "iamind_session_management_rule" {
 
   condition {
     path_pattern {
-      values = ["/api/session", "/api/session/*"]
+      values = [
+        "/api/session",
+        "/api/session/docs/*",
+        "/api/session/*",
+      ]
     }
   }
 }
@@ -80,7 +84,8 @@ resource "aws_lb_listener_rule" "iamind_user_ms_rule" {
         "/api/users/psychopedagogists",
         "/api/users/psychopedagogists/*",
         "/api/users/students",
-        "/api/users/students/*"
+        "/api/users/students/*",
+        "/api/users/docs/*"
       ]
     }
   }
