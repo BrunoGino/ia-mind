@@ -102,6 +102,7 @@ public class StudentServiceImpl implements StudentService {
         student.setGender(dto.gender());
         student.setSchoolYear(dto.schoolYear());
 
+        this.userRepository.save(userTableToStudentConverter.convert(student));
         Student updated = userTableToStudentConverter.convert(this.userRepository.findById(student.getId()).get());
         return mapToResponseDTO(updated);
     }

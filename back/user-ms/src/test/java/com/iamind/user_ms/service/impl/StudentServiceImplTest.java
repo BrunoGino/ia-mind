@@ -1,10 +1,12 @@
 package com.iamind.user_ms.service.impl;
 
+import com.iamind.user_ms.converter.UserTableToStudentConverter;
 import com.iamind.user_ms.dto.StudentRequestDTO;
 import com.iamind.user_ms.dto.StudentResponseDTO;
 import com.iamind.user_ms.exception.ResourceNotFoundException;
 import com.iamind.user_ms.model.Student;
-import org.junit.jupiter.api.BeforeEach;
+import com.iamind.user_ms.model.dynamodb.UserTable;
+import com.iamind.user_ms.repository.impl.UserRepositoryImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -22,145 +24,188 @@ import static org.mockito.Mockito.*;
 class StudentServiceImplTest {
 
     @Mock
-    private StudentRepository studentRepository;
+    private UserRepositoryImpl userRepository;
+
+    @Mock
+    private UserTableToStudentConverter converter;
 
     @InjectMocks
-    private StudentServiceImpl studentService;
+    private StudentServiceImpl service;
 
-    private Student student;
-    private StudentRequestDTO studentRequestDTO;
+    @Test
+    void testGetAllStudents() {
+        // Arrange
+        UserTable userTable = new UserTable();
+        userTable.setId("1");
+        userTable.setFirstName("John");
+        userTable.setLastName("Doe");
+        userTable.setDateOfBirth(LocalDate.of(2005, 1, 1));
 
-    @BeforeEach
-    void setUp() {
-        student = Student.builder()
-                .id(1L)
-                .firstName("Alice")
-                .lastName("Smith")
-                .dateOfBirth(LocalDate.of(2005, 5, 15))
-                .gender("Female")
-                .fullAddress("123 Main St")
-                .email("alice@example.com")
-                .phone("+1-555-1234")
-                .schoolYear("5th Grade")
-                .classRoom("5A")
-                .school("Springfield School")
-                .shift("Morning")
-                .guardianName("Emily Smith")
-                .guardianPhone("+1-555-5678")
-                .guardianEmail("emily@example.com")
-                .build();
+        when(userRepository.findAll()).thenReturn(List.of(userTable));
 
-        studentRequestDTO = new StudentRequestDTO(
-                "Alice",
-                "Smith",
-                LocalDate.of(2005, 5, 15),
-                "Female",
-                "123 Main St",
-                "alice@example.com",
-                "+1-555-1234",
-                "5th Grade",
-                "5A",
-                "Springfield School",
-                "Morning",
-                null,
-                null,
-                null,
-                null,
-                "Emily Smith",
-                "+1-555-5678",
-                "emily@example.com"
+        // Act
+        List<StudentResponseDTO> result = service.getAllStudents();
+
+        // Assert
+        assertNotNull(result);
+        assertEquals(1, result.size());
+        assertEquals("John", result.getFirst().firstName());
+        verify(userRepository, times(1)).findAll();
+    }
+
+    @Test
+    void testGetStudentById_Success() {
+        // Arrange
+        String id = "1";
+        UserTable userTable = new UserTable();
+        userTable.setId(id);
+        userTable.setFirstName("John");
+        userTable.setLastName("Doe");
+
+        Student student = new Student();
+        student.setId(id);
+        student.setFirstName("John");
+        student.setLastName("Doe");
+
+        when(userRepository.findById(id)).thenReturn(Optional.of(userTable));
+        when(converter.convert(userTable)).thenReturn(student);
+
+        // Act
+        StudentResponseDTO result = service.getStudentById(id);
+
+        // Assert
+        assertNotNull(result);
+        assertEquals("John", result.firstName());
+        verify(userRepository, times(1)).findById(id);
+    }
+
+    @Test
+    void testGetStudentById_NotFound() {
+        // Arrange
+        String id = "1";
+        when(userRepository.findById(id)).thenReturn(Optional.empty());
+
+        // Act & Assert
+        assertThrows(ResourceNotFoundException.class, () -> service.getStudentById(id));
+        verify(userRepository, times(1)).findById(id);
+    }
+
+    @Test
+    void testCreateStudent() {
+        // Arrange
+        StudentRequestDTO requestDTO = new StudentRequestDTO(
+                "John", "Doe", LocalDate.of(2005, 1, 1), "Male",
+                "123 Main St", "john.doe@example.com", "555-1234",
+                "2023", "10A", "Springfield High", "Morning",
+                null, null, null, null,
+                "Jane Doe", "555-5678", "jane.doe@example.com"
         );
+
+        Student student = Student.builder()
+                .firstName("John")
+                .lastName("Doe")
+                .dateOfBirth(LocalDate.of(2005, 1, 1))
+                .gender("Male")
+                .fullAddress("123 Main St")
+                .email("john.doe@example.com")
+                .phone("555-1234")
+                .schoolYear("2023")
+                .classRoom("10A")
+                .school("Springfield High")
+                .shift("Morning")
+                .guardianName("Jane Doe")
+                .guardianPhone("555-5678")
+                .guardianEmail("jane.doe@example.com")
+                .build();
+        student.setId("1");
+
+        UserTable userTable = new UserTable();
+
+        when(converter.convert(any(Student.class))).thenReturn(userTable);
+        when(userRepository.findById(anyString())).thenReturn(Optional.of(userTable));
+        lenient().when(converter.convert(userTable)).thenReturn(student);
+
+        // Act
+        StudentResponseDTO result = service.createStudent(requestDTO);
+
+        // Assert
+        assertNotNull(result);
+        assertEquals("John", result.firstName());
+        verify(userRepository, times(1)).save(userTable);
     }
 
     @Test
-    void shouldReturnAllStudentsSuccessfully() {
-        when(studentRepository.findAll()).thenReturn(List.of(student));
+    void testUpdateStudent_Success() {
+        // Arrange
+        String id = "1";
+        StudentRequestDTO requestDTO = new StudentRequestDTO(
+                "John", "Doe", LocalDate.of(2005, 1, 1), "Male",
+                "123 Main St", "john.doe@example.com", "555-1234",
+                "2023", "10A", "Springfield High", "Morning",
+                null, null, null, null,
+                "Jane Doe", "555-5678", "jane.doe@example.com"
+        );
 
-        List<StudentResponseDTO> students = studentService.getAllStudents();
+        UserTable userTable = new UserTable();
+        userTable.setId(id);
 
-        assertFalse(students.isEmpty());
-        assertEquals(1, students.size());
-        assertEquals("Alice", students.getFirst().firstName());
-        verify(studentRepository, times(1)).findAll();
+        Student student = new Student();
+        student.setId(id);
+
+        when(userRepository.findById(id)).thenReturn(Optional.of(userTable));
+        when(converter.convert(userTable)).thenReturn(student);
+        when(converter.convert(student)).thenReturn(userTable);
+
+        // Act
+        StudentResponseDTO result = service.updateStudent(id, requestDTO);
+
+        // Assert
+        assertNotNull(result);
+        assertEquals("John", result.firstName());
+        verify(userRepository, times(1)).save(userTable);
     }
 
     @Test
-    void shouldReturnEmptyListWhenNoStudentsExist() {
-        when(studentRepository.findAll()).thenReturn(List.of());
+    void testUpdateStudent_NotFound() {
+        // Arrange
+        String id = "1";
+        StudentRequestDTO requestDTO = new StudentRequestDTO(
+                "John", "Doe", LocalDate.of(2005, 1, 1), "Male",
+                "123 Main St", "john.doe@example.com", "555-1234",
+                "2023", "10A", "Springfield High", "Morning",
+                null, null, null, null,
+                "Jane Doe", "555-5678", "jane.doe@example.com"
+        );
 
-        List<StudentResponseDTO> students = studentService.getAllStudents();
+        when(userRepository.findById(id)).thenReturn(Optional.empty());
 
-        assertTrue(students.isEmpty());
-        verify(studentRepository, times(1)).findAll();
+        // Act & Assert
+        assertThrows(ResourceNotFoundException.class, () -> service.updateStudent(id, requestDTO));
+        verify(userRepository, times(1)).findById(id);
     }
 
     @Test
-    void shouldReturnStudentByIdSuccessfully() {
-        when(studentRepository.findById(1L)).thenReturn(Optional.of(student));
+    void testDeleteStudent_Success() {
+        // Arrange
+        String id = "1";
+        UserTable userTable = new UserTable();
+        when(userRepository.findById(id)).thenReturn(Optional.of(userTable));
 
-        StudentResponseDTO response = studentService.getStudentById(1L);
+        // Act
+        service.deleteStudent(id);
 
-        assertNotNull(response);
-        assertEquals("Alice", response.firstName());
-        verify(studentRepository, times(1)).findById(1L);
+        // Assert
+        verify(userRepository, times(1)).delete(userTable);
     }
 
     @Test
-    void shouldThrowExceptionWhenStudentNotFoundById() {
-        when(studentRepository.findById(1L)).thenReturn(Optional.empty());
+    void testDeleteStudent_NotFound() {
+        // Arrange
+        String id = "1";
+        when(userRepository.findById(id)).thenReturn(Optional.empty());
 
-        assertThrows(ResourceNotFoundException.class, () -> studentService.getStudentById(1L));
-        verify(studentRepository, times(1)).findById(1L);
-    }
-
-    @Test
-    void shouldCreateStudentSuccessfully() {
-        when(studentRepository.save(any(Student.class))).thenReturn(student);
-
-        StudentResponseDTO response = studentService.createStudent(studentRequestDTO);
-
-        assertNotNull(response);
-        assertEquals("Alice", response.firstName());
-        verify(studentRepository, times(1)).save(any(Student.class));
-    }
-
-    @Test
-    void shouldUpdateStudentSuccessfully() {
-        when(studentRepository.findById(1L)).thenReturn(Optional.of(student));
-        when(studentRepository.save(any(Student.class))).thenReturn(student);
-
-        StudentResponseDTO response = studentService.updateStudent(1L, studentRequestDTO);
-
-        assertNotNull(response);
-        assertEquals("Alice", response.firstName());
-        verify(studentRepository, times(1)).findById(1L);
-        verify(studentRepository, times(1)).save(any(Student.class));
-    }
-
-    @Test
-    void shouldThrowExceptionWhenUpdatingNonExistingStudent() {
-        when(studentRepository.findById(1L)).thenReturn(Optional.empty());
-
-        assertThrows(ResourceNotFoundException.class, () -> studentService.updateStudent(1L, studentRequestDTO));
-        verify(studentRepository, times(1)).findById(1L);
-    }
-
-    @Test
-    void shouldDeleteStudentSuccessfully() {
-        when(studentRepository.existsById(1L)).thenReturn(true);
-        doNothing().when(studentRepository).deleteById(1L);
-
-        studentService.deleteStudent(1L);
-
-        verify(studentRepository, times(1)).existsById(1L);
-        verify(studentRepository, times(1)).deleteById(1L);
-    }
-
-    @Test
-    void shouldThrowExceptionWhenDeletingNonExistingStudent() {
-        when(studentRepository.existsById(1L)).thenReturn(false);
-
-        assertThrows(ResourceNotFoundException.class, () -> studentService.deleteStudent(1L));
-        verify(studentRepository, times(1)).existsById(1L);
+        // Act & Assert
+        assertThrows(ResourceNotFoundException.class, () -> service.deleteStudent(id));
+        verify(userRepository, times(1)).findById(id);
     }
 }
