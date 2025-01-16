@@ -53,7 +53,7 @@ resource "aws_lb_listener" "iamind_alb_listener_https" {
 
 resource "aws_lb_listener_rule" "iamind_session_management_rule" {
   listener_arn = aws_lb_listener.iamind_alb_listener_https.arn
-  priority     = 1
+  priority     = 100
   action {
     type             = "forward"
     target_group_arn = aws_lb_target_group.iamind_session_management_tg.arn
@@ -72,7 +72,7 @@ resource "aws_lb_listener_rule" "iamind_session_management_rule" {
 
 resource "aws_lb_listener_rule" "iamind_user_ms_rule" {
   listener_arn = aws_lb_listener.iamind_alb_listener_https.arn
-  priority     = 2
+  priority     = 110
   action {
     type             = "forward"
     target_group_arn = aws_lb_target_group.iamind_user_ms_tg.arn
@@ -81,10 +81,24 @@ resource "aws_lb_listener_rule" "iamind_user_ms_rule" {
   condition {
     path_pattern {
       values = [
-        "/api/users/*",
-        "/swagger-ui-users.html"
+        "/api/users/*"
       ]
     }
+  }
+}
+resource "aws_lb_listener_rule" "iamind_user_swagger_ui_rule" {
+  listener_arn = aws_lb_listener.iamind_alb_listener_https.arn
+  priority     = 200
+
+  condition {
+    path_pattern {
+      values = ["/users-swagger-ui.html", "/api/users/docs/*"] # Matches Swagger UI paths
+    }
+  }
+
+  action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.iamind_user_ms_tg.arn
   }
 }
 
