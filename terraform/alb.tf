@@ -30,6 +30,14 @@ resource "aws_lb_target_group" "iamind_user_ms_tg" {
   protocol    = "HTTP"
   target_type = "ip"
   vpc_id      = aws_vpc.iamind_vpc.id
+
+  health_check {
+    path                = "/users-health" # Update this to match your app's health endpoint
+    interval            = 30
+    timeout             = 5
+    healthy_threshold   = 2
+    unhealthy_threshold = 2
+  }
 }
 
 
@@ -92,7 +100,12 @@ resource "aws_lb_listener_rule" "iamind_user_swagger_ui_rule" {
 
   condition {
     path_pattern {
-      values = ["/users-swagger-ui.html", "/api/users/docs/*"] # Matches Swagger UI paths
+      values = [
+        "/users-swagger-ui.html",
+        "/users-api-docs*",
+        "/users-health*",
+        "/swagger-ui*"
+      ]
     }
   }
 
