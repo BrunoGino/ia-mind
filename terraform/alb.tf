@@ -81,11 +81,7 @@ resource "aws_lb_listener_rule" "iamind_user_ms_rule" {
   condition {
     path_pattern {
       values = [
-        "/api/users/psychopedagogists",
-        "/api/users/psychopedagogists/*",
-        "/api/users/students",
-        "/api/users/students/*",
-        "/api/users/docs/v3/api-docs",
+        "/api/users/*",
         "/users/docs/swagger-ui.html"
       ]
     }
