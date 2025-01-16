@@ -82,7 +82,7 @@ resource "aws_lb_listener_rule" "iamind_user_ms_rule" {
     path_pattern {
       values = [
         "/api/users/*",
-        "/users/docs/swagger-ui.html"
+        "/swagger-ui-users.html"
       ]
     }
   }
