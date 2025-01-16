@@ -412,8 +412,7 @@ data "aws_iam_policy_document" "ecs_tasks_policy_document" {
     actions = [
       "cloudwatch:PutMetricAlarm",
       "cloudwatch:DeleteAlarms",
-      "logs:CreateLogStream",
-      "logs:PutLogEvents"
+      "logs:*",
     ]
     resources = [
       "arn:aws:cloudwatch:eu-west-1:108782061116:alarm:iamind-*",

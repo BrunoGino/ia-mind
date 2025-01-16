@@ -34,7 +34,7 @@ resource "aws_ecs_task_definition" "session_management_task_definition" {
       name      = "session_management_task",
       image     = "brunogino/iamind-session_management:latest",
       essential = true,
-      logConfigurations = {
+      logConfiguration = {
         logDriver     = "awslogs",
         secretOptions = [],
         options = {
@@ -95,7 +95,7 @@ resource "aws_ecs_task_definition" "user_ms_task_definition" {
       name      = "user_ms_task",
       image     = "brunogino/iamind-user-ms:latest",
       essential = true,
-      logConfigurations = {
+      logConfiguration = {
         logDriver     = "awslogs",
         secretOptions = [],
         options = {
