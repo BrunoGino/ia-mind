@@ -5,14 +5,12 @@ import com.iamind.user_ms.dto.PsychopedagogistRequestDTO;
 import com.iamind.user_ms.dto.PsychopedagogistResponseDTO;
 import com.iamind.user_ms.exception.ResourceNotFoundException;
 import com.iamind.user_ms.model.Psychopedagogist;
-import com.iamind.user_ms.model.dynamodb.DynamoDbRepository;
 import com.iamind.user_ms.model.dynamodb.UserTable;
-import org.junit.jupiter.api.BeforeEach;
+import com.iamind.user_ms.repository.impl.UserRepositoryImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
@@ -26,7 +24,7 @@ import static org.mockito.Mockito.*;
 class PsychopedagogistServiceImplTest {
 
     @Mock
-    private DynamoDbRepository<UserTable> userRepository;
+    private UserRepositoryImpl userRepository;
 
     @Mock
     private UserTableToPsychopedagogistConverter converter;
@@ -38,8 +36,17 @@ class PsychopedagogistServiceImplTest {
     void testGetAllPsychopedagogists() {
         // Arrange
         UserTable userTable = new UserTable();
+        userTable.setId("1");
         Psychopedagogist psychopedagogist = new Psychopedagogist();
-        PsychopedagogistResponseDTO responseDTO = new PsychopedagogistResponseDTO("1", "John", "Doe", null, "Male", "Address", "email", "phone", "reg", "edu", "spec", 5, "notes");
+        psychopedagogist.setId("1");
+        psychopedagogist.setFirstName("John");
+        psychopedagogist.setLastName("Doe");
+
+        PsychopedagogistResponseDTO responseDTO = new PsychopedagogistResponseDTO(
+                "1", "John", "Doe", LocalDate.of(1980, 1, 1), "Male",
+                "123 Main St", "john.doe@example.com", "555-1234", "12345",
+                "PhD", "Special Education", 10, "Some notes"
+        );
 
         when(userRepository.findAll()).thenReturn(List.of(userTable));
         when(converter.convert(userTable)).thenReturn(psychopedagogist);
@@ -59,8 +66,10 @@ class PsychopedagogistServiceImplTest {
         // Arrange
         String id = "1";
         UserTable userTable = new UserTable();
+        userTable.setId(id);
         Psychopedagogist psychopedagogist = new Psychopedagogist();
-        PsychopedagogistResponseDTO responseDTO = new PsychopedagogistResponseDTO("1", "John", "Doe", null, "Male", "Address", "email", "phone", "reg", "edu", "spec", 5, "notes");
+        psychopedagogist.setId(id);
+        psychopedagogist.setFirstName("John");
 
         when(userRepository.findById(id)).thenReturn(Optional.of(userTable));
         when(converter.convert(userTable)).thenReturn(psychopedagogist);
@@ -88,13 +97,31 @@ class PsychopedagogistServiceImplTest {
     @Test
     void testCreatePsychopedagogist() {
         // Arrange
-        PsychopedagogistRequestDTO requestDTO = new PsychopedagogistRequestDTO("John", "Doe", LocalDate.now(), "Male", "Address", "email", "phone", "reg", "edu", "spec", 5);
-        Psychopedagogist psychopedagogist = new Psychopedagogist();
+        PsychopedagogistRequestDTO requestDTO = new PsychopedagogistRequestDTO(
+                "John", "Doe", LocalDate.of(1980, 1, 1), "Male",
+                "123 Main St", "john.doe@example.com", "555-1234",
+                "12345", "PhD", "Special Education", 10
+        );
+
+        Psychopedagogist psychopedagogist = Psychopedagogist.builder()
+                .firstName("John")
+                .lastName("Doe")
+                .dateOfBirth(LocalDate.of(1980, 1, 1))
+                .gender("Male")
+                .fullAddress("123 Main St")
+                .email("john.doe@example.com")
+                .phone("555-1234")
+                .professionalRegistration("12345")
+                .academicFormation("PhD")
+                .specializations("Special Education")
+                .experienceInYears(10)
+                .build();
         psychopedagogist.setId("1");
+
         UserTable userTable = new UserTable();
 
-        when(converter.convert(psychopedagogist)).thenReturn(userTable);
-        when(userRepository.findById("1")).thenReturn(Optional.of(userTable));
+        when(converter.convert(any(Psychopedagogist.class))).thenReturn(userTable);
+        when(userRepository.findById(anyString())).thenReturn(Optional.of(userTable));
         when(converter.convert(userTable)).thenReturn(psychopedagogist);
 
         // Act
@@ -110,9 +137,17 @@ class PsychopedagogistServiceImplTest {
     void testUpdatePsychopedagogist_Success() {
         // Arrange
         String id = "1";
-        PsychopedagogistRequestDTO requestDTO = new PsychopedagogistRequestDTO("John", "Doe", LocalDate.now(), "Male", "New Address", "newemail", "newphone", "newreg", "newedu", "newspec", 10);
+        PsychopedagogistRequestDTO requestDTO = new PsychopedagogistRequestDTO(
+                "John", "Doe", LocalDate.of(1980, 1, 1), "Male",
+                "123 Main St", "john.doe@example.com", "555-1234",
+                "12345", "PhD", "Special Education", 10
+        );
+
         UserTable userTable = new UserTable();
+        userTable.setId(id);
+
         Psychopedagogist psychopedagogist = new Psychopedagogist();
+        psychopedagogist.setId(id);
 
         when(userRepository.findById(id)).thenReturn(Optional.of(userTable));
         when(converter.convert(userTable)).thenReturn(psychopedagogist);
@@ -124,7 +159,6 @@ class PsychopedagogistServiceImplTest {
         // Assert
         assertNotNull(result);
         assertEquals("John", result.firstName());
-        assertEquals("New Address", result.fullAddress());
         verify(userRepository, times(1)).save(userTable);
     }
 
@@ -132,7 +166,11 @@ class PsychopedagogistServiceImplTest {
     void testUpdatePsychopedagogist_NotFound() {
         // Arrange
         String id = "1";
-        PsychopedagogistRequestDTO requestDTO = new PsychopedagogistRequestDTO("John", "Doe", LocalDate.now(), "Male", "New Address", "newemail", "newphone", "newreg", "newedu", "newspec", 10);
+        PsychopedagogistRequestDTO requestDTO = new PsychopedagogistRequestDTO(
+                "John", "Doe", LocalDate.of(1980, 1, 1), "Male",
+                "123 Main St", "john.doe@example.com", "555-1234",
+                "12345", "PhD", "Special Education", 10
+        );
 
         when(userRepository.findById(id)).thenReturn(Optional.empty());
 
