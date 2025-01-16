@@ -85,7 +85,8 @@ resource "aws_lb_listener_rule" "iamind_user_ms_rule" {
         "/api/users/psychopedagogists/*",
         "/api/users/students",
         "/api/users/students/*",
-        "/api/users/docs/*"
+        "/api/users/docs/v3/api-docs",
+        "/users/docs/swagger-ui.html"
       ]
     }
   }
