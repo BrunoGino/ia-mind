@@ -37,7 +37,7 @@ jobs:
         - uses: actions/checkout@v4
                   
         - name: Java unit + integration tests
-          uses: ./github/actions/maven-build
+          uses: ./.github/actions/maven-build
             
     docker:
       runs-on: ubuntu-latest
