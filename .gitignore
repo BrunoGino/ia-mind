@@ -167,6 +167,9 @@ virtualenv/
 # ==============================
 .github/.secrets
 .secrets
+<<<<<<< HEAD
+.codegpt
+=======
 
 # ==============================
 # 🌐 FRONTEND
@@ -180,3 +183,4 @@ front\node_modules
 # 📄 OTHER HELP FILES
 # ==============================
 HELP.md
+>>>>>>> c0231147ad4871848fb03356746ff2ac8bef97f2
