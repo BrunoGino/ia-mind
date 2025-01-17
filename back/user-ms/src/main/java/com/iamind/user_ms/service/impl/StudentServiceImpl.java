@@ -101,6 +101,18 @@ public class StudentServiceImpl implements StudentService {
         student.setDateOfBirth(dto.dateOfBirth());
         student.setGender(dto.gender());
         student.setSchoolYear(dto.schoolYear());
+        student.setAllergies(dto.allergies());
+        student.setSchool(dto.school());
+        student.setShift(dto.shift());
+        student.setClassRoom(dto.classRoom());
+        student.setGuardianEmail(dto.guardianEmail());
+        student.setGuardianName(dto.guardianName());
+        student.setGuardianPhone(dto.guardianPhone());
+        student.setMentalHealthHistory(dto.mentalHealthHistory());
+        student.setMedicationsInUse(dto.medicationsInUse());
+        student.setEmail(dto.email());
+        student.setPreviousDiagnoses(dto.previousDiagnoses());
+        student.setFullAddress(dto.fullAddress());
 
         this.userRepository.save(userTableToStudentConverter.convert(student));
         Student updated = userTableToStudentConverter.convert(this.userRepository.findById(student.getId()).get());
