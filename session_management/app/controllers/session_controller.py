@@ -8,7 +8,7 @@ session_blueprint = Blueprint("sessions", __name__)
 
 # Configuração do DynamoDB
 dynamodb = boto3.resource('dynamodb')
-table = dynamodb.Table('iamind-sessions')  # Nome da tabela no DynamoDB que o bruno passou
+table = dynamodb.Table('iamind_session_table')  # Nome da tabela no DynamoDB que o bruno passou
 
 # GET /sessions/<id>
 @session_blueprint.route('/sessions/<string:id>', methods=['GET'])

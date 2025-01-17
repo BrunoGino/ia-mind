@@ -1,6 +1,7 @@
 package com.iamind.user_ms.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.iamind.user_ms.config.InitializeDynamoDb;
 import com.iamind.user_ms.dto.StudentRequestDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,7 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
 @ContextConfiguration(classes = {com.iamind.user_ms.config.TestContainerConfig.class})
-@Testcontainers
+@InitializeDynamoDb
 class StudentControllerIT {
 
     @Autowired
