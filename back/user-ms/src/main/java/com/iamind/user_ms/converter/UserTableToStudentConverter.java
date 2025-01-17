@@ -12,6 +12,7 @@ public class UserTableToStudentConverter {
         }
 
         return Student.builder()
+                .id(userTable.getId())
                 .firstName(userTable.getFirstName())
                 .lastName(userTable.getLastName())
                 .dateOfBirth(userTable.getDateOfBirth())

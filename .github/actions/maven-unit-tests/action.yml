@@ -1,5 +1,5 @@
-name: Maven Build
-description: Run unit + integration tests for Java apps
+name: Maven Unit Tests
+description: Run unit tests for Java apps
 
 runs:
   using: composite
@@ -15,8 +15,3 @@ runs:
       shell: bash
       working-directory: back/user-ms
       run: mvn test
-
-    # - name: Run Integration Tests
-    #   shell: bash
-    #   working-directory: back/user-ms
-    #   run: mvn integration-test verify

@@ -24,7 +24,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
-@ContextConfiguration(classes = {com.iamind.user_ms.config.TestContainerConfig.class})
 @InitializeDynamoDb
 class StudentControllerIT {
 
@@ -84,7 +83,7 @@ class StudentControllerIT {
 
     @Test
     void shouldGetStudentById() throws Exception {
-        long id = createStudent(studentRequest);
+        String id = createStudent(studentRequest);
 
         mockMvc.perform(get("/api/users/students/" + id))
                 .andExpect(status().isOk())
@@ -93,7 +92,7 @@ class StudentControllerIT {
 
     @Test
     void shouldUpdateStudent() throws Exception {
-        long id = createStudent(studentRequest);
+        String id = createStudent(studentRequest);
 
         StudentRequestDTO updatedRequest = new StudentRequestDTO(
                 "Alice Updated",
@@ -125,7 +124,7 @@ class StudentControllerIT {
 
     @Test
     void shouldDeleteStudent() throws Exception {
-        long id = createStudent(studentRequest);
+        String id = createStudent(studentRequest);
 
         mockMvc.perform(delete("/api/users/students/" + id))
                 .andExpect(status().isNoContent());
@@ -134,7 +133,7 @@ class StudentControllerIT {
                 .andExpect(status().isNotFound());
     }
 
-    private long createStudent(StudentRequestDTO request) throws Exception {
+    private String createStudent(StudentRequestDTO request) throws Exception {
         String responseBody = mockMvc.perform(post("/api/users/students")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
@@ -143,6 +142,6 @@ class StudentControllerIT {
                 .getResponse()
                 .getContentAsString();
 
-        return objectMapper.readTree(responseBody).get("id").asLong();
+        return objectMapper.readTree(responseBody).get("id").asText();
     }
 }

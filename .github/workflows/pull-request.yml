@@ -29,14 +29,24 @@ jobs:
           with:
             python_version: ${{env.PYTHON_VERSION}}
 
-  users-build:
+
+  users-unit-tests:
     runs-on: ubuntu-latest
-    name: User -  Install dependencies and run unit tests
+    name: User - run unit tests
     steps:
       - uses: actions/checkout@v4
+                          
+      - name: Java unit tests
+        uses: ./.github/actions/maven-unit-tests
         
-      - name: Java unit + integration tests
-        uses: ./.github/actions/maven-build
+  users-integration-tests:
+    runs-on: ubuntu-latest
+    name: User - run integration tests
+    steps:
+      - uses: actions/checkout@v4
+                          
+      - name: Java integration tests
+        uses: ./.github/actions/maven-integration-tests
 
   terraform-ci:
     runs-on: ubuntu-latest

@@ -1,0 +1,17 @@
+name: Maven Integration Tests
+description: Run integration tests for Java apps
+
+runs:
+  using: composite
+  steps:
+    - name: Set up JDK
+      uses: actions/setup-java@v3
+      with:
+        java-version: 21
+        distribution: adopt
+        cache: maven
+
+    - name: Run Integration Tests
+      shell: bash
+      working-directory: back/user-ms
+      run: mvn integration-test verify

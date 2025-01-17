@@ -14,6 +14,7 @@ public class UserTableToPsychopedagogistConverter {
 
         // Convert UserTable to Psychopedagogist
         return Psychopedagogist.builder()
+                .id(userTable.getId())
                 .firstName(userTable.getFirstName())
                 .lastName(userTable.getLastName())
                 .dateOfBirth(userTable.getDateOfBirth())
