@@ -3,16 +3,13 @@ package com.iamind.user_ms.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.iamind.user_ms.config.InitializeDynamoDb;
 import com.iamind.user_ms.dto.PsychopedagogistRequestDTO;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
-import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.time.LocalDate;
 
@@ -24,8 +21,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
-@ContextConfiguration(classes = {com.iamind.user_ms.config.TestContainerConfig.class})
 @InitializeDynamoDb
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class PsychopedagogistControllerIT {
 
     @Autowired
@@ -54,6 +51,7 @@ class PsychopedagogistControllerIT {
     }
 
     @Test
+    @Order(1)
     void shouldReturnAllPsychopedagogists() throws Exception {
         mockMvc.perform(get("/api/users/psychopedagogists"))
                 .andExpect(status().isOk())
@@ -67,6 +65,7 @@ class PsychopedagogistControllerIT {
     }
 
     @Test
+    @Order(2)
     void shouldCreatePsychopedagogist() throws Exception {
         mockMvc.perform(post("/api/users/psychopedagogists")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -76,8 +75,9 @@ class PsychopedagogistControllerIT {
     }
 
     @Test
+    @Order(3)
     void shouldGetPsychopedagogistById() throws Exception {
-        long id = createPsychopedagogist(psychopedagogistRequest);
+        String id = createPsychopedagogist(psychopedagogistRequest);
 
         mockMvc.perform(get("/api/users/psychopedagogists/" + id))
                 .andExpect(status().isOk())
@@ -85,8 +85,9 @@ class PsychopedagogistControllerIT {
     }
 
     @Test
+    @Order(4)
     void shouldUpdatePsychopedagogist() throws Exception {
-        long id = createPsychopedagogist(psychopedagogistRequest);
+        String id = createPsychopedagogist(psychopedagogistRequest);
 
         PsychopedagogistRequestDTO updatedRequest = new PsychopedagogistRequestDTO(
                 "Jane",
@@ -110,8 +111,9 @@ class PsychopedagogistControllerIT {
     }
 
     @Test
+    @Order(5)
     void shouldDeletePsychopedagogist() throws Exception {
-        long id = createPsychopedagogist(psychopedagogistRequest);
+        String id = createPsychopedagogist(psychopedagogistRequest);
 
         mockMvc.perform(delete("/api/users/psychopedagogists/" + id))
                 .andExpect(status().isNoContent());
@@ -120,7 +122,7 @@ class PsychopedagogistControllerIT {
                 .andExpect(status().isNotFound());
     }
 
-    private long createPsychopedagogist(PsychopedagogistRequestDTO request) throws Exception {
+    private String createPsychopedagogist(PsychopedagogistRequestDTO request) throws Exception {
         String responseBody = mockMvc.perform(post("/api/users/psychopedagogists")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
@@ -129,6 +131,6 @@ class PsychopedagogistControllerIT {
                 .getResponse()
                 .getContentAsString();
 
-        return objectMapper.readTree(responseBody).get("id").asLong();
+        return objectMapper.readTree(responseBody).get("id").asText();
     }
 }

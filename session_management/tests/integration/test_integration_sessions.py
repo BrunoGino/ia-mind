@@ -2,13 +2,13 @@ import boto3
 import pytest
 import json
 from app.app import app
-from moto import mock_dynamodb2
+from moto import mock_dynamodb
 
 @pytest.fixture
 def dynamodb_setup():
     
-    with mock_dynamodb2():
-        dynamodb = boto3.resource('dynamodb', region_name='us-east-1')
+    with mock_dynamodb():
+        dynamodb = boto3.resource('dynamodb', region_name='eu-west-1')
 
         
         table = dynamodb.create_table(

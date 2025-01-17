@@ -1,6 +1,6 @@
 #!/bin/bash
 table_name_users="iamind_users_table"
-hash_key_users_users="id"
+hash_key_users="id"
 
 awslocal dynamodb create-table \
     --table-name "$table_name_users" \
