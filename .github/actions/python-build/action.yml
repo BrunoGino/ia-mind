@@ -1,0 +1,45 @@
+name: Python Build
+description: Run unit + integration tests for Python apps
+inputs:
+  python_version:
+    required: true
+    description: The python version to use
+
+runs:
+  using: composite
+  steps:
+    - name: Setup Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{input.python_version}}
+
+    - name: Session - Install dependencies
+      shell: bash
+      working-directory: session_management
+      run: |
+        python -m pip install --upgrade pip
+        pwd
+        ls session_management
+        pip install -r requirements.txt
+
+    - name: Session - Run unit tests
+      shell: bash
+      run: |
+        pytest . --doctest-modules --junitxml=test-results.xml --cov=com --cov-report=xml --cov-report=html
+
+    - name: Upload test results
+      uses: actions/upload-artifact@v4
+      if: ${{ always() }}
+      with:
+        name: pytest-results
+        path: test-results.xml
+            
+    - name: Create test report
+      uses: dorny/test-reporter@v1
+      if: ${{ always() }}
+      with:
+        name: Test Results Report
+        artifact: pytest-results
+        path: test-results.xml
+        reporter: jest-junit
+        fail-on-error: 'false'
