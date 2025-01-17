@@ -6264,6 +6264,7 @@ a.fn__like.no_border .fn__svg{
 }
 
 .fn__model_content_item{
+	width: 100%;
 	display: flex;
 	align-items: center;
 }
@@ -6292,6 +6293,18 @@ a.fn__like.no_border .fn__svg{
 .fn__model_item .item__info {
     flex: 1; /* Faz o texto ocupar o restante do espaço */
     padding: 0; /* Remove padding adicional */
+}
+
+.fn__model_content_item .fn__model__title{  
+	margin-bottom: 10px !important;
+}
+
+.fn__model_content_item .fn__model__categories{
+	margin-bottom: 10px !important;
+}
+
+.fn__model_content_item .desc{
+	margin-bottom: 10px !important;
 }
 
 .fn__model_item .item__info .title {

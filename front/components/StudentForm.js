@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 export default function StudentForm({ studentId = null }) {
   const [formData, setFormData] = useState({
@@ -23,7 +23,47 @@ export default function StudentForm({ studentId = null }) {
     observations: "",
   });
 
-  const [isEditing, setIsEditing] = useState(studentId !== null);
+  const [isEditing, setIsEditing] = useState(!!studentId);
+
+  useEffect(() => {
+    if (isEditing) {
+      fetch(
+        `http://iamind-alb-1060024196.eu-west-1.elb.amazonaws.com/api/users/students/${studentId}`
+      )
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Erro ao buscar os dados do aluno.");
+          }
+          return response.json();
+        })
+        .then((data) => {
+          setFormData({
+            firstName: data.firstName || "",
+            lastName: data.lastName || "",
+            birthDate: data.dateOfBirth || "",
+            gender: data.gender || "",
+            address: data.fullAddress || "",
+            school: data.school || "",
+            grade: data.schoolYear || "",
+            classGroup: data.classRoom || "",
+            shift: data.shift || "",
+            medications: data.medicationsInUse || "",
+            allergies: data.allergies || "",
+            healthHistory: data.mentalHealthHistory || "",
+            diagnoses: data.previousDiagnoses || [],
+            medicalReports: null,
+            guardianName: data.guardianName || "",
+            guardianPhone: data.guardianPhone || "",
+            guardianEmail: data.guardianEmail || "",
+            observations: "",
+          });
+        })
+        .catch((error) => {
+          console.error("Erro ao carregar os dados do aluno:", error);
+          alert("Erro ao carregar os dados do aluno.");
+        });
+    }
+  }, [isEditing, studentId]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -33,11 +73,19 @@ export default function StudentForm({ studentId = null }) {
     }));
   };
 
+  const handleFileChange = (e) => {
+    setFormData((prev) => ({
+      ...prev,
+      medicalReports: e.target.files[0],
+    }));
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
+
     const endpoint = isEditing
-      ? `https://api.example.com/students/${studentId}`
-      : "https://api.example.com/students";
+      ? `http://iamind-alb-1060024196.eu-west-1.elb.amazonaws.com/api/users/students/${studentId}`
+      : "http://iamind-alb-1060024196.eu-west-1.elb.amazonaws.com/api/users/students";
     const method = isEditing ? "PUT" : "POST";
 
     fetch(endpoint, {
@@ -45,13 +93,44 @@ export default function StudentForm({ studentId = null }) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(formData),
     })
-      .then((response) => response.json())
-      .then((data) => {
-        alert(isEditing ? "Aluno atualizado com sucesso!" : "Aluno adicionado com sucesso!");
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Erro ao processar a solicitação.");
+        }
+        return response.json();
+      })
+      .then(() => {
+        alert(
+          isEditing
+            ? "Aluno atualizado com sucesso!"
+            : "Aluno adicionado com sucesso!"
+        );
+        if (!isEditing) {
+          setFormData({
+            firstName: "",
+            lastName: "",
+            birthDate: "",
+            gender: "",
+            address: "",
+            school: "",
+            grade: "",
+            classGroup: "",
+            shift: "",
+            medications: "",
+            allergies: "",
+            healthHistory: "",
+            diagnoses: [],
+            medicalReports: null,
+            guardianName: "",
+            guardianPhone: "",
+            guardianEmail: "",
+            observations: "",
+          });
+        }
       })
       .catch((error) => {
         console.error("Erro:", error);
-        alert("Ocorreu um erro ao processar a solicitação.");
+        alert("Erro ao salvar os dados do aluno.");
       });
   };
 
@@ -61,7 +140,6 @@ export default function StudentForm({ studentId = null }) {
         {isEditing ? "Editar Aluno" : "Adicionar Novo Aluno"}
       </h1>
       <form onSubmit={handleSubmit} className="needs-validation students-fomrs">
-        {/* Dados Pessoais */}
         <fieldset className="mb-4">
           <legend>Dados Pessoais</legend>
           <div className="row g-3">
@@ -122,7 +200,6 @@ export default function StudentForm({ studentId = null }) {
           </div>
         </fieldset>
 
-        {/* Dados Escolares */}
         <fieldset className="mb-4">
           <legend>Dados Escolares</legend>
           <div className="row g-3">
@@ -176,7 +253,6 @@ export default function StudentForm({ studentId = null }) {
           </div>
         </fieldset>
 
-        {/* Dados de Saúde */}
         <fieldset className="mb-4">
           <legend>Dados de Saúde</legend>
           <div className="row g-3">
@@ -214,16 +290,13 @@ export default function StudentForm({ studentId = null }) {
               <input
                 type="file"
                 name="medicalReports"
-                onChange={(e) =>
-                  setFormData({ ...formData, medicalReports: e.target.files[0] })
-                }
+                onChange={handleFileChange}
                 className="form-control"
               />
             </div>
           </div>
         </fieldset>
 
-        {/* Dados do Responsável */}
         <fieldset className="mb-4">
           <legend>Dados do Responsável</legend>
           <div className="row g-3">
