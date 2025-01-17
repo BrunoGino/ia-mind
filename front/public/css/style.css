@@ -6260,7 +6260,7 @@ a.fn__like.no_border .fn__svg{
 .fn__model_item {
     margin: 0;
     padding: 0;
-    width: 100%; /* Cada item ocupa toda a largura */
+    width: 100% !important; /* Cada item ocupa toda a largura */
     display: flex; /* Exibe o conteúdo em linha */
     align-items: center; /* Alinha verticalmente o conteúdo */
     border: 1px solid var(--techwave-border-color);
@@ -6274,6 +6274,15 @@ a.fn__like.no_border .fn__svg{
 	width: 100%;
 	display: flex;
 	align-items: center;
+}
+
+@media (max-width: 780px) {
+	.fn__model_content_item{
+		width: 100%;
+		display: flex;
+		align-items: center;
+		flex-direction: column;
+	}
 }
 
 .fn__model_image{

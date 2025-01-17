@@ -10,6 +10,7 @@ export default function StudentForm() {
     firstName: "",
     lastName: "",
     birthDate: "",
+    phone: "",
     gender: "",
     email: "",
     address: "",
@@ -20,7 +21,7 @@ export default function StudentForm() {
     medications: "",
     allergies: "",
     healthHistory: "",
-    diagnoses: [],
+    diagnoses: "",
     medicalReports: null,
     guardianName: "",
     guardianPhone: "",
@@ -60,6 +61,7 @@ export default function StudentForm() {
             firstName: data.firstName || "",
             lastName: data.lastName || "",
             birthDate: data.dateOfBirth || "",
+            phone: data.phone || "",
             gender: data.gender || "",
             email: data.email || "",
             address: data.fullAddress || "",
@@ -70,7 +72,7 @@ export default function StudentForm() {
             medications: data.medicationsInUse || "",
             allergies: data.allergies || "",
             healthHistory: data.mentalHealthHistory || "",
-            diagnoses: data.previousDiagnoses || [],
+            diagnoses: data.previousDiagnoses || "",
             medicalReports: null,
             guardianName: data.guardianName || "",
             guardianPhone: data.guardianPhone || "",
@@ -105,6 +107,7 @@ export default function StudentForm() {
       firstName: formData.firstName,
       lastName: formData.lastName,
       dateOfBirth: formData.birthDate,
+      phone: formData.phone,
       gender: formData.gender,
       email: formData.email,
       fullAddress: formData.address,
@@ -143,6 +146,7 @@ export default function StudentForm() {
             firstName: "",
             lastName: "",
             birthDate: "",
+            phone: "",
             gender: "",
             email: "",
             address: "",
@@ -153,7 +157,7 @@ export default function StudentForm() {
             medications: "",
             allergies: "",
             healthHistory: "",
-            diagnoses: [],
+            diagnoses: "",
             medicalReports: null,
             guardianName: "",
             guardianPhone: "",
@@ -202,7 +206,18 @@ export default function StudentForm() {
                 required
               />
             </div>
-            <div className="col-md-6">
+            <div className="col-md-4">
+              <input
+                type="text"
+                name="phone"
+                placeholder="Telefone"
+                value={formData.phone}
+                onChange={handleChange}
+                className="form-control"
+                required
+              />
+            </div>
+            <div className="col-md-4">
               <input
                 type="text"
                 name="gender"
@@ -213,7 +228,7 @@ export default function StudentForm() {
                 required
               />
             </div>
-            <div className="col-md-6">
+            <div className="col-md-4">
               <input
                 type="date"
                 name="birthDate"
@@ -306,7 +321,7 @@ export default function StudentForm() {
         <fieldset className="mb-4">
           <legend>Dados de Saúde</legend>
           <div className="row g-3">
-            <div className="col-md-6">
+            <div className="col-md-4">
               <input
                 type="text"
                 name="medications"
@@ -316,12 +331,22 @@ export default function StudentForm() {
                 className="form-control"
               />
             </div>
-            <div className="col-md-6">
+            <div className="col-md-4">
               <input
                 type="text"
                 name="allergies"
                 placeholder="Alergias"
                 value={formData.allergies}
+                onChange={handleChange}
+                className="form-control"
+              />
+            </div>
+            <div className="col-md-4">
+              <input
+                type="text"
+                name="diagnoses"
+                placeholder="Diagnósticos"
+                value={formData.diagnoses}
                 onChange={handleChange}
                 className="form-control"
               />
