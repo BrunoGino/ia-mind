@@ -3,8 +3,7 @@ package com.iamind.user_ms.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.iamind.user_ms.config.InitializeDynamoDb;
 import com.iamind.user_ms.dto.StudentRequestDTO;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -25,6 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
 @InitializeDynamoDb
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class StudentControllerIT {
 
     @Autowired
@@ -60,6 +60,7 @@ class StudentControllerIT {
     }
 
     @Test
+    @Order(1)
     void shouldReturnAllStudents() throws Exception {
         mockMvc.perform(get("/api/users/students"))
                 .andExpect(status().isOk())
@@ -73,6 +74,7 @@ class StudentControllerIT {
     }
 
     @Test
+    @Order(2)
     void shouldCreateStudent() throws Exception {
         mockMvc.perform(post("/api/users/students")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -82,6 +84,7 @@ class StudentControllerIT {
     }
 
     @Test
+    @Order(3)
     void shouldGetStudentById() throws Exception {
         String id = createStudent(studentRequest);
 
@@ -91,6 +94,7 @@ class StudentControllerIT {
     }
 
     @Test
+    @Order(4)
     void shouldUpdateStudent() throws Exception {
         String id = createStudent(studentRequest);
 
@@ -123,6 +127,7 @@ class StudentControllerIT {
     }
 
     @Test
+    @Order(5)
     void shouldDeleteStudent() throws Exception {
         String id = createStudent(studentRequest);
 
