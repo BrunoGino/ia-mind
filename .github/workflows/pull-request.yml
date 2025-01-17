@@ -8,7 +8,7 @@ on:
       - 'session_management/**'
       - 'back/user-ms/**'
       - 'terraform/**'
-      - '.github/*'
+      - '.github/**'
 
 env:
   PYTHON_VERSION: "3.13"
