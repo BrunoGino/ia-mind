@@ -1,0 +1,20 @@
+name: Maven Build
+description: Run unit + integration tests for Java apps
+
+runs:
+  using: composite
+  steps:
+    - name: Set up JDK
+      uses: actions/setup-java@v3
+      with:
+        java-version: 21
+        distribution: adopt
+        cache: maven
+
+    - name: Run Unit tests Tests
+      shell: bash
+      run: mvn test
+
+    - name: Run Integration Tests
+      shell: bash
+      run: mvn integration-test verify

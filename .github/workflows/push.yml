@@ -18,9 +18,9 @@ permissions:
   contents: read
   
 jobs:
-    build:
+    session-build:
       runs-on: ubuntu-latest
-      name: Install dependencies and run unit tests
+      name: Session - Install dependencies and run unit tests
       steps:
         - name: Checkout code
           uses: actions/checkout@v4
@@ -29,11 +29,20 @@ jobs:
           uses: ./.github/actions/python-build
           with:
             python_version: ${{env.PYTHON_VERSION}}
+
+    users-build:
+      runs-on: ubuntu-latest
+      name: User - Install dependencies and run unit tests
+      steps:
+        - uses: actions/checkout@v4
+                  
+        - name: Java unit + integration tests
+          uses: ./github/actions/maven-build
             
     docker:
       runs-on: ubuntu-latest
       needs:
-        - build
+        - users-build
       name: Generate and Publish Docker Images
       steps:
         - name: Checkout code
