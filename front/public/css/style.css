@@ -159,6 +159,13 @@ body{
 	width: 18px;
 	height: 18px;
 }
+
+.icon__student{
+	fill: currentcolor;
+	width: 18px;
+	height: 18px;
+}
+
 .replaced-svg{
 	opacity: 1;
 }
@@ -6350,13 +6357,16 @@ a.fn__like.no_border .fn__svg{
 }
 
 .fn__model__actions{
-
+	width: 100%;
+	text-align: right;
 }
 
 
 
 .fn__model__actions .fn__model_bt_tools{
 	display: flex;
+	align-items: center;
+	justify-content: end;
 }
 
 .fn__model__actions .fn__model_bt_tools a{

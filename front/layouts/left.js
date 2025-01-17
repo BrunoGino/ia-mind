@@ -39,7 +39,7 @@ const data = [
       },
     ],
   },
-  {
+  /*{
     title: "Image Generation",
     pathname: "/image-generation",
     img: "svg/image.svg",
@@ -73,7 +73,7 @@ const data = [
     title: "Log Out",
     pathname: "/sign-in",
     img: "svg/logout.svg",
-  },
+  },*/
 ];
 
 export default function Left({ activeTrueFalse, activeMobileMenu }) {

@@ -1,12 +1,17 @@
 "use client";
+import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 
-export default function StudentForm({ studentId = null }) {
+export default function StudentForm() {
+  const [isClient, setIsClient] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [studentId, setStudentId] = useState(null);
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
     birthDate: "",
     gender: "",
+    email: "",
     address: "",
     school: "",
     grade: "",
@@ -23,10 +28,24 @@ export default function StudentForm({ studentId = null }) {
     observations: "",
   });
 
-  const [isEditing, setIsEditing] = useState(!!studentId);
-
   useEffect(() => {
-    if (isEditing) {
+    // Garante que o código será executado no lado do cliente
+    setIsClient(true);
+
+    if (typeof window !== "undefined") {
+      const router = new URLSearchParams(window.location.search);
+      const id = router.get("id");
+
+      if (id) {
+        setStudentId(id);
+        setIsEditing(true);
+      }
+    }
+  }, []);
+
+  // Carregar dados do estudante para edição
+  useEffect(() => {
+    if (isEditing && studentId) {
       fetch(
         `http://iamind-alb-1060024196.eu-west-1.elb.amazonaws.com/api/users/students/${studentId}`
       )
@@ -42,6 +61,7 @@ export default function StudentForm({ studentId = null }) {
             lastName: data.lastName || "",
             birthDate: data.dateOfBirth || "",
             gender: data.gender || "",
+            email: data.email || "",
             address: data.fullAddress || "",
             school: data.school || "",
             grade: data.schoolYear || "",
@@ -73,13 +93,6 @@ export default function StudentForm({ studentId = null }) {
     }));
   };
 
-  const handleFileChange = (e) => {
-    setFormData((prev) => ({
-      ...prev,
-      medicalReports: e.target.files[0],
-    }));
-  };
-
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -88,10 +101,30 @@ export default function StudentForm({ studentId = null }) {
       : "http://iamind-alb-1060024196.eu-west-1.elb.amazonaws.com/api/users/students";
     const method = isEditing ? "PUT" : "POST";
 
+    const payload = {
+      firstName: formData.firstName,
+      lastName: formData.lastName,
+      dateOfBirth: formData.birthDate,
+      gender: formData.gender,
+      email: formData.email,
+      fullAddress: formData.address,
+      school: formData.school,
+      schoolYear: formData.grade,
+      classRoom: formData.classGroup,
+      shift: formData.shift,
+      medicationsInUse: formData.medications,
+      allergies: formData.allergies,
+      mentalHealthHistory: formData.healthHistory,
+      previousDiagnoses: formData.diagnoses,
+      guardianName: formData.guardianName,
+      guardianPhone: formData.guardianPhone,
+      guardianEmail: formData.guardianEmail,
+    };
+
     fetch(endpoint, {
       method,
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(formData),
+      body: JSON.stringify(payload),
     })
       .then((response) => {
         if (!response.ok) {
@@ -111,6 +144,7 @@ export default function StudentForm({ studentId = null }) {
             lastName: "",
             birthDate: "",
             gender: "",
+            email: "",
             address: "",
             school: "",
             grade: "",
@@ -134,12 +168,15 @@ export default function StudentForm({ studentId = null }) {
       });
   };
 
+  if (!isClient) return null;
+
   return (
     <div className="container p-4">
       <h1 className="text-center mb-4">
         {isEditing ? "Editar Aluno" : "Adicionar Novo Aluno"}
       </h1>
       <form onSubmit={handleSubmit} className="needs-validation students-fomrs">
+        {/* Dados Pessoais */}
         <fieldset className="mb-4">
           <legend>Dados Pessoais</legend>
           <div className="row g-3">
@@ -189,6 +226,17 @@ export default function StudentForm({ studentId = null }) {
             <div className="col-12">
               <input
                 type="text"
+                name="email"
+                placeholder="Email"
+                value={formData.email}
+                onChange={handleChange}
+                className="form-control"
+                required
+              />
+            </div>
+            <div className="col-12">
+              <input
+                type="text"
                 name="address"
                 placeholder="Endereço Completo"
                 value={formData.address}
@@ -200,6 +248,7 @@ export default function StudentForm({ studentId = null }) {
           </div>
         </fieldset>
 
+        {/* Dados Escolares */}
         <fieldset className="mb-4">
           <legend>Dados Escolares</legend>
           <div className="row g-3">
@@ -253,6 +302,7 @@ export default function StudentForm({ studentId = null }) {
           </div>
         </fieldset>
 
+        {/* Dados de Saúde */}
         <fieldset className="mb-4">
           <legend>Dados de Saúde</legend>
           <div className="row g-3">
@@ -290,13 +340,16 @@ export default function StudentForm({ studentId = null }) {
               <input
                 type="file"
                 name="medicalReports"
-                onChange={handleFileChange}
+                onChange={(e) =>
+                  setFormData({ ...formData, medicalReports: e.target.files[0] })
+                }
                 className="form-control"
               />
             </div>
           </div>
         </fieldset>
 
+        {/* Dados do Responsável */}
         <fieldset className="mb-4">
           <legend>Dados do Responsável</legend>
           <div className="row g-3">
@@ -345,7 +398,7 @@ export default function StudentForm({ studentId = null }) {
             </div>
           </div>
         </fieldset>
-
+        {/* Outros campos do formulário */}
         <div className="text-center">
           <button type="submit" className="techwave_fn_button">
             {isEditing ? "Salvar Alterações" : "Adicionar Aluno"}

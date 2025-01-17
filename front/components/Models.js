@@ -12,7 +12,7 @@ const requestOptions = {
     .then((result) => console.log(result))
     .catch((error) => console.error(error));
 
-    console.log(requestOptions)
+  //console.log(requestOptions)
 
 export default function Models() {
 
@@ -58,7 +58,7 @@ export default function Models() {
 
     // Função para redirecionar para a página de edição
     const handleItemClick = (id) => {
-        window.location.href = `/student/${id}`;
+        window.location.href = `/student?id=${id}`;
     };
 
     const handleOnClick = (index) => {
@@ -142,9 +142,10 @@ export default function Models() {
     return (
         <>
             <div className="techwave_fn_models_page">
-                <div className="fn__title_holder">
-                    <div className="container">
-                        <h1 className="title">Alunos</h1>
+                <div className="fn__title_holder container">
+                    <div className="row">
+                        <div className="col-12 col-md-9"><h1 className="text-center mb-4">Alunos</h1></div>
+                        {/*<div className="col-md-3 col-12"><a>Refresh</a></div>*/}
                     </div>
                 </div>
                 {/* Models */}
@@ -225,7 +226,20 @@ export default function Models() {
                                                             {/*<div className="fn__model_image">
                                                                 <img src={student.img} alt={student.title} />
                                                             </div>*/}
-                                                            <div className="col-12"><h3 className="fn__model__title">{student.firstName} {student.lastName}</h3></div>
+                                                            <div className="col-md-9 col-12"><h3 className="fn__model__title">{student.firstName} {student.lastName}</h3></div>
+                                                            <div className="col-md-3 col-12">{/* Ações à direita */}
+                                                            
+                                                                <div className="fn__model__actions">
+                                                                    <div className="fn__actions__hover fn__model_bt_tools">
+                                                                    <a alt="Editar" title="Editar" onClick={(e) => { e.preventDefault(); handleItemClick(student.id); }}>
+                                                                        <img src="svg/setting.svg" alt="" className="fn__svg f_screen icon__student" />
+                                                                    </a>
+                                                                    <a alt="Excluir" title="Excluir" href="#"><img src="svg/close.svg" alt="" className="fn__svg f_screen" /></a>
+                                                                        {/*<a href="#"><b>Relatórios</b></a>*/}
+                                                                    </div>
+                                                                </div>
+                                                            
+                                                            </div>
                                                             <div className="col-md-8 col">
                                                                 <p className="fn__model__categories">
                                                                         <b>Email:</b> <i>{student.email}</i>
