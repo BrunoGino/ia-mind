@@ -66,6 +66,45 @@ export default function Models() {
         setSelectedTag('');
     };
 
+    const handleExcludeItem = (id) => {
+        if (!id) {
+          alert("ID do estudante inválido!");
+          return;
+        }
+      
+        const requestDelete = {
+          method: "DELETE",
+          headers: { "Content-Type": "application/json" },
+          redirect: "follow",
+        };
+      
+        // Confirmação antes de executar a exclusão
+        if (confirm("Você tem certeza que deseja excluir este estudante?")) {
+          fetch(
+            `http://iamind-alb-1060024196.eu-west-1.elb.amazonaws.com/api/users/students/${id}`,
+            requestDelete
+          )
+
+            .then((response) => {
+              if (!response.ok) {
+                throw new Error("Erro ao excluir o estudante. Verifique o servidor.");
+              }
+              // Verifica se a resposta é vazia (status 204)
+              return response.status === 204 ? null : response.json();
+            })
+            .then(() => {
+              alert("Estudante excluído com sucesso!");
+              // Remove o redirecionamento inesperado, garantindo apenas atualização visual
+              window.location.reload(); // Atualiza a página para refletir a exclusão
+            })
+            .catch((error) => {
+              console.error("Erro ao excluir o estudante:", error);
+              alert("Erro ao excluir o estudante. Por favor, tente novamente.");
+            });
+        }
+      };
+      
+
     // For filter
     /*const students = [
         { id: 1, category: 1, img: "img/models/1.jpg", title: 'Felipe Lenin Alvarenga Siqueira', hasBookmark: false, desc: "A versatile model great at both photorealism and anime, includes noise offset training... by Lykon.", author_pic: "img/user/user.jpg", author_name: "Caden", tags: ['Buildings', 'Environments', 'Illustration', 'Textures', ''] },
@@ -234,8 +273,11 @@ export default function Models() {
                                                                     <a alt="Editar" title="Editar" onClick={(e) => { e.preventDefault(); handleItemClick(student.id); }}>
                                                                         <img src="svg/setting.svg" alt="" className="fn__svg f_screen icon__student" />
                                                                     </a>
-                                                                    <a alt="Excluir" title="Excluir" href="#"><img src="svg/close.svg" alt="" className="fn__svg f_screen" /></a>
-                                                                        {/*<a href="#"><b>Relatórios</b></a>*/}
+                                                                    <a alt="Excluir" title="Excluir" href="#" onClick={(e) => { e.preventDefault(); handleExcludeItem(student.id); }}>
+                                                                        <img src="svg/close.svg" alt="" className="fn__svg f_screen" />
+                                                                    </a>
+
+                                                                    {/*<a href="#"><b>Relatórios</b></a>*/}
                                                                     </div>
                                                                 </div>
                                                             
