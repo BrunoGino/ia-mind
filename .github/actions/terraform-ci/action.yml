@@ -8,11 +8,19 @@ inputs:
 runs:
   using: composite
   steps:
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v4        
+      with:
+        role-to-assume: ${{inputs.aws_deployment_role}}
+        role-session-name: github-to-aws-via-oidc
+        aws-region: eu-west-1
+        role-skip-session-tagging: true
+        
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v3        
       with:
         terraform_version: "1.10.3"
-        
+
     - name: Terraform fmt
       id: fmt
       working-directory: terraform
