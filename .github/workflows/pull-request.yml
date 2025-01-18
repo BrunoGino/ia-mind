@@ -59,3 +59,4 @@ jobs:
         uses: ./.github/actions/terraform-ci
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
+          aws_deployment_role: ${{secrets.AWS_DEPLOYMENT_ROLE_ARN}}
