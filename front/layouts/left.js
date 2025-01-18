@@ -20,7 +20,7 @@ const data = [
       },
       {
         title: "Todos os Alunos",
-        pathname: "/models",
+        pathname: "/models?load",
       },
     ],
   },

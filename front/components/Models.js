@@ -78,29 +78,16 @@ export default function Models() {
           redirect: "follow",
         };
       
-        // Confirmação antes de executar a exclusão
         if (confirm("Você tem certeza que deseja excluir este estudante?")) {
-          fetch(
-            `http://iamind-alb-1060024196.eu-west-1.elb.amazonaws.com/api/users/students/${id}`,
-            requestDelete
-          )
+            fetch(
+                `http://iamind-alb-1060024196.eu-west-1.elb.amazonaws.com/api/users/students/${id}`,
+                requestDelete
+            )
 
-            .then((response) => {
-              if (!response.ok) {
-                throw new Error("Erro ao excluir o estudante. Verifique o servidor.");
-              }
-              // Verifica se a resposta é vazia (status 204)
-              return response.status === 204 ? null : response.json();
-            })
             .then(() => {
-              alert("Estudante excluído com sucesso!");
-              // Remove o redirecionamento inesperado, garantindo apenas atualização visual
-              window.location.reload(); // Atualiza a página para refletir a exclusão
+                alert("Estudante excluído com sucesso!");
+                window.location.reload(); 
             })
-            .catch((error) => {
-              console.error("Erro ao excluir o estudante:", error);
-              alert("Erro ao excluir o estudante. Por favor, tente novamente.");
-            });
         }
       };
       
@@ -259,7 +246,7 @@ export default function Models() {
                                         <ul className="fn__model_items row">
                                             {/*  model item goes here */}{
                                                 students.map((student, index) => (
-                                                    <li key={student.id} className="fn__model_item col-12" onMouseEnter={() => handleMouseEnter(index)} onMouseLeave={handleMouseLeave} onClick={() => handleItemClick(student.id)}>
+                                                    <li key={student.id} className="fn__model_item col-12" onMouseEnter={() => handleMouseEnter(index)} onMouseLeave={handleMouseLeave}>
                                                         <div className="fn__model_content_item row">
                                                             {/* Imagem à esquerda */}
                                                             {/*<div className="fn__model_image">
@@ -301,7 +288,7 @@ export default function Models() {
                                 </div>
                             </div>
                             <div className="models__more">
-                                <Link href="#" className="medium techwave_fn_button"><span>Load More</span></Link>
+                                <Link href="#" className="medium techwave_fn_button"><span>Carregar Mais</span></Link>
                             </div>
                         </div>
                         {/* !models content */}
