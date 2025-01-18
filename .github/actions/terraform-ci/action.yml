@@ -8,6 +8,11 @@ inputs:
 runs:
   using: composite
   steps:
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v3        
+      with:
+        terraform_version: "1.10.3"
+        
     - name: Terraform fmt
       id: fmt
       working-directory: terraform
