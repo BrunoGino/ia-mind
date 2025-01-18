@@ -4,6 +4,9 @@ inputs:
   github_token:
     description: 'GitHub Token for authentication'
     required: true
+  aws_deployment_role:
+    required: true
+    description: The deployment role to assume
 
 runs:
   using: composite
@@ -15,7 +18,7 @@ runs:
         role-session-name: github-to-aws-via-oidc
         aws-region: eu-west-1
         role-skip-session-tagging: true
-        
+
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v3        
       with:
