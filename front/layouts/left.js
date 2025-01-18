@@ -24,7 +24,7 @@ const data = [
       },
     ],
   },
-  {
+  /*{
     title: "Professores",
     img: "svg/bookmark.svg",
     counter: 48,
@@ -39,7 +39,7 @@ const data = [
       },
     ],
   },
-  /*{
+  {
     title: "Image Generation",
     pathname: "/image-generation",
     img: "svg/image.svg",
