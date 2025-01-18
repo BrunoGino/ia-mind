@@ -1,9 +1,29 @@
 name: terraform-ci
 description: Validate terraform configuration
+inputs:
+  github_token:
+    description: 'GitHub Token for authentication'
+    required: true
+  aws_deployment_role:
+    required: true
+    description: The deployment role to assume
 
 runs:
   using: composite
   steps:
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v4        
+      with:
+        role-to-assume: ${{inputs.aws_deployment_role}}
+        role-session-name: github-to-aws-via-oidc
+        aws-region: eu-west-1
+        role-skip-session-tagging: true
+
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v3        
+      with:
+        terraform_version: "1.10.3"
+
     - name: Terraform fmt
       id: fmt
       working-directory: terraform
@@ -35,7 +55,7 @@ runs:
       env:
         PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
       with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
+        github-token: ${{ inputs.GITHUB_TOKEN }}
         script: |
           const output = `#### Terraform Format and Style 🖌\`${{ steps.fmt.outcome }}\`
           #### Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
