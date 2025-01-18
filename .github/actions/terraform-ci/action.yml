@@ -1,5 +1,9 @@
 name: terraform-ci
 description: Validate terraform configuration
+inputs:
+  github_token:
+    description: 'GitHub Token for authentication'
+    required: true
 
 runs:
   using: composite

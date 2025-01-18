@@ -57,5 +57,5 @@ jobs:
 
       - name: Validate Terraform
         uses: ./.github/actions/terraform-ci
-
-
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
