@@ -1,6 +1,6 @@
-"use client";
-import React, { useEffect, useState } from "react";
-import Link from "next/link";
+"use client"
+import React, { useState } from 'react'
+import Link from 'next/link'
 
 const requestOptions = {
     method: "GET",
@@ -12,88 +12,12 @@ const requestOptions = {
     .then((result) => console.log(result))
     .catch((error) => console.error(error));
 
-  //console.log(requestOptions)
+    console.log(requestOptions)
 
 export default function Models() {
 
-    const [students, setStudents] = useState([]); // Inicializa como um array vazio
-    const [hoveredIndex, setHoveredIndex] = useState(null); // Gerenciar hover
-    const [errorMessage, setErrorMessage] = useState(""); // Mensagem de erro da API
-    const [activeIndex, setActiveIndex] = useState(1);
-
-    // Função para buscar os dados da API
-    useEffect(() => {
-        const fetchStudents = async () => {
-        try {
-            const requestOptions = {
-            method: "GET",
-            headers: {
-                Accept: "application/json",
-            },
-            };
-
-            const response = await fetch(
-            "http://iamind-alb-1060024196.eu-west-1.elb.amazonaws.com/api/users/students",
-            requestOptions
-            );
-
-            if (!response.ok) {
-            throw new Error(`Erro na API: ${response.status} - ${response.statusText}`);
-            }
-
-            const data = await response.json(); // Garante que os dados sejam convertidos em JSON
-            setStudents(data); // Atualiza o estado com os dados da API
-        } catch (error) {
-            console.error("Erro ao carregar os estudantes:", error);
-            setErrorMessage(`Erro ao carregar os estudantes: ${error.message}`);
-        }
-        };
-
-        fetchStudents();
-    }, []);
-
-    // Funções para hover
-    const handleMouseEnter = (index) => setHoveredIndex(index);
-    const handleMouseLeave = () => setHoveredIndex(null);
-
-    // Função para redirecionar para a página de edição
-    const handleItemClick = (id) => {
-        window.location.href = `/student?id=${id}`;
-    };
-
-    const handleOnClick = (index) => {
-        setActiveIndex(index);
-        setSelectedTag('');
-    };
-
-    const handleExcludeItem = (id) => {
-        if (!id) {
-          alert("ID do estudante inválido!");
-          return;
-        }
-      
-        const requestDelete = {
-          method: "DELETE",
-          headers: { "Content-Type": "application/json" },
-          redirect: "follow",
-        };
-      
-        if (confirm("Você tem certeza que deseja excluir este estudante?")) {
-            fetch(
-                `http://iamind-alb-1060024196.eu-west-1.elb.amazonaws.com/api/users/students/${id}`,
-                requestDelete
-            )
-
-            .then(() => {
-                alert("Estudante excluído com sucesso!");
-                window.location.reload(); 
-            })
-        }
-      };
-      
-
     // For filter
-    /*const students = [
+    const students = [
         { id: 1, category: 1, img: "img/models/1.jpg", title: 'Felipe Lenin Alvarenga Siqueira', hasBookmark: false, desc: "A versatile model great at both photorealism and anime, includes noise offset training... by Lykon.", author_pic: "img/user/user.jpg", author_name: "Caden", tags: ['Buildings', 'Environments', 'Illustration', 'Textures', ''] },
         { id: 2, category: 1, img: "img/models/2.jpg", title: 'Bruno Gino', hasBookmark: false, desc: "A versatile model great at both photorealism and anime, includes noise offset training... by Lykon.", author_pic: "img/user/user.jpg", author_name: "Caden", tags: ['Characters', 'Fashion', 'Graphical', 'Photography', 'Environments'] },
         { id: 3, category: 1, img: "img/models/3.jpg", title: 'Gustavo Borges', hasBookmark: false, desc: "A versatile model great at both photorealism and anime, includes noise offset training... by Lykon.", author_pic: "img/user/user.jpg", author_name: "Caden", tags: ['Buildings', 'Environments', 'Characters', 'Graphical', ''] },
@@ -127,12 +51,28 @@ export default function Models() {
         { id: 32, category: 4, img: "img/models/6.jpg", title: 'GameVisuals9', hasBookmark: false, desc: "A versatile model great at both photorealism and anime, includes noise offset training... by Lykon.", author_pic: "img/user/user.jpg", author_name: "Caden", tags: ['Graphical', 'Characters', 'Illustration', 'Photography', ''] },
         { id: 33, category: 4, img: "img/models/7.jpg", title: 'GameVisuals10', hasBookmark: false, desc: "A versatile model great at both photorealism and anime, includes noise offset training... by Lykon.", author_pic: "img/user/user.jpg", author_name: "Caden", tags: ['Textures', 'Characters', 'Fashion', 'Photography', ''] },
         // Add more students with tags here
-    ]*/
+    ]
 
-    //const [selectedTag, setSelectedTag] = useState('');
-    //const [bookmarkStates, setBookmarkStates] = useState(students.map(() => false));
+    // Initialize your component state
+    const [activeIndex, setActiveIndex] = useState(1);
+    const [selectedTag, setSelectedTag] = useState('');
+    const [bookmarkStates, setBookmarkStates] = useState(students.map(() => false));
 
-    /*
+    const [hoveredIndex, setHoveredIndex] = useState(null); // Estado para gerenciar hover
+
+    const handleMouseEnter = (index) => setHoveredIndex(index);
+    const handleMouseLeave = () => setHoveredIndex(null);
+
+    const handleItemClick = (id) => {
+        // Redireciona para o perfil do aluno/professor
+        window.location.href = `/student/${id}`;
+    };
+
+    const handleOnClick = (index) => {
+        setActiveIndex(index);
+        setSelectedTag('');
+    };
+
     const filteredStudentsByCategory = activeIndex
         ? students.filter((student) => student.category === activeIndex)
         : null;
@@ -161,17 +101,16 @@ export default function Models() {
             setBookmarkStates(updatedBookmarkStates);
         }
     };
-    */
+
 
 
 
     return (
         <>
             <div className="techwave_fn_models_page">
-                <div className="fn__title_holder container">
-                    <div className="row">
-                        <div className="col-12 col-md-9"><h1 className="text-center mb-4">Alunos</h1></div>
-                        {/*<div className="col-md-3 col-12"><a>Refresh</a></div>*/}
+                <div className="fn__title_holder">
+                    <div className="container">
+                        <h1 className="title">Finetuned Models</h1>
                     </div>
                 </div>
                 {/* Models */}
@@ -187,8 +126,8 @@ export default function Models() {
                         </div>
                     </div>
                     //models filter */}
-                    {/*<div className="container">
-                         <div className="models__filter">
+                    <div className="container">
+                        {/* <div className="models__filter">
                             <div className="filter__left">
                                 <div className="filter__search">
                                     <input type="text" placeholder="Search gallery" />
@@ -230,10 +169,10 @@ export default function Models() {
                                     </div>
                                 </div>
                             </div>
-                        </div> 
-                    </div>*/}
+                        </div> */}
+                    </div>
                     {/* !models filter */}
-                    <div className="container-fluid">
+                    <div className="container">
                         {/* models content */}
                         <div className="models__content">
                             <div className="models__results">
@@ -245,41 +184,36 @@ export default function Models() {
                                     <div id="tab1" className={activeIndex === 1 ? "tab__item active container" : "tab__item container"}>
                                         <ul className="fn__model_items row">
                                             {/*  model item goes here */}{
-                                                students.map((student, index) => (
-                                                    <li key={student.id} className="fn__model_item col-12" onMouseEnter={() => handleMouseEnter(index)} onMouseLeave={handleMouseLeave}>
-                                                        <div className="fn__model_content_item row">
+                                                filteredStudents.map((student, index) => (
+                                                    <li key={student.id} className="fn__model_item col-12" onMouseEnter={() => handleMouseEnter(index)} onMouseLeave={handleMouseLeave} onClick={() => handleItemClick(student.id)}>
+                                                        <div className="fn__model_content_item">
                                                             {/* Imagem à esquerda */}
                                                             {/*<div className="fn__model_image">
                                                                 <img src={student.img} alt={student.title} />
                                                             </div>*/}
-                                                            <div className="col-md-9 col-12"><h3 className="fn__model__title">{student.firstName} {student.lastName}</h3></div>
-                                                            <div className="col-md-3 col-12">{/* Ações à direita */}
-                                                            
+                                                            <div className="fn__model_data_items">
+                                                                {/* Informações centrais */}
+                                                                <div className="fn__model__info">
+                                                                    <h3 className="fn__model__title">{student.firstName} {student.lastName}</h3>
+                                                                    <h6 className="fn__model__categories">
+                                                                        Email: <i>{student.email}</i>
+                                                                    </h6>
+                                                                    <p className="desc">{student.dateOfBirth}</p>
+                                                                    <p className="desc">{student.schoolYear}</p>
+                                                                    <p className="desc">{student.classRoom}</p>
+                                                                    <p className="desc">{student.gender}</p>
+                                                                </div>
+                                                                {/* Ações à direita */}
+                                                                {hoveredIndex === index && ( // Exibe ações somente no hover
                                                                 <div className="fn__model__actions">
                                                                     <div className="fn__actions__hover fn__model_bt_tools">
-                                                                    <a alt="Editar" title="Editar" onClick={(e) => { e.preventDefault(); handleItemClick(student.id); }}>
-                                                                        <img src="svg/setting.svg" alt="" className="fn__svg f_screen icon__student" />
-                                                                    </a>
-                                                                    <a alt="Excluir" title="Excluir" href="#" onClick={(e) => { e.preventDefault(); handleExcludeItem(student.id); }}>
-                                                                        <img src="svg/close.svg" alt="" className="fn__svg f_screen" />
-                                                                    </a>
-
-                                                                    {/*<a href="#"><b>Relatórios</b></a>*/}
+                                                                        <a href="#"><b>Editar</b></a>
+                                                                        <a href="#"><b>Excluir</b></a>
+                                                                        <a href="#"><b>Relatórios</b></a>
                                                                     </div>
                                                                 </div>
-                                                            
+                                                                )}
                                                             </div>
-                                                            <div className="col-md-8 col">
-                                                                <p className="fn__model__categories">
-                                                                        <b>Email:</b> <i>{student.email}</i>
-                                                                </p>
-                                                            </div>
-                                                            <div className="col-md-4 col"><p className="desc"><b>Telefone:</b> {student.phone}</p></div>
-                                                            <div className="col-md-3 col"><p className="desc"><b>Data de Nasc:</b> {student.dateOfBirth}</p></div>
-                                                            <div className="col-md-3 col"><p className="desc"><b>Ano Escolar:</b> {student.schoolYear}</p></div>
-                                                            <div className="col-md-3 col"><p className="desc"><b>Turma:</b> {student.shift}</p></div>
-                                                            <div className="col-md-3 col"><p className="desc"><b>Gênero:</b> {student.gender}</p></div>
-                                                            <div className="col-md-3 col"><p className="desc"><b>Escola:</b> {student.school}</p></div>
                                                         </div>
                                                     </li>
                                                 ))}
@@ -288,7 +222,7 @@ export default function Models() {
                                 </div>
                             </div>
                             <div className="models__more">
-                                <Link href="#" className="medium techwave_fn_button"><span>Carregar Mais</span></Link>
+                                <Link href="#" className="medium techwave_fn_button"><span>Load More</span></Link>
                             </div>
                         </div>
                         {/* !models content */}

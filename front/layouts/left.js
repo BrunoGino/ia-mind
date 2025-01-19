@@ -20,11 +20,11 @@ const data = [
       },
       {
         title: "Todos os Alunos",
-        pathname: "/models",
+        pathname: "/models?load",
       },
     ],
   },
-  {
+  /*{
     title: "Professores",
     img: "svg/bookmark.svg",
     counter: 48,
@@ -73,7 +73,7 @@ const data = [
     title: "Log Out",
     pathname: "/sign-in",
     img: "svg/logout.svg",
-  },
+  },*/
 ];
 
 export default function Left({ activeTrueFalse, activeMobileMenu }) {
