@@ -16,7 +16,7 @@ public class DynamoDbInitializer implements BeforeAllCallback {
     private static final LocalStackContainer localStackContainer = new LocalStackContainer(LOCALSTACK_IMAGE)
             .withCopyFileToContainer(MountableFile.forClasspathResource("init-dynamodb.sh", 0744), "/etc/localstack/init/ready.d/init-dynamodb.sh")
             .withServices(LocalStackContainer.Service.DYNAMODB)
-            .waitingFor(Wait.forLogMessage(".*Executed init-dynamodb.sh.*", 1));
+            .waitingFor(Wait.forListeningPort());
 
     @Override
     public void beforeAll(final ExtensionContext context) {
