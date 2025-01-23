@@ -16,13 +16,13 @@ resource "aws_ecs_cluster_capacity_providers" "iamind_capacity_provider" {
 
 
   default_capacity_provider_strategy {
-    weight            = 90
+    weight            = 100
     base              = 1
     capacity_provider = "FARGATE_SPOT"
   }
 
   default_capacity_provider_strategy {
-    weight            = 10
+    weight            = 0
     capacity_provider = "FARGATE"
   }
 }
@@ -75,7 +75,7 @@ resource "aws_ecs_service" "session_management_service" {
   network_configuration {
     assign_public_ip = true
     security_groups  = [aws_security_group.iamind_sg_tls_http.id]
-    subnets          = [aws_subnet.iamind_subnet_public1.id, aws_subnet.iamind_subnet_public2.id]
+    subnets          = [aws_subnet.iamind_subnet_public1.id]
   }
 
   load_balancer {
@@ -136,7 +136,7 @@ resource "aws_ecs_service" "user_ms_service" {
   network_configuration {
     assign_public_ip = true
     security_groups  = [aws_security_group.iamind_sg_tls_http.id]
-    subnets          = [aws_subnet.iamind_subnet_public1.id, aws_subnet.iamind_subnet_public2.id]
+    subnets          = [aws_subnet.iamind_subnet_public1.id]
   }
 
   load_balancer {
