@@ -200,6 +200,7 @@ data "aws_iam_policy_document" "deployment_policy_document_1" {
     sid    = "VPCEC2Control"
     effect = "Allow"
     actions = [
+      "ec2:Disassociate*",
       "ec2:Revoke*",
       "ec2:Authorize*",
       "ec2:Update*",
