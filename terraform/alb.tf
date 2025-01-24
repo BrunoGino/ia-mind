@@ -43,10 +43,10 @@ resource "aws_lb_target_group" "iamind_user_ms_tg" {
 
 resource "aws_lb_listener" "iamind_alb_listener_https" {
   load_balancer_arn = aws_lb.iamind_alb.arn
-  port              = "80"
-  protocol          = "HTTP"
-  # ssl_policy        = "ELBSecurityPolicy-2016-08"
-  # certificate_arn   = aws_acm_certificate.iamind_certificate.arn
+  port              = "443"
+  protocol          = "HTTPS"
+  ssl_policy        = "ELBSecurityPolicy-2016-08"
+  certificate_arn   = aws_acm_certificate.iamind_certificate.arn
 
   default_action {
     type = "fixed-response"
@@ -55,6 +55,22 @@ resource "aws_lb_listener" "iamind_alb_listener_https" {
       content_type = "text/plain"
       message_body = "Page not found"
       status_code  = "404"
+    }
+  }
+}
+
+resource "aws_lb_listener" "http_listener" {
+  load_balancer_arn = aws_lb.iamind_alb.arn
+  port              = "80"
+  protocol          = "HTTP"
+
+  default_action {
+    type = "redirect"
+
+    redirect {
+      port        = "443"
+      protocol    = "HTTPS"
+      status_code = "HTTP_301"
     }
   }
 }
