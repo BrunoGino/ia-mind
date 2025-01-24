@@ -3,7 +3,7 @@ resource "aws_lb" "iamind_alb" {
   internal           = false
   load_balancer_type = "application"
   security_groups    = [aws_security_group.iamind_sg_tls_http.id]
-  subnets            = [aws_subnet.iamind_subnet_public1.id, aws_subnet.iamind_subnet_public2.id]
+  subnets            = [aws_subnet.iamind_subnet_public1.id]
 
   enable_deletion_protection = true
 
