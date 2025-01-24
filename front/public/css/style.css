@@ -159,6 +159,13 @@ body{
 	width: 18px;
 	height: 18px;
 }
+
+.icon__student{
+	fill: currentcolor;
+	width: 18px;
+	height: 18px;
+}
+
 .replaced-svg{
 	opacity: 1;
 }
@@ -6253,7 +6260,7 @@ a.fn__like.no_border .fn__svg{
 .fn__model_item {
     margin: 0;
     padding: 0;
-    width: 100%; /* Cada item ocupa toda a largura */
+    width: 100% !important; /* Cada item ocupa toda a largura */
     display: flex; /* Exibe o conteúdo em linha */
     align-items: center; /* Alinha verticalmente o conteúdo */
     border: 1px solid var(--techwave-border-color);
@@ -6264,8 +6271,18 @@ a.fn__like.no_border .fn__svg{
 }
 
 .fn__model_content_item{
+	width: 100%;
 	display: flex;
 	align-items: center;
+}
+
+@media (max-width: 780px) {
+	.fn__model_content_item{
+		width: 100%;
+		display: flex;
+		align-items: center;
+		flex-direction: column;
+	}
 }
 
 .fn__model_image{
@@ -6292,6 +6309,18 @@ a.fn__like.no_border .fn__svg{
 .fn__model_item .item__info {
     flex: 1; /* Faz o texto ocupar o restante do espaço */
     padding: 0; /* Remove padding adicional */
+}
+
+.fn__model_content_item .fn__model__title{  
+	margin-bottom: 10px !important;
+}
+
+.fn__model_content_item .fn__model__categories{
+	margin-bottom: 10px !important;
+}
+
+.fn__model_content_item .desc{
+	margin-bottom: 10px !important;
 }
 
 .fn__model_item .item__info .title {
@@ -6337,13 +6366,16 @@ a.fn__like.no_border .fn__svg{
 }
 
 .fn__model__actions{
-
+	width: 100%;
+	text-align: right;
 }
 
 
 
 .fn__model__actions .fn__model_bt_tools{
 	display: flex;
+	align-items: center;
+	justify-content: end;
 }
 
 .fn__model__actions .fn__model_bt_tools a{
