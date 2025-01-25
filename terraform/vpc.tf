@@ -209,47 +209,6 @@ resource "aws_route_table_association" "iamind_rtb_association_public1" {
 }
 
 #####################################
-#    VPC Endpoints
-#####################################
-resource "aws_vpc_endpoint" "private_s3_endpoint" {
-  vpc_id       = aws_vpc.iamind_vpc.id
-  service_name = "com.amazonaws.eu-west-1.s3"
-
-  policy = jsonencode({
-    Version = "2008-10-17",
-    Statement = [
-      {
-        Effect    = "Allow",
-        Principal = "*",
-        Action    = "*",
-        Resource  = "*"
-      }
-    ]
-  })
-
-  tags = merge(local.default_tags, { Name : "iamind-S3-private-endpoint" })
-}
-
-resource "aws_vpc_endpoint" "private_dynamodb_endpoint" {
-  vpc_id       = aws_vpc.iamind_vpc.id
-  service_name = "com.amazonaws.eu-west-1.dynamodb"
-
-  policy = jsonencode({
-    Version = "2008-10-17",
-    Statement = [
-      {
-        Effect    = "Allow",
-        Principal = "*",
-        Action    = "*",
-        Resource  = "*"
-      }
-    ]
-  })
-
-  tags = merge(local.default_tags, { Name : "iamind-dynamoDB-private-endpoint" })
-}
-
-#####################################
 #   Private Route Tables
 #####################################
 resource "aws_route_table" "iamind_rtb_private1" {
@@ -274,34 +233,7 @@ resource "aws_route_table" "iamind_rtb_private2" {
   tags = merge(local.default_tags, { Name : "iamind-private2-route-table" })
 }
 
-resource "aws_vpc_endpoint_route_table_association" "iamind_rtb_association_private1_dynamodb" {
-  route_table_id  = aws_route_table.iamind_rtb_private1.id
-  vpc_endpoint_id = aws_vpc_endpoint.private_dynamodb_endpoint.id
-}
-
-resource "aws_vpc_endpoint_route_table_association" "iamind_rtb_association_private1_s3" {
-  route_table_id  = aws_route_table.iamind_rtb_private1.id
-  vpc_endpoint_id = aws_vpc_endpoint.private_s3_endpoint.id
-}
-
-resource "aws_vpc_endpoint_route_table_association" "iamind_rtb_association_private2_dynamodb" {
-  route_table_id  = aws_route_table.iamind_rtb_private2.id
-  vpc_endpoint_id = aws_vpc_endpoint.private_dynamodb_endpoint.id
-}
-
-resource "aws_vpc_endpoint_route_table_association" "iamind_rtb_association_private2_s3" {
-  route_table_id  = aws_route_table.iamind_rtb_private2.id
-  vpc_endpoint_id = aws_vpc_endpoint.private_s3_endpoint.id
-}
-
 resource "aws_route_table_association" "iamind_rtb_association_private1" {
   subnet_id      = aws_subnet.iamind_subnet_private1.id
   route_table_id = aws_route_table.iamind_rtb_private1.id
-}
-
-resource "aws_flow_log" "iamind_vpc_flow_logs" {
-  log_group_name = "/aws/vpc/iamind-flow-logs"
-  iam_role_arn   = aws_iam_role.iamind_flow_logs_role.arn
-  vpc_id         = aws_vpc.iamind_vpc.id
-  traffic_type   = "ALL" # Capture ALL traffic (accepted, rejected, all)
 }
