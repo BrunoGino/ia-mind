@@ -75,7 +75,7 @@ resource "aws_ecs_service" "user_ms_service" {
   network_configuration {
     assign_public_ip = true
     security_groups  = [aws_security_group.iamind_sg_tls_http.id]
-    subnets          = [aws_subnet.iamind_subnet_public1.id]
+    subnets          = [aws_subnet.iamind_subnet_public1.id, aws_subnet.iamind_subnet_public2.id]
   }
 
   load_balancer {
