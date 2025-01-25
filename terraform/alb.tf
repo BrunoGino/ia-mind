@@ -16,14 +16,6 @@ resource "aws_lb" "iamind_alb" {
   tags = local.default_tags
 }
 
-resource "aws_lb_target_group" "iamind_session_management_tg" {
-  name        = "iamind-session-management-tg"
-  port        = 80
-  protocol    = "HTTP"
-  target_type = "ip"
-  vpc_id      = aws_vpc.iamind_vpc.id
-}
-
 resource "aws_lb_target_group" "iamind_user_ms_tg" {
   name        = "iamind-user-ms-tg"
   port        = 80
@@ -71,25 +63,6 @@ resource "aws_lb_listener" "http_listener" {
       port        = "443"
       protocol    = "HTTPS"
       status_code = "HTTP_301"
-    }
-  }
-}
-
-resource "aws_lb_listener_rule" "iamind_session_management_rule" {
-  listener_arn = aws_lb_listener.iamind_alb_listener_https.arn
-  priority     = 100
-  action {
-    type             = "forward"
-    target_group_arn = aws_lb_target_group.iamind_session_management_tg.arn
-  }
-
-  condition {
-    path_pattern {
-      values = [
-        "/api/session",
-        "/api/session/docs/*",
-        "/api/session/*",
-      ]
     }
   }
 }

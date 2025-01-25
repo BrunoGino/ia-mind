@@ -27,67 +27,6 @@ resource "aws_ecs_cluster_capacity_providers" "iamind_capacity_provider" {
   }
 }
 
-resource "aws_ecs_task_definition" "session_management_task_definition" {
-  family = "session_management_task"
-  container_definitions = jsonencode([
-    {
-      name      = "session_management_task",
-      image     = "brunogino/iamind-session_management:latest",
-      essential = true,
-      logConfiguration = {
-        logDriver     = "awslogs",
-        secretOptions = [],
-        options = {
-          awslogs-group         = "/ecs/session_management_task-logs",
-          awslogs-region        = "eu-west-1",
-          awslogs-stream-prefix = "ecs"
-        }
-      },
-      portMappings = [
-        {
-          containerPort = 5000,
-          hostPort      = 5000
-        }
-      ],
-      repositoryCredentials = {
-        credentialsParameter = "arn:aws:secretsmanager:eu-west-1:108782061116:secret:iamind_docker_hub_secret-XQ0rOK"
-      }
-    }
-  ])
-  requires_compatibilities = ["FARGATE"]
-  network_mode             = "awsvpc"
-  execution_role_arn       = aws_iam_role.deployment_role.arn
-  task_role_arn            = aws_iam_role.ecs_tasks_role.arn
-  memory                   = 512
-  cpu                      = 256
-  tags                     = local.default_tags
-
-}
-
-resource "aws_ecs_service" "session_management_service" {
-  depends_on      = [aws_ecs_task_definition.session_management_task_definition]
-  name            = "session_management_service"
-  cluster         = aws_ecs_cluster.iamind_ecs_cluster.id
-  task_definition = aws_ecs_task_definition.session_management_task_definition.arn
-  launch_type     = "FARGATE"
-  desired_count   = 1
-
-  network_configuration {
-    assign_public_ip = true
-    security_groups  = [aws_security_group.iamind_sg_tls_http.id]
-    subnets          = [aws_subnet.iamind_subnet_public1.id]
-  }
-
-  load_balancer {
-    target_group_arn = aws_lb_target_group.iamind_session_management_tg.arn
-    container_name   = "session_management_task"
-    container_port   = 5000
-  }
-
-  tags = local.default_tags
-
-}
-
 resource "aws_ecs_task_definition" "user_ms_task_definition" {
   family = "user_ms_task"
   container_definitions = jsonencode([
