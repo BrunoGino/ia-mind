@@ -51,14 +51,6 @@ resource "aws_subnet" "iamind_subnet_public1" {
   tags = merge(local.default_tags, { Name = "iamind-public-subnet-1" })
 }
 
-resource "aws_subnet" "iamind_subnet_private1" {
-  vpc_id            = aws_vpc.iamind_vpc.id
-  cidr_block        = "13.3.128.0/20"
-  availability_zone = "eu-west-1a"
-
-  tags = merge(local.default_tags, { Name = "iamind-private-subnet-1" })
-}
-
 #####################################
 #    Security Groups
 #####################################
@@ -112,7 +104,6 @@ resource "aws_network_acl" "iamind_main_nacl" {
 
   subnet_ids = [
     aws_subnet.iamind_subnet_public1.id,
-    aws_subnet.iamind_subnet_private1.id
   ]
 
   # Ingress Rules
@@ -231,9 +222,4 @@ resource "aws_route_table" "iamind_rtb_private2" {
   }
 
   tags = merge(local.default_tags, { Name : "iamind-private2-route-table" })
-}
-
-resource "aws_route_table_association" "iamind_rtb_association_private1" {
-  subnet_id      = aws_subnet.iamind_subnet_private1.id
-  route_table_id = aws_route_table.iamind_rtb_private1.id
 }
