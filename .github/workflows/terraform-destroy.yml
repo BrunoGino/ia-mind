@@ -50,7 +50,7 @@ jobs:
               shell: bash
               working-directory: terraform
               run: |
-                terraform apply -destroy -auto-approve -target=aws_dynamodb_table.iamind_session_table \
+                terraform apply -destroy -target=aws_dynamodb_table.iamind_session_table \
                 -target=aws_dynamodb_table.iamind_users_table -target=aws_cloudwatch_log_group.user_ms_task_logs \
                 -target=aws_apigatewayv2_api.iamind_api_gateway -target=aws_ecs_service.user_ms_service -target=aws_ecs_task_definition.user_ms_task_definition \
                 -target=aws_ecs_cluster_capacity_providers.iamind_capacity_provider -target=aws_ecs_cluster.iamind_ecs_cluster \
@@ -66,6 +66,6 @@ jobs:
                 -target=aws_vpc_ipam.iamind_vpc_ipam -target=aws_secretsmanager_secret_version.iamind_kms_key_version \
                 -target=aws_secretsmanager_secret.iamind_docker_repo_secret -target=aws_kms_key.iamind_kms_key \
                 -target=aws_s3_bucket_policy.iamind_access_logs_bucket_policy -target=aws_s3_bucket_server_side_encryption_configuration.iamind_access_logs_bucket_encryption \
-                -target=aws_s3_bucket.iamind_access_logs_bucket
+                -target=aws_s3_bucket.iamind_access_logs_bucket -auto-approve
 
       
