@@ -49,6 +49,23 @@ jobs:
               id: terraform-destroy
               shell: bash
               working-directory: terraform
-              run: terraform apply -destroy -auto-approve
+              run: |
+                terraform apply -destroy -auto-approve -target=aws_dynamodb_table.iamind_session_table \
+                -target=aws_dynamodb_table.iamind_users_table -target=aws_cloudwatch_log_group.user_ms_task_logs \
+                -target=aws_apigatewayv2_api.iamind_api_gateway -target=aws_ecs_service.user_ms_service -target=aws_ecs_task_definition.user_ms_task_definition \
+                -target=aws_ecs_cluster_capacity_providers.iamind_capacity_provider -target=aws_ecs_cluster.iamind_ecs_cluster \
+                -target=aws_lb_listener_rule.iamind_user_swagger_ui_rule -target=aws_lb_listener_rule.iamind_user_ms_rule \
+                -target=aws_lb_listener.http_listener -target=aws_lb_listener.iamind_alb_listener_https \
+                -target=aws_lb_target_group.iamind_user_ms_tg -target=aws_lb.iamind_alb -target=aws_route_table_association.iamind_rtb_association_public2 \
+                -target=aws_route_table_association.iamind_rtb_association_public1 -target=aws_route_table.iamind_rtb_public \
+                -target=aws_internet_gateway.iamind_vpc_ig -target=aws_network_acl.iamind_main_nacl \
+                -target=aws_vpc_security_group_egress_rule.allow_http_traffic_ipv4 -target=aws_vpc_security_group_ingress_rule.allow_ephemeral_in \
+                -target=aws_vpc_security_group_ingress_rule.allow_https_in -target=aws_vpc_security_group_ingress_rule.allow_http_in \
+                -target=aws_security_group.iamind_sg_tls_http -target=aws_subnet.iamind_subnet_public2 -target=aws_subnet.iamind_subnet_public1 \
+                -target=aws_vpc.iamind_vpc target=aws_vpc_ipam_pool_cidr.iamind_vpc_ipam_pool_cidr -target=aws_vpc_ipam_pool.iamind_vpc_ipam_pool \
+                -target=aws_vpc_ipam.iamind_vpc_ipam -target=aws_secretsmanager_secret_version.iamind_kms_key_version \
+                -target=aws_secretsmanager_secret.iamind_docker_repo_secret -target=aws_kms_key.iamind_kms_key \
+                -target=aws_s3_bucket_policy.iamind_access_logs_bucket_policy -target=aws_s3_bucket_server_side_encryption_configuration.iamind_access_logs_bucket_encryption \
+                -target=aws_s3_bucket.iamind_access_logs_bucket
 
       
