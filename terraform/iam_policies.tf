@@ -9,7 +9,7 @@ data "aws_iam_policy_document" "deployment_policy_document_1" {
     effect = "Allow"
     actions = [
       "s3:CreateBucket",
-      "s3:DeleteBucket",
+      "s3:Delete*",
       "s3:Put*",
       "s3:Get*",
       "s3:List*"
@@ -33,7 +33,8 @@ data "aws_iam_policy_document" "deployment_policy_document_1" {
       "dynamodb:Describe*",
       "dynamodb:Get*",
       "dynamodb:Put*",
-      "dynamodb:*Item"
+      "dynamodb:*Item",
+      "dynamodb:Delete*"
     ]
     resources = [
       "arn:aws:dynamodb:eu-west-1:108782061116:table/iamind-terraform-state-lock",
@@ -170,7 +171,8 @@ data "aws_iam_policy_document" "deployment_policy_document_1" {
       "arn:aws:ecs:eu-west-1:108782061116:service/iamind/*",
       "arn:aws:ecs:eu-west-1:108782061116:task-set/iamind/*/*",
       "arn:aws:ecs:eu-west-1:108782061116:service-revision/iamind/*/*",
-      "arn:aws:ecs:eu-west-1:108782061116:capacity-provider/*"
+      "arn:aws:ecs:eu-west-1:108782061116:capacity-provider/*",
+      "arn:aws:ecs:eu-west-1:108782061116:service/iamind_ecs_cluster/*"
     ]
   }
 
@@ -181,7 +183,6 @@ data "aws_iam_policy_document" "deployment_policy_document_1" {
       "elasticloadbalancing:set*",
       "elasticloadbalancing:Modify*",
       "elasticloadbalancing:Describe*",
-      "elasticloadbalancing:Delete*",
       "elasticloadbalancing:Delete*",
       "elasticloadbalancing:Create*",
       "elasticloadbalancing:AddTags",
@@ -359,12 +360,20 @@ resource "aws_iam_policy" "deployment_policy_1" {
   name        = "aws_gino_sol_deployment_policy_1"
   description = "The policy that grants permissions to the deployment role"
   policy      = data.aws_iam_policy_document.deployment_policy_document_1.json
+
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 
 resource "aws_iam_policy" "deployment_policy_2" {
   name        = "aws_gino_sol_deployment_policy_2"
   description = "The policy that grants permissions to the deployment role"
   policy      = data.aws_iam_policy_document.deployment_policy_document_2.json
+
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 
 #####################################

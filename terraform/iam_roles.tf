@@ -55,16 +55,28 @@ resource "aws_iam_role" "deployment_role" {
   assume_role_policy = data.aws_iam_policy_document.deployment_assume_role_policy_document.json
 
   tags = local.default_tags
+
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 
 resource "aws_iam_role_policy_attachment" "deployment_role_policy_attch_1" {
   role       = aws_iam_role.deployment_role.name
   policy_arn = aws_iam_policy.deployment_policy_1.arn
+
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 
 resource "aws_iam_role_policy_attachment" "deployment_role_policy_attch_2" {
   role       = aws_iam_role.deployment_role.name
   policy_arn = aws_iam_policy.deployment_policy_2.arn
+
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 
 #####################################

@@ -5,7 +5,7 @@ resource "aws_lb" "iamind_alb" {
   security_groups    = [aws_security_group.iamind_sg_tls_http.id]
   subnets            = [aws_subnet.iamind_subnet_public1.id, aws_subnet.iamind_subnet_public2.id]
 
-  enable_deletion_protection = true
+  enable_deletion_protection = false
 
   access_logs {
     bucket  = aws_s3_bucket.iamind_access_logs_bucket.id

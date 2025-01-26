@@ -52,11 +52,11 @@ resource "aws_subnet" "iamind_subnet_public1" {
 }
 
 resource "aws_subnet" "iamind_subnet_public2" {
-  vpc_id            = aws_vpc.iamind_vpc.id
-  cidr_block        = "13.3.16.0/20"
-  availability_zone = "eu-west-1b"
+  vpc_id                  = aws_vpc.iamind_vpc.id
+  cidr_block              = "13.3.16.0/20"
+  availability_zone       = "eu-west-1b"
   map_public_ip_on_launch = true
-  tags = merge(local.default_tags, { Name = "iamind-public-subnet-2" })
+  tags                    = merge(local.default_tags, { Name = "iamind-public-subnet-2" })
 }
 
 
