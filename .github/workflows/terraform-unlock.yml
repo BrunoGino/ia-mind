@@ -6,12 +6,10 @@ on:
             lock_id:
                 required: true
                 description: ID of the lock to release
-            role_arn_to_assume:
-                required: true
-                description: The AWS role to assume
             aws_region:
                 required: true
                 description: The AWS region to get the credentials
+                default: eu-west-1
 
 
 permissions:
@@ -27,7 +25,7 @@ jobs:
             - name: Configure AWS credentials
               uses: aws-actions/configure-aws-credentials@v4
               with:
-                role-to-assume: ${{ inputs.role_arn_to_assume }}
+                role-to-assume: ${{secrets.AWS_DEPLOYMENT_ROLE_ARN}}
                 role-session-name: github-to-aws-via-oidc
                 aws-region: ${{ inputs.aws_region }}
                 role-skip-session-tagging: true
@@ -39,10 +37,14 @@ jobs:
 
             - name: Terraform Init
               id: terraform-init
+              working-directory: terraform
+              shell: bash
               run: terraform init
             
             - name: Terraform Unlock
               id: terraform-unlock
+              working-directory: terraform
+              shell: bash
               run: terraform force-unlock -force ${{ inputs.lock_id }}
 
       
