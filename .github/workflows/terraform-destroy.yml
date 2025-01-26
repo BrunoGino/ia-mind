@@ -9,9 +9,9 @@ permissions:
     contents: read
 
 jobs:
-    unlock_terraform_state:
+    destroy_infrastructure:
         runs-on: ubuntu-latest
-        name: Unlock Terraform state
+        name: Destroy Infrastructure
         env:
             TF_INPUT: 0      
             TF_VAR_session_management_docker_image: brunogino/iamind-session_management

@@ -21,7 +21,7 @@ permissions:
 jobs:
     unlock_terraform_state:
         runs-on: ubuntu-latest
-        name: Unlock Terraform state
+        name: Unlock Terraform state        
         steps:
             - uses: actions/checkout@v4
             - name: Configure AWS credentials
