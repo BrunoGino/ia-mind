@@ -29,14 +29,19 @@ jobs:
 
             - name: Terraform Init
               id: terraform-init
+              shell: bash
+              working-directory: terraform
               run: terraform init
             
             - name: Terraform Plan
               id: terraform-plan
+              shell: bash
               run: terraform plan -destroy
 
             - name: Terraform Destroy
               id: terraform-destroy
+              shell: bash
+              working-directory: terraform
               run: terraform apply -destroy -auto-approve
 
       
