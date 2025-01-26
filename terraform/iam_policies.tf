@@ -32,7 +32,8 @@ data "aws_iam_policy_document" "deployment_policy_document_1" {
       "dynamodb:List*",
       "dynamodb:Describe*",
       "dynamodb:Get*",
-      "dynamodb:Put*"
+      "dynamodb:Put*",
+      "dynamodb:*Item"
     ]
     resources = [
       "arn:aws:dynamodb:eu-west-1:108782061116:table/iamind-terraform-state-lock",
