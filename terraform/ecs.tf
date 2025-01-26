@@ -50,7 +50,7 @@ resource "aws_ecs_task_definition" "user_ms_task_definition" {
         }
       ],
       repositoryCredentials = {
-        credentialsParameter = "arn:aws:secretsmanager:eu-west-1:108782061116:secret:iamind_docker_hub_secret-XQ0rOK"
+        credentialsParameter = "arn:aws:secretsmanager:eu-west-1:108782061116:secret:iamind_docker_repo_secret-XQ0rOK"
       }
     }
   ])

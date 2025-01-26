@@ -12,7 +12,8 @@ data "aws_iam_policy_document" "deployment_policy_document_1" {
       "s3:Delete*",
       "s3:Put*",
       "s3:Get*",
-      "s3:List*"
+      "s3:List*",
+      "s3:Head*"
     ]
     resources = [
       "arn:aws:s3:::iamind-terraform-state-backend",
@@ -444,7 +445,7 @@ data "aws_iam_policy_document" "ecs_tasks_policy_document" {
       "kms:Encrypt"
     ]
     resources = [
-      aws_secretsmanager_secret.iamind_docker_hub_secret.arn,
+      aws_secretsmanager_secret.iamind_docker_repo_secret.arn,
       aws_kms_key.iamind_kms_key.arn
     ]
   }
@@ -591,7 +592,7 @@ data "aws_iam_policy_document" "iamind_developer_policy_document" {
       "kms:Encrypt"
     ]
     resources = [
-      aws_secretsmanager_secret.iamind_docker_hub_secret.arn,
+      aws_secretsmanager_secret.iamind_docker_repo_secret.arn,
       aws_kms_key.iamind_kms_key.arn
     ]
   }
