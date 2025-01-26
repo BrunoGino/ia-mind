@@ -12,6 +12,13 @@ jobs:
     unlock_terraform_state:
         runs-on: ubuntu-latest
         name: Unlock Terraform state
+        env:
+            TF_INPUT: 0      
+            TF_VAR_session_management_docker_image: brunogino/iamind-session_management
+            TF_VAR_user_ms_docker_image: brunogino/iamind-user-ms
+            TF_VAR_docker_hub_token: ${{secrets.DOCKER_REPO_TOKEN}}
+            TF_VAR_docker_hub_user: ${{secrets.DOCKER_REPO_USER}}
+            TF_VAR_access_key_id: ${{secrets.AWS_ACCESS_KEY_ID}}
         steps:
             - uses: actions/checkout@v4
             - name: Configure AWS credentials
